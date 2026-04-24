@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1a56db">
+<title>Visita Consultoria · EssilorLuxottica</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@500&display=swap');
+:root{
+  --blue:#1a56db;--blue-dk:#1240a8;--blue-lt:#e8f0fe;--blue-md:#3b72f0;
+  --green:#059669;--green-lt:#d1fae5;--red:#dc2626;--red-lt:#fee2e2;
+  --amber:#d97706;--amber-lt:#fef3c7;
+  --g50:#f9fafb;--g100:#f3f4f6;--g200:#e5e7eb;--g300:#d1d5db;
+  --g400:#9ca3af;--g500:#6b7280;--g600:#4b5563;--g700:#374151;--g900:#111827;
+  --r:10px;--rsm:6px;--f:'DM Sans',system-ui,sans-serif;--m:'DM Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:var(--f);background:var(--g50);color:var(--g900);min-height:100vh;padding-bottom:90px}
+
+/* HEADER */
+.hdr{background:var(--blue);position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;padding:12px 18px 8px}
+.hdr-title{font-size:14px;font-weight:600;color:white;letter-spacing:-.01em}
+.hdr-step{font-size:11px;color:rgba(255,255,255,.65);font-family:var(--m)}
+.prog-track{height:3px;background:rgba(255,255,255,.2)}
+.prog-fill{height:100%;background:white;transition:width .3s ease}
+.tabs{display:flex;padding:0 12px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex-shrink:0;padding:7px 10px;font-size:10px;font-weight:500;color:rgba(255,255,255,.45);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:all .2s}
+.tab.active{color:white;border-color:white}
+
+/* LAYOUT */
+.ct{padding:16px;max-width:480px;margin:0 auto}
+.sec{display:none}.sec.active{display:block}
+.dvd{height:1px;background:var(--g100);margin:14px 0}
+.slbl{font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--g400);text-transform:uppercase;margin-bottom:10px}
+.ibox{background:var(--blue-lt);border-radius:var(--rsm);padding:10px 13px;font-size:11px;color:var(--blue-dk);line-height:1.6;margin-bottom:13px}
+.ibox.ok{background:var(--green-lt);color:#065f46}
+.ibox.warn{background:var(--amber-lt);color:#92400e}
+.ibox.err{background:var(--red-lt);color:#991b1b}
+
+/* FIELDS */
+.fld{margin-bottom:13px}
+.fld label{display:block;font-size:12px;font-weight:500;color:var(--g600);margin-bottom:5px}
+.fld input,.fld select,.fld textarea{width:100%;padding:10px 12px;border:1.5px solid var(--g200);border-radius:var(--rsm);font-size:14px;font-family:var(--f);color:var(--g900);background:white;outline:none;appearance:none;-webkit-appearance:none;transition:border-color .15s}
+.fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--blue)}
+.fld textarea{resize:none;min-height:68px;line-height:1.5;font-size:13px}
+.fld select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 5 5-5z' fill='%239ca3af'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center;padding-right:28px}
+
+/* KPI CARDS */
+.kg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.kc{background:white;border:1.5px solid var(--g200);border-radius:var(--rsm);padding:9px 11px}
+.kl{font-size:9px;font-weight:600;color:var(--g400);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+.kc input{width:100%;border:none;font-size:18px;font-weight:600;font-family:var(--m);color:var(--g900);background:transparent;outline:none;padding:0}
+.kc input::placeholder{color:var(--g200)}
+.kcalc{background:var(--blue-lt);border-radius:var(--rsm);padding:9px 13px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.kcalc-l{font-size:12px;color:var(--blue-dk);font-weight:500}
+.kcalc-v{font-size:20px;font-weight:600;font-family:var(--m);color:var(--blue-dk)}
+
+/* TOGGLES */
+.tlbl{font-size:12px;font-weight:500;color:var(--g600);margin-bottom:6px}
+.trow{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:11px}
+.tog{padding:7px 11px;border:1.5px solid var(--g200);border-radius:20px;font-size:12px;font-weight:500;color:var(--g600);background:white;cursor:pointer;transition:all .15s;user-select:none}
+.tog.on{background:var(--blue-lt);border-color:var(--blue);color:var(--blue-dk)}
+
+/* STATUS */
+.sc{background:white;border:1.5px solid var(--g200);border-radius:var(--r);padding:3px 13px;margin-bottom:12px}
+.sr{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--g100)}
+.sr:last-child{border-bottom:none}
+.sn{font-size:12px;font-weight:500;color:var(--g700);flex-shrink:0;margin-right:6px}
+.stgs{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.stg{padding:4px 9px;border:1px solid var(--g200);border-radius:20px;font-size:10px;font-weight:500;color:var(--g500);background:white;cursor:pointer;transition:all .15s;white-space:nowrap}
+.stg.ok{background:var(--green-lt);border-color:var(--green);color:#065f46}
+.stg.wn{background:var(--amber-lt);border-color:var(--amber);color:#92400e}
+.stg.er{background:var(--red-lt);border-color:var(--red);color:#991b1b}
+
+/* STARS */
+.stars{display:flex;gap:8px;margin-bottom:11px}
+.star{font-size:26px;cursor:pointer;color:var(--g200);user-select:none;transition:transform .1s}
+.star.lit{color:var(--amber)}
+.star:active{transform:scale(1.3)}
+
+/* TAGS */
+.tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:11px}
+.tag{padding:5px 10px;border:1.5px solid var(--g200);border-radius:20px;font-size:11px;font-weight:500;color:var(--g600);background:white;cursor:pointer;transition:all .15s;user-select:none}
+.tag.ok{background:var(--green-lt);border-color:var(--green);color:#065f46}
+.tag.wn{background:var(--amber-lt);border-color:var(--amber);color:#92400e}
+
+/* ACTION BLOCKS */
+.ab{background:white;border:1.5px solid var(--g200);border-radius:var(--r);padding:10px 12px;margin-bottom:8px}
+.anum{font-size:9px;font-weight:600;color:var(--blue);letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px}
+.ab input[type=text]{width:100%;border:none;font-size:13px;font-family:var(--f);color:var(--g900);background:transparent;outline:none;padding:0;margin-bottom:7px}
+.ab input::placeholder{color:var(--g300)}
+.am{display:flex;gap:6px}
+.am select{flex:1;border:1px solid var(--g200);border-radius:var(--rsm);font-size:11px;font-family:var(--f);color:var(--g600);padding:5px 7px;background:var(--g50);outline:none;appearance:none;-webkit-appearance:none}
+
+/* FATURAMENTO */
+.fat-mes{background:white;border:1.5px solid var(--g200);border-radius:var(--rsm);padding:10px 12px;margin-bottom:7px}
+.fat-mes-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.fat-mes-nm{font-size:11px;font-weight:600;color:var(--blue-dk);letter-spacing:.06em;text-transform:uppercase}
+.fat-pct{font-size:14px;font-weight:700;font-family:var(--m)}
+.fat-pct.pos{color:var(--green)}.fat-pct.neg{color:var(--red)}.fat-pct.neu{color:var(--g400)}
+.fat-inputs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fat-inp{background:var(--g50);border:1.5px solid var(--g200);border-radius:var(--rsm);padding:7px 10px}
+.fat-inp-l{font-size:9px;font-weight:600;color:var(--g400);letter-spacing:.05em;text-transform:uppercase;margin-bottom:3px}
+.fat-inp-row{display:flex;align-items:center;gap:4px}
+.fat-inp input{flex:1;border:none;background:transparent;font-size:16px;font-weight:600;font-family:var(--m);color:var(--g900);outline:none;padding:0;min-width:0}
+.fat-inp input::placeholder{color:var(--g300)}
+.fat-inp-sfx{font-size:12px;color:var(--g500)}
+
+/* ADD BTN */
+.add-btn{width:100%;padding:9px;background:var(--blue-lt);color:var(--blue-dk);border:1.5px dashed var(--blue);border-radius:var(--rsm);font-size:12px;font-weight:600;font-family:var(--f);cursor:pointer;margin-bottom:12px}
+
+/* DYNAMIC ITEMS */
+.ditem{background:white;border:1.5px solid var(--g200);border-radius:var(--r);padding:10px 12px;margin-bottom:8px;position:relative}
+.ditem-del{position:absolute;top:9px;right:11px;font-size:14px;color:var(--g300);cursor:pointer;padding:2px}
+.ditem-del:active{color:var(--red)}
+.drow{display:flex;gap:6px;margin-bottom:7px}
+.drow select{flex:1;border:1.5px solid var(--g200);border-radius:var(--rsm);font-size:12px;font-family:var(--f);padding:7px 9px;color:var(--g700);background:var(--g50);outline:none;appearance:none;-webkit-appearance:none}
+.dtxt textarea{width:100%;border:1px solid var(--g100);border-radius:var(--rsm);font-size:12px;font-family:var(--f);padding:7px 9px;color:var(--g900);outline:none;resize:none;min-height:48px;line-height:1.5;background:var(--g50)}
+.dtxt textarea:focus{border-color:var(--blue);background:white}
+
+/* MATERIAIS */
+.mi{display:flex;align-items:flex-start;gap:8px;background:white;border:1.5px solid var(--g200);border-radius:var(--r);padding:9px 11px;margin-bottom:7px;transition:all .15s}
+.mi.sent{border-color:var(--green);background:var(--green-lt)}
+.mi.pend{border-color:var(--amber)}
+.mchk{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--g300);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent;background:white;margin-top:1px;transition:all .15s}
+.mi.sent .mchk{background:var(--green);border-color:var(--green);color:white}
+.mbody{flex:1;min-width:0}
+.mdsc{font-size:13px;font-weight:500;color:var(--g900);word-break:break-word;line-height:1.4}
+.mmeta{font-size:10px;color:var(--g500);margin-top:2px}
+.mmeta span{background:var(--g100);border-radius:4px;padding:1px 5px;margin-right:3px}
+.mi.sent .mdsc{text-decoration:line-through;color:var(--g500)}
+.mdel{font-size:14px;color:var(--g300);cursor:pointer;padding:2px;flex-shrink:0}
+.mdel:active{color:var(--red)}
+
+/* FACING */
+.fblk{background:white;border:1.5px solid var(--g200);border-radius:var(--r);padding:12px;margin-bottom:12px}
+.fbrand{font-size:10px;font-weight:600;color:var(--g500);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;margin-top:10px}
+.fbrand:first-child{margin-top:0}
+.fbrand textarea{width:100%;border:1px solid var(--g100);border-radius:var(--rsm);font-size:12px;font-family:var(--f);padding:7px 9px;color:var(--g900);outline:none;resize:none;min-height:50px;line-height:1.5;background:var(--g50)}
+.fbrand textarea:focus{border-color:var(--blue);background:white}
+
+/* RELATÓRIO */
+.rel-view{display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:200;background:white;flex-direction:column}
+.rel-view.open{display:flex}
+.rel-hdr{background:var(--blue);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.rel-hdr-title{font-size:14px;font-weight:600;color:white}
+.rel-close{color:white;font-size:22px;cursor:pointer;padding:2px 6px;opacity:.8}
+.rel-close:active{opacity:1}
+.rel-body{flex:1;overflow-y:auto;padding:16px;background:var(--g50)}
+.rel-txt{background:white;border:1.5px solid var(--g200);border-radius:var(--r);padding:16px;font-size:12px;line-height:1.9;font-family:var(--m);color:var(--g700);white-space:pre-wrap;word-break:break-word;margin-bottom:16px}
+.rel-actions{display:flex;flex-direction:column;gap:9px;padding-bottom:20px}
+.rbtn{width:100%;padding:13px;border:none;border-radius:var(--r);font-size:14px;font-weight:600;font-family:var(--f);cursor:pointer;transition:background .15s}
+.rbtn.primary{background:var(--blue);color:white}
+.rbtn.primary:active{background:var(--blue-dk)}
+.rbtn.success{background:var(--green);color:white}
+.rbtn.success:active{background:#047857}
+.rbtn.secondary{background:white;color:var(--g800);border:1.5px solid var(--g200)}
+.rbtn.secondary:active{background:var(--g100)}
+.rbtn.outline{background:white;color:var(--blue);border:1.5px solid var(--blue)}
+.rbtn.outline:active{background:var(--blue-lt)}
+
+/* HISTÓRICO */
+.hist-item{background:white;border:1.5px solid var(--g200);border-radius:var(--r);padding:11px 13px;margin-bottom:7px}
+.hist-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
+.hist-loja{font-size:13px;font-weight:600;color:var(--g900)}
+.hist-meta{font-size:11px;color:var(--g600)}
+.hist-cov{font-size:11px;font-weight:600;border-radius:20px;padding:2px 9px}
+.hist-cov.ok{background:var(--green-lt);color:#065f46}
+.hist-cov.wn{background:var(--amber-lt);color:#92400e}
+.hist-cov.er{background:var(--red-lt);color:#991b1b}
+.hist-del{font-size:13px;color:var(--g300);cursor:pointer;margin-left:8px}
+.hist-del:active{color:var(--red)}
+.hist-open{font-size:11px;color:var(--blue);cursor:pointer;margin-top:5px;display:inline-block}
+
+/* BOTÕES NAV */
+.navb{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid var(--g200);padding:10px 16px;padding-bottom:max(10px,env(safe-area-inset-bottom));display:flex;gap:9px;max-width:480px;margin:0 auto}
+.bbk{flex:1;padding:12px;background:var(--g100);border:none;border-radius:var(--r);font-size:14px;font-weight:600;font-family:var(--f);color:var(--g600);cursor:pointer}
+.bbk:active{background:var(--g200)}
+.bnx{flex:2;padding:12px;background:var(--blue);border:none;border-radius:var(--r);font-size:14px;font-weight:600;font-family:var(--f);color:white;cursor:pointer}
+.bnx:active{background:var(--blue-dk)}
+.bnx.finish{background:var(--green)}
+.bnx.finish:active{background:#047857}
+
+.empty-msg{text-align:center;color:var(--g400);font-size:12px;padding:16px 0;line-height:1.7}
+</style>
+</head>
+<body>
+
+<!-- CABEÇALHO -->
+<div class="hdr">
+  <div class="hdr-top">
+    <span class="hdr-title">Visita de Consultoria</span>
+    <span class="hdr-step" id="hstep">1 / 8</span>
+  </div>
+  <div class="prog-track"><div class="prog-fill" id="prog" style="width:12.5%"></div></div>
+  <div class="tabs" id="stabs">
+    <div class="tab active"  onclick="goTo(0)">Loja</div>
+    <div class="tab" onclick="goTo(1)">Faturamento</div>
+    <div class="tab" onclick="goTo(2)">KPIs</div>
+    <div class="tab" onclick="goTo(3)">Plataformas</div>
+    <div class="tab" onclick="goTo(4)">Equipe</div>
+    <div class="tab" onclick="goTo(5)">Comercial</div>
+    <div class="tab" onclick="goTo(6)">Observações</div>
+    <div class="tab" onclick="goTo(7)">Materiais</div>
+  </div>
+</div>
+
+<div class="ct">
+
+<!-- 0: LOJA -->
+<div class="sec active" id="sec0">
+  <div class="slbl">Identificação da visita</div>
+  <div class="fld"><label>Número e nome da loja</label><input type="text" id="loja" placeholder="Ex: 2767 — Itapema"></div>
+  <div class="fld"><label>Rede</label>
+    <select id="marca"><option value="">Selecionar...</option><option>Óticas Carol</option><option>Sunglass Hut</option><option>Grandvision by Fototica</option></select>
+  </div>
+  <div class="fld"><label>Gerente / responsável presente</label><input type="text" id="gerente" placeholder="Nome"></div>
+  <div class="fld"><label>Data da visita</label><input type="date" id="data"></div>
+  <div class="fld"><label>Consultor responsável</label><input type="text" id="consultor" placeholder="Seu nome"></div>
+  <div class="fld"><label>Objetivo da visita</label>
+    <select id="objetivo"><option value="">Selecionar...</option><option>Visita rotina</option><option>Treinamento</option><option>Inventário de marcas</option><option>PEX</option><option>Lançamento de campanha</option><option>Acompanhamento de meta</option><option>Visita com liderança</option></select>
+  </div>
+  <div class="tlbl">Perfil da loja</div>
+  <div class="trow"><div class="tog" onclick="ts(this,'ploja')">Shopping</div><div class="tog" onclick="ts(this,'ploja')">Rua</div><div class="tog" onclick="ts(this,'ploja')">Popular</div><div class="tog" onclick="ts(this,'ploja')">Premium</div></div>
+  <div class="dvd"></div>
+  <div class="slbl">Crediário próprio</div>
+  <div class="trow"><div class="tog" onclick="ts(this,'cred');showCred(true)">Sim</div><div class="tog" onclick="ts(this,'cred');showCred(false)">Não</div></div>
+  <div id="cred-blk" style="display:none">
+    <div class="fld"><label>Nome / operadora</label><input type="text" id="cred-nome" placeholder="Ex: Crediloja, nome próprio..."></div>
+    <div class="fld"><label>Limite atual (R$)</label><input type="number" id="cred-lim" placeholder="0"></div>
+    <div class="fld"><label>Observações sobre o crediário</label><textarea id="cred-obs" placeholder="Detalhes relevantes..."></textarea></div>
+  </div>
+</div>
+
+<!-- 1: FATURAMENTO -->
+<div class="sec" id="sec1">
+  <div class="ibox">Para cada mês realizado, informe o <strong>valor faturado (R$)</strong> e a <strong>variação % vs mesmo mês do ano anterior</strong>. Deixe em branco os meses não realizados.</div>
+  <div class="slbl">Crescimento mês a mês vs ano anterior</div>
+  <div id="fat-table"></div>
+  <div class="dvd"></div>
+  <div class="kg">
+    <div class="kc"><div class="kl">Total CY acum.</div><div style="font-size:17px;font-weight:700;font-family:var(--m);color:var(--blue-dk)" id="tot-cy">R$ —</div></div>
+    <div class="kc"><div class="kl">Var. média acum.</div><div style="font-size:17px;font-weight:700;font-family:var(--m)" id="tot-var">—</div></div>
+  </div>
+  <div class="ibox" id="fat-tend">Preencha para ver a análise de tendência.</div>
+</div>
+
+<!-- 2: KPIs -->
+<div class="sec" id="sec2">
+  <div class="slbl">Resultados do mês em curso</div>
+  <div class="kg">
+    <div class="kc"><div class="kl">Meta do mês (R$)</div><input type="number" id="meta" placeholder="0" oninput="calcPct()"></div>
+    <div class="kc"><div class="kl">Realizado até hoje (R$)</div><input type="number" id="realizado" placeholder="0" oninput="calcPct()"></div>
+  </div>
+  <div class="kcalc"><span class="kcalc-l">Cobertura da meta</span><span class="kcalc-v" id="pct-val">—</span></div>
+  <div class="kg">
+    <div class="kc"><div class="kl">Ticket médio (R$)</div><input type="number" id="ticket" placeholder="0"></div>
+    <div class="kc"><div class="kl">Itens / atend.</div><input type="number" id="itens" placeholder="0.0" step="0.1"></div>
+  </div>
+  <div class="dvd"></div>
+  <div class="slbl">Conversões (%)</div>
+  <div class="kg">
+    <div class="kc"><div class="kl">RX → Solar</div><input type="number" id="conv1" placeholder="0"></div>
+    <div class="kc"><div class="kl">RX → Lente OFT</div><input type="number" id="conv2" placeholder="0"></div>
+  </div>
+  <div class="kg">
+    <div class="kc"><div class="kl">PM Óculos RX (R$)</div><input type="number" id="pmrx" placeholder="0"></div>
+    <div class="kc"><div class="kl">PM Lente OFT (R$)</div><input type="number" id="pmoft" placeholder="0"></div>
+  </div>
+  <div class="dvd"></div>
+  <div class="tlbl">Tendência vs mês anterior</div>
+  <div class="trow"><div class="tog" onclick="ts(this,'fatvar')">Acima</div><div class="tog" onclick="ts(this,'fatvar')">Em linha</div><div class="tog" onclick="ts(this,'fatvar')">Abaixo</div></div>
+</div>
+
+<!-- 3: PLATAFORMAS -->
+<div class="sec" id="sec3">
+  <div class="slbl">Plataformas digitais</div>
+  <div class="sc">
+    <div class="sr"><span class="sn">Leonardo</span><div class="stgs"><div class="stg" onclick="sg(this,'leo','ok')">Todos</div><div class="stg" onclick="sg(this,'leo','wn')">Parcial</div><div class="stg" onclick="sg(this,'leo','er')">Nenhum</div></div></div>
+    <div class="sr"><span class="sn">Conecta</span><div class="stgs"><div class="stg" onclick="sg(this,'con','ok')">Ativo</div><div class="stg" onclick="sg(this,'con','wn')">Parcial</div><div class="stg" onclick="sg(this,'con','er')">Bloqueado</div></div></div>
+    <div class="sr"><span class="sn">Plataforma Meta</span><div class="stgs"><div class="stg" onclick="sg(this,'metap','ok')">Ativa</div><div class="stg" onclick="sg(this,'metap','wn')">Demo</div><div class="stg" onclick="sg(this,'metap','er')">Inativa</div></div></div>
+    <div class="sr"><span class="sn">Smart Shopper</span><div class="stgs"><div class="stg" onclick="sg(this,'ss','ok')">OK</div><div class="stg" onclick="sg(this,'ss','wn')">Falha</div><div class="stg" onclick="sg(this,'ss','ok')">Resolvido</div></div></div>
+    <div class="sr"><span class="sn">Visioffice</span><div class="stgs"><div class="stg" onclick="sg(this,'vo','ok')">Em uso</div><div class="stg" onclick="sg(this,'vo','wn')">Tem/não usa</div><div class="stg" onclick="sg(this,'vo','er')">Não tem</div></div></div>
+  </div>
+  <div class="slbl">Operacional</div>
+  <div class="sc">
+    <div class="sr"><span class="sn">Tripla oferta</span><div class="stgs"><div class="stg" onclick="sg(this,'tripla','ok')">Executada</div><div class="stg" onclick="sg(this,'tripla','wn')">Desvios</div><div class="stg" onclick="sg(this,'tripla','er')">Não exec.</div></div></div>
+    <div class="sr"><span class="sn">Livro óptico</span><div class="stgs"><div class="stg" onclick="sg(this,'livro','ok')">OK</div><div class="stg" onclick="sg(this,'livro','er')">Pendente</div></div></div>
+    <div class="sr"><span class="sn">Diploma óptico</span><div class="stgs"><div class="stg" onclick="sg(this,'diploma','ok')">Exposto</div><div class="stg" onclick="sg(this,'diploma','er')">Pendente</div></div></div>
+    <div class="sr"><span class="sn">Pós-venda ativo</span><div class="stgs"><div class="stg" onclick="sg(this,'posv','ok')">Sim</div><div class="stg" onclick="sg(this,'posv','wn')">Esporádico</div><div class="stg" onclick="sg(this,'posv','er')">Não</div></div></div>
+    <div class="sr"><span class="sn">PEX atualizado</span><div class="stgs"><div class="stg" onclick="sg(this,'pex','ok')">Sim</div><div class="stg" onclick="sg(this,'pex','er')">Pendente</div></div></div>
+  </div>
+  <div class="dvd"></div>
+  <div class="slbl">Facing e Planograma</div>
+  <div class="trow" style="margin-bottom:11px">
+    <div class="stg" onclick="sg(this,'plan','ok')">Conforme</div>
+    <div class="stg" onclick="sg(this,'plan','wn')">Desvios menores</div>
+    <div class="stg" onclick="sg(this,'plan','er')">Desvios graves</div>
+  </div>
+  <div class="fblk">
+    <div class="fbrand">Ray-Ban</div>
+    <div class="fbrand"><textarea id="fc-rb" placeholder="Ex: 4 col. RX + 5 Solar. Giro baixo."></textarea></div>
+    <div class="fbrand">Prada / Luxottica</div>
+    <div class="fbrand"><textarea id="fc-pr" placeholder="Ex: Facing correto. Precificação ok."></textarea></div>
+    <div class="fbrand">Outras marcas</div>
+    <div class="fbrand"><textarea id="fc-ot" placeholder="MK, Vogue, Armani — inversões, faltas..."></textarea></div>
+    <div class="fbrand">Obs. gerais de planograma</div>
+    <div class="fbrand"><textarea id="fc-obs" placeholder="Desvios, ajustes necessários..."></textarea></div>
+  </div>
+</div>
+
+<!-- 4: EQUIPE -->
+<div class="sec" id="sec4">
+  <div class="slbl">Composição</div>
+  <div class="kg">
+    <div class="kc"><div class="kl">Presentes</div><input type="number" id="ncolab" placeholder="0"></div>
+    <div class="kc"><div class="kl">Total na loja</div><input type="number" id="ntotal" placeholder="0"></div>
+  </div>
+  <div class="tlbl">Perfil predominante</div>
+  <div class="trow"><div class="tog" onclick="ts(this,'peq')">Júnior</div><div class="tog" onclick="ts(this,'peq')">Misto</div><div class="tog" onclick="ts(this,'peq')">Sênior</div></div>
+  <div class="tlbl">Energia e motivação</div>
+  <div class="stars">
+    <span class="star" onclick="setStar(1)">★</span><span class="star" onclick="setStar(2)">★</span>
+    <span class="star" onclick="setStar(3)">★</span><span class="star" onclick="setStar(4)">★</span>
+    <span class="star" onclick="setStar(5)">★</span>
+  </div>
+  <div class="dvd"></div>
+  <div class="tlbl">Vícios observados</div>
+  <div class="tags">
+    <span class="tag" onclick="tt(this,'wn')">Espera passiva</span>
+    <span class="tag" onclick="tt(this,'wn')">Uso de celular</span>
+    <span class="tag" onclick="tt(this,'wn')">Conversa paralela</span>
+    <span class="tag" onclick="tt(this,'wn')">Sem abordagem</span>
+    <span class="tag" onclick="tt(this,'wn')">Sem oferta adicional</span>
+    <span class="tag" onclick="tt(this,'wn')">Preço sem Smart</span>
+  </div>
+  <div class="tlbl">Destaques positivos</div>
+  <div class="tags">
+    <span class="tag" onclick="tt(this,'ok')">Abordagem proativa</span>
+    <span class="tag" onclick="tt(this,'ok')">Tripla oferta</span>
+    <span class="tag" onclick="tt(this,'ok')">Conhecimento de produto</span>
+    <span class="tag" onclick="tt(this,'ok')">Clima positivo</span>
+    <span class="tag" onclick="tt(this,'ok')">Pertencimento à marca</span>
+    <span class="tag" onclick="tt(this,'ok')">Iniciativa própria</span>
+  </div>
+  <div class="fld" style="margin-top:4px"><label>Talento em destaque (nome e observação)</label><textarea id="talento" placeholder="Nome, perfil, potencial observado..."></textarea></div>
+</div>
+
+<!-- 5: COMERCIAL -->
+<div class="sec" id="sec5">
+  <div class="slbl">Ações de marketing</div>
+  <div id="mkt-list"></div>
+  <button class="add-btn" onclick="addMkt()">+ Adicionar ação de marketing</button>
+  <div class="dvd"></div>
+  <div class="slbl">Problemas com laboratório óptico</div>
+  <div id="lab-list"></div>
+  <button class="add-btn" onclick="addLab()">+ Registrar problema de laboratório</button>
+  <div class="dvd"></div>
+  <div class="slbl">Reclamações</div>
+  <div class="fld"><label>Reclamações do gerente / franqueado</label><textarea id="reclam" placeholder="Ex: Atraso Lab REPRO. Falta material de campanha."></textarea></div>
+  <div class="fld"><label>Encaminhamento dado</label><textarea id="rec-enc" placeholder="Ex: Orientado abrir chamado no suporte."></textarea></div>
+</div>
+
+<!-- 6: OBSERVAÇÕES -->
+<div class="sec" id="sec6">
+  <div class="fld"><label>Treinamento realizado</label><textarea id="trein" placeholder="Tema, metodologia, participação da equipe..."></textarea></div>
+  <div class="fld"><label>Estrutura física e ponto comercial</label><textarea id="estrutura" placeholder="Layout, fachada, vitrine, localização..."></textarea></div>
+  <div class="fld"><label>Concorrência e mercado local</label><textarea id="concorr" placeholder="Preços, mix, ações da concorrência observadas..."></textarea></div>
+  <div class="dvd"></div>
+  <div class="fld"><label>Percepção do consultor</label><textarea id="percepcao" placeholder="Impressão genuína: liderança, potencial, comportamento, clima..."></textarea></div>
+  <div class="fld"><label>Observações gerais</label><textarea id="obsgerais" placeholder="Pontos soltos, lembretes, anotações livres..."></textarea></div>
+  <div class="dvd"></div>
+  <div class="slbl">Plano de ação — máx. 3</div>
+  <div class="ab"><div class="anum">Ação 1</div><input type="text" id="a1" placeholder="Descreva a ação..."><div class="am"><select id="a1r"><option value="">Responsável...</option><option>Gerente</option><option>Consultor</option><option>Equipe</option><option>Franqueador</option><option>TI</option></select><select id="a1p"><option value="">Prazo...</option><option>Hoje</option><option>Esta semana</option><option>Próxima visita</option><option>30 dias</option><option>Urgente</option></select></div></div>
+  <div class="ab"><div class="anum">Ação 2</div><input type="text" id="a2" placeholder="Descreva a ação..."><div class="am"><select id="a2r"><option value="">Responsável...</option><option>Gerente</option><option>Consultor</option><option>Equipe</option><option>Franqueador</option><option>TI</option></select><select id="a2p"><option value="">Prazo...</option><option>Hoje</option><option>Esta semana</option><option>Próxima visita</option><option>30 dias</option><option>Urgente</option></select></div></div>
+  <div class="ab"><div class="anum">Ação 3</div><input type="text" id="a3" placeholder="Descreva a ação..."><div class="am"><select id="a3r"><option value="">Responsável...</option><option>Gerente</option><option>Consultor</option><option>Equipe</option><option>Franqueador</option><option>TI</option></select><select id="a3p"><option value="">Prazo...</option><option>Hoje</option><option>Esta semana</option><option>Próxima visita</option><option>30 dias</option><option>Urgente</option></select></div></div>
+</div>
+
+<!-- 7: MATERIAIS -->
+<div class="sec" id="sec7">
+  <div class="ibox">Registre tudo que precisa enviar. Marque como <strong>Enviado</strong> ao concluir. Pendentes aparecem no relatório.</div>
+  <div id="mat-list"></div>
+  <div style="background:white;border:1.5px solid var(--g200);border-radius:var(--r);padding:10px 12px;margin-bottom:11px">
+    <div class="slbl" style="margin-bottom:8px">Adicionar item</div>
+    <div class="fld" style="margin-bottom:8px"><input type="text" id="mat-desc" placeholder="Ex: PDF do PEX, relatório Shop9..."></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:8px">
+      <select id="mat-dest" style="width:100%;border:1.5px solid var(--g200);border-radius:var(--rsm);font-size:12px;font-family:var(--f);color:var(--g700);padding:8px 9px;background:var(--g50);outline:none;appearance:none;-webkit-appearance:none"><option value="">Para quem...</option><option>Gerente</option><option>Consultor de vendas</option><option>Equipe</option><option>Franqueador</option><option>TI / Suporte</option></select>
+      <select id="mat-tipo" style="width:100%;border:1.5px solid var(--g200);border-radius:var(--rsm);font-size:12px;font-family:var(--f);color:var(--g700);padding:8px 9px;background:var(--g50);outline:none;appearance:none;-webkit-appearance:none"><option value="">Tipo...</option><option>PDF / Documento</option><option>Relatório</option><option>Planilha</option><option>Material de treinamento</option><option>Link / Acesso</option><option>Outro</option></select>
+    </div>
+    <button onclick="addMat()" style="width:100%;padding:9px;background:var(--blue);color:white;border:none;border-radius:var(--rsm);font-size:13px;font-weight:600;font-family:var(--f);cursor:pointer">+ Adicionar</button>
+  </div>
+  <div class="slbl">Frequentes — toque para adicionar</div>
+  <div class="tags">
+    <span class="tag" onclick="qMat('PDF do PEX','Gerente','PDF / Documento')">PDF PEX</span>
+    <span class="tag" onclick="qMat('Relatório Shop9 conversões RX','Gerente','Relatório')">Shop9 RX</span>
+    <span class="tag" onclick="qMat('Material Ray-Ban','Equipe','Material de treinamento')">Treino Ray-Ban</span>
+    <span class="tag" onclick="qMat('Política Comercial','Gerente','PDF / Documento')">Política Comercial</span>
+    <span class="tag" onclick="qMat('Vendas em Dobro','Equipe','Material de treinamento')">Vendas em Dobro</span>
+    <span class="tag" onclick="qMat('Protocolo de Atendimento','Equipe','Material de treinamento')">Protocolo Atend.</span>
+    <span class="tag" onclick="qMat('Acesso Leonardo','Gerente','Link / Acesso')">Acesso Leonardo</span>
+    <span class="tag" onclick="qMat('Feedback Lab REPRO','Franqueador','Relatório')">Feedback REPRO</span>
+    <span class="tag" onclick="qMat('RX todas as lojas','Consultor de vendas','Relatório')">RX Todas lojas</span>
+    <span class="tag" onclick="qMat('Material campanha vigente','Equipe','PDF / Documento')">Campanha atual</span>
+  </div>
+  <div class="dvd"></div>
+  <div class="slbl">Histórico de visitas <span id="hist-count" style="font-size:10px;color:var(--g400);font-family:var(--m)"></span></div>
+  <div id="hist-list"></div>
+</div>
+
+</div><!-- /ct -->
+
+<!-- BOTÕES NAV -->
+<div class="navb">
+  <button class="bbk" id="btnBack" onclick="go(-1)" style="display:none">Voltar</button>
+  <button class="bnx" id="btnNext" onclick="go(1)">Próximo</button>
+</div>
+
+<!-- TELA DO RELATÓRIO (overlay) -->
+<div class="rel-view" id="relView">
+  <div class="rel-hdr">
+    <span class="rel-hdr-title" id="rel-titulo">Relatório de Visita</span>
+    <span class="rel-close" onclick="closeRel()">✕</span>
+  </div>
+  <div class="rel-body">
+    <div class="rel-txt" id="rel-txt"></div>
+    <div class="rel-actions">
+      <button class="rbtn success" onclick="downloadTxt()">⬇ Baixar como arquivo .txt</button>
+      <button class="rbtn primary" onclick="shareRel()">Compartilhar via WhatsApp</button>
+      <button class="rbtn secondary" onclick="copyRel()">Copiar texto</button>
+      <button class="rbtn outline" onclick="saveAndNew()">Salvar no histórico e nova visita</button>
+      <button class="rbtn secondary" onclick="closeRel()">Voltar ao formulário</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── ESTADO ───────────────────────────────────────────────── */
+var cur=0,TOTAL=8,starVal=0,ST={};
+var mats=[],matId=0,labs=[],labId=0,mkts=[],mktId=0;
+var MESES=["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+var MESES_EXT=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+var fatCY=new Array(12).fill(0),fatVP=new Array(12).fill(null);
+var STORE_KEY="visitas_v4";
+
+document.getElementById('data').valueAsDate=new Date();
+
+/* ── NAV ──────────────────────────────────────────────────── */
+function go(d){
+  if(cur+d<0)return;
+  if(cur===TOTAL-1){gerarRelatorio();return;}
+  goTo(cur+d);
+}
+function goTo(n){
+  if(n<0||n>=TOTAL)return;
+  document.getElementById('sec'+cur).classList.remove('active');
+  document.getElementById('stabs').children[cur].classList.remove('active');
+  cur=n;
+  document.getElementById('sec'+cur).classList.add('active');
+  document.getElementById('stabs').children[cur].classList.add('active');
+  document.getElementById('stabs').children[cur].scrollIntoView({inline:'center',behavior:'smooth'});
+  document.getElementById('hstep').textContent=(cur+1)+' / '+TOTAL;
+  document.getElementById('prog').style.width=((cur+1)/TOTAL*100).toFixed(1)+'%';
+  document.getElementById('btnBack').style.display=cur===0?'none':'block';
+  var nx=document.getElementById('btnNext');
+  if(cur===TOTAL-1){nx.textContent='Gerar Relatório';nx.className='bnx finish';}
+  else{nx.textContent='Próximo';nx.className='bnx';}
+  window.scrollTo(0,0);
+  if(cur===TOTAL-1)renderHist();
+}
+
+/* ── GETTERS ──────────────────────────────────────────────── */
+function g(id){var e=document.getElementById(id);return e?e.value.trim():'';}
+function gST(k){return ST[k]||'—';}
+function fmtD(v){if(!v)return'—';var p=v.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
+function fmtR(v){if(!v&&v!==0)return'—';return'R$ '+Math.round(v).toLocaleString('pt-BR');}
+function getTags(cls){var o=[];document.querySelectorAll('.tag.'+cls).forEach(function(t){o.push(t.textContent.trim());});return o;}
+
+/* ── TOGGLES ──────────────────────────────────────────────── */
+function ts(el,grp){
+  document.querySelectorAll('[onclick*="ts(this,\''+grp+'\'"]').forEach(function(e){e.classList.remove('on');});
+  el.classList.add('on');ST[grp]=el.textContent.trim();
+}
+function sg(el,grp,cls){
+  el.parentNode.querySelectorAll('.stg').forEach(function(e){e.classList.remove('ok','wn','er');});
+  el.classList.add(cls);ST[grp]=el.textContent.trim();
+}
+function tt(el,cls){
+  if(el.classList.contains(cls)){el.className='tag';}
+  else{el.className='tag '+cls;}
+}
+function setStar(n){
+  starVal=n;
+  document.querySelectorAll('.star').forEach(function(s,i){s.classList.toggle('lit',i<n);});
+}
+function showCred(b){document.getElementById('cred-blk').style.display=b?'block':'none';}
+
+/* ── FATURAMENTO ──────────────────────────────────────────── */
+function buildFatTable(){
+  var t='';
+  MESES.forEach(function(m,i){
+    t+='<div class="fat-mes">'
+      +'<div class="fat-mes-hdr"><span class="fat-mes-nm">'+m+'</span><span class="fat-pct" id="fp'+i+'"></span></div>'
+      +'<div class="fat-inputs">'
+      +'<div class="fat-inp"><div class="fat-inp-l">Faturado (R$)</div>'
+      +'<div class="fat-inp-row"><input type="number" id="cy'+i+'" value="'+(fatCY[i]||'')+'" placeholder="—" oninput="updFat('+i+')" inputmode="numeric"></div></div>'
+      +'<div class="fat-inp"><div class="fat-inp-l">Var % vs PY</div>'
+      +'<div class="fat-inp-row"><input type="number" id="vp'+i+'" value="'+(fatVP[i]!==null?fatVP[i]:'')+'" placeholder="—" step="0.1" oninput="updFat('+i+')" inputmode="decimal"><span class="fat-inp-sfx">%</span></div></div>'
+      +'</div></div>';
+  });
+  document.getElementById('fat-table').innerHTML=t;
+  calcAllFat();
+}
+function updFat(i){
+  fatCY[i]=parseFloat(document.getElementById('cy'+i).value)||0;
+  var vv=document.getElementById('vp'+i).value.trim();
+  fatVP[i]=vv===''?null:parseFloat(vv);
+  var vpEl=document.getElementById('vp'+i);
+  if(fatVP[i]!==null)vpEl.style.color=fatVP[i]>=0?'#059669':'#dc2626';
+  else vpEl.style.color='';
+  calcAllFat();
+}
+function calcAllFat(){
+  var sumCY=0,filled=[],pos=0,neg=0;
+  MESES.forEach(function(m,i){
+    sumCY+=fatCY[i]||0;
+    var el=document.getElementById('fp'+i);if(!el)return;
+    var vp=fatVP[i];
+    if(vp===null){el.textContent='';return;}
+    filled.push(vp);
+    var s=vp>0?'+':'';
+    el.textContent=s+vp.toFixed(1)+'%';
+    el.className='fat-pct '+(vp>0?'pos':vp<0?'neg':'neu');
+    if(vp>0)pos++;else neg++;
+  });
+  var cEl=document.getElementById('tot-cy'),vEl=document.getElementById('tot-var');
+  cEl.textContent=sumCY>0?fmtR(sumCY):'R$ —';
+  if(filled.length){
+    var med=filled.reduce(function(a,b){return a+b;},0)/filled.length;
+    vEl.textContent=(med>=0?'+':'')+med.toFixed(1)+'%';
+    vEl.style.color=med>0?'#059669':med<0?'#dc2626':'var(--g500)';
+  }else{vEl.textContent='—';vEl.style.color='';}
+  var td=document.getElementById('fat-tend');
+  if(!filled.length){td.className='ibox';td.textContent='Preencha os valores para ver a análise de tendência.';return;}
+  var media=filled.reduce(function(a,b){return a+b;},0)/filled.length;
+  var info=pos+' mês(es) positivo(s), '+neg+' negativo(s) — '+filled.length+' analisados.';
+  if(media>5){td.className='ibox ok';td.innerHTML='<strong>Crescimento médio: +'+(media).toFixed(1)+'%</strong><br>'+info+' Loja em trajetória positiva.';}
+  else if(media>0){td.className='ibox';td.innerHTML='<strong>Crescimento médio: +'+(media).toFixed(1)+'%</strong><br>'+info+' Crescimento leve — replicar ações dos meses positivos.';}
+  else if(media>-10){td.className='ibox warn';td.innerHTML='<strong>Queda média: '+(media).toFixed(1)+'%</strong><br>'+info+' Revisar mix, conversões e prospecção.';}
+  else{td.className='ibox err';td.innerHTML='<strong>Queda acentuada: '+(media).toFixed(1)+'%</strong><br>'+info+' Plano de ação imediato necessário.';}
+}
+
+/* ── KPI ──────────────────────────────────────────────────── */
+function calcPct(){
+  var m=parseFloat(g('meta'))||0,r=parseFloat(g('realizado'))||0,el=document.getElementById('pct-val');
+  if(!m){el.textContent='—';el.style.color='';return;}
+  var p=Math.round(r/m*100);
+  el.textContent=p+'%';
+  el.style.color=p>=100?'#059669':p>=70?'#d97706':'#dc2626';
+}
+
+/* ── MATERIAIS ────────────────────────────────────────────── */
+function renderMats(){
+  var l=document.getElementById('mat-list');if(!l)return;
+  if(!mats.length){l.innerHTML='<div class="empty-msg">Nenhum material registrado.<br>Use os atalhos abaixo ou adicione manualmente.</div>';return;}
+  l.innerHTML=mats.map(function(m){
+    return '<div class="mi'+(m.status==='enviado'?' sent':' pend')+'">'
+      +'<div class="mchk" onclick="togSent('+m.id+')">'+(m.status==='enviado'?'✓':'')+'</div>'
+      +'<div class="mbody"><div class="mdsc">'+m.desc+'</div>'
+      +'<div class="mmeta">'+(m.dest?'<span>'+m.dest+'</span>':'')+(m.tipo?'<span>'+m.tipo+'</span>':'')
+      +'<span style="color:'+(m.status==='enviado'?'#059669':'#d97706')+'">'+m.status+'</span></div></div>'
+      +'<span class="mdel" onclick="delMat('+m.id+')">✕</span></div>';
+  }).join('');
+}
+function addMat(){
+  var d=g('mat-desc');if(!d){document.getElementById('mat-desc').focus();return;}
+  mats.push({id:matId++,desc:d,dest:document.getElementById('mat-dest').value,tipo:document.getElementById('mat-tipo').value,status:'pendente'});
+  document.getElementById('mat-desc').value='';
+  document.getElementById('mat-dest').selectedIndex=0;
+  document.getElementById('mat-tipo').selectedIndex=0;
+  renderMats();
+}
+function qMat(d,de,t){mats.push({id:matId++,desc:d,dest:de,tipo:t,status:'pendente'});renderMats();}
+function togSent(id){var m=mats.find(function(x){return x.id===id;});if(m){m.status=m.status==='enviado'?'pendente':'enviado';renderMats();}}
+function delMat(id){mats=mats.filter(function(m){return m.id!==id;});renderMats();}
+
+/* ── LABS ─────────────────────────────────────────────────── */
+function addLab(){labs.push({id:labId++,lab:'',tipo:'',desc:'',status:'aberto'});renderLabs();}
+function renderLabs(){
+  var el=document.getElementById('lab-list');if(!el)return;
+  if(!labs.length){el.innerHTML='';return;}
+  el.innerHTML=labs.map(function(l){
+    return '<div class="ditem"><span class="ditem-del" onclick="delLab('+l.id+')">✕</span>'
+      +'<div class="drow">'
+      +'<select onchange="updL('+l.id+',\'lab\',this.value)"><option value="">Laboratório...</option><option>REPRO</option><option>Essilor</option><option>Hoya</option><option>Lab Carol</option><option>Outro</option></select>'
+      +'<select onchange="updL('+l.id+',\'tipo\',this.value)"><option value="">Tipo...</option><option>Atraso</option><option>Qualidade</option><option>Extravio</option><option>Refração</option><option>Comunicação</option><option>Outro</option></select>'
+      +'</div>'
+      +'<div class="dtxt"><textarea placeholder="Descreva: OSs afetadas, data, impacto..." oninput="updL('+l.id+',\'desc\',this.value)">'+l.desc+'</textarea></div>'
+      +'</div>';
+  }).join('');
+}
+function updL(id,f,v){var l=labs.find(function(x){return x.id===id;});if(l)l[f]=v;}
+function delLab(id){labs=labs.filter(function(l){return l.id!==id;});renderLabs();}
+
+/* ── MKT ──────────────────────────────────────────────────── */
+function addMkt(){mkts.push({id:mktId++,tipo:'',status:'planejada',desc:''});renderMkts();}
+function renderMkts(){
+  var el=document.getElementById('mkt-list');if(!el)return;
+  if(!mkts.length){el.innerHTML='';return;}
+  el.innerHTML=mkts.map(function(m){
+    return '<div class="ditem"><span class="ditem-del" onclick="delMkt('+m.id+')">✕</span>'
+      +'<div class="drow">'
+      +'<select onchange="updMkt('+m.id+',\'tipo\',this.value)"><option value="">Tipo de ação...</option><option>Panfletagem</option><option>Instagram</option><option>Google Ads</option><option>WhatsApp</option><option>Clínica/Oftalmo</option><option>Evento local</option><option>Parceria empresa</option><option>Outro</option></select>'
+      +'<select onchange="updMkt('+m.id+',\'status\',this.value)"><option value="planejada">Planejada</option><option value="em andamento">Em andamento</option><option value="concluída">Concluída</option><option value="cancelada">Cancelada</option></select>'
+      +'</div>'
+      +'<div class="dtxt"><textarea placeholder="Objetivo, público-alvo, resultado esperado/obtido..." oninput="updMkt('+m.id+',\'desc\',this.value)">'+m.desc+'</textarea></div></div>';
+  }).join('');
+}
+function updMkt(id,f,v){var m=mkts.find(function(x){return x.id===id;});if(m)m[f]=v;}
+function delMkt(id){mkts=mkts.filter(function(m){return m.id!==id;});renderMkts();}
+
+/* ══════════════════════════════════════════════════
+   GERADOR DE RELATÓRIO COMPLETO
+══════════════════════════════════════════════════ */
+function gerarRelatorio(){
+  var txt=buildRelatorio();
+  document.getElementById('rel-txt').textContent=txt;
+  document.getElementById('rel-titulo').textContent='Relatório — '+(g('loja')||'Loja');
+  document.getElementById('relView').classList.add('open');
+}
+function closeRel(){document.getElementById('relView').classList.remove('open');}
+
+function linha(c,n){return c.repeat(n);}
+function bloco(titulo,linhas){
+  var out='\n'+linha('─',50)+'\n'+titulo+'\n'+linha('─',50)+'\n';
+  linhas.forEach(function(l){if(l)out+=l+'\n';});
+  return out;
+}
+
+function buildRelatorio(){
+  var sumCY=fatCY.reduce(function(a,b){return a+b;},0);
+  var filled=fatVP.filter(function(v){return v!==null;});
+  var mediaVar=filled.length?(filled.reduce(function(a,b){return a+b;},0)/filled.length):null;
+  var meta=parseFloat(g('meta'))||0,real=parseFloat(g('realizado'))||0;
+  var pct=meta?Math.round(real/meta*100):null;
+  var vicios=getTags('wn'),dest=getTags('ok');
+  var stars='★'.repeat(starVal)+'☆'.repeat(5-starVal);
+  var mPend=mats.filter(function(x){return x.status!=='enviado';});
+  var mEnv=mats.filter(function(x){return x.status==='enviado';});
+  var dataVisita=fmtD(g('data'));
+  var anoVisita=g('data')?g('data').split('-')[0]:'';
+  var anoAnterior=anoVisita?(parseInt(anoVisita)-1).toString():'PY';
+
+  var L=[];
+
+  /* CABEÇALHO */
+  L.push(linha('═',50));
+  L.push('RELATÓRIO DE VISITA DE CONSULTORIA');
+  L.push('EssilorLuxottica — '+(g('marca')||'Óticas Carol'));
+  L.push(linha('═',50));
+  L.push('');
+  L.push('Loja          : '+(g('loja')||'—'));
+  L.push('Data          : '+dataVisita);
+  L.push('Gerente       : '+(g('gerente')||'—'));
+  L.push('Consultor     : '+(g('consultor')||'—'));
+  L.push('Objetivo      : '+(g('objetivo')||'—'));
+  L.push('Perfil        : '+gST('ploja'));
+  if(gST('cred')==='Sim'){
+    L.push('Crediário     : '+(g('cred-nome')||'Sim')+(g('cred-lim')?' | Limite R$ '+g('cred-lim'):''));
+    if(g('cred-obs'))L.push('  Obs.: '+g('cred-obs'));
+  }
+
+  /* FATURAMENTO */
+  L.push(bloco('1. FATURAMENTO — CRESCIMENTO VS '+anoAnterior,[]));
+  var temFat=false;
+  MESES.forEach(function(m,i){
+    if(fatCY[i]||fatVP[i]!==null){
+      temFat=true;
+      var vp=fatVP[i];
+      var varStr=vp!==null?((vp>=0?'+':'')+vp.toFixed(1)+'%  '+(vp>0?'▲':vp<0?'▼':'■')):'—';
+      L.push('  '+m.padEnd(4)+': '+fmtR(fatCY[i]).padEnd(14)+'Var% vs PY: '+varStr);
+    }
+  });
+  if(!temFat)L.push('  Dados de faturamento não informados.');
+  if(sumCY>0){
+    L.push('');
+    L.push('  Total acumulado CY : '+fmtR(sumCY));
+  }
+  if(mediaVar!==null){
+    var sinal=mediaVar>=0?'+':'';
+    L.push('  Variação média     : '+sinal+mediaVar.toFixed(1)+'%  ('+(mediaVar>0?'crescimento vs '+anoAnterior:mediaVar<0?'queda vs '+anoAnterior:'estável')+')');
+  }
+
+  /* KPIs */
+  L.push(bloco('2. KPIs DO MÊS EM CURSO',[]));
+  L.push('  Meta estabelecida  : '+(g('meta')?fmtR(parseFloat(g('meta'))):'—'));
+  L.push('  Realizado até hoje : '+(g('realizado')?fmtR(parseFloat(g('realizado'))):'—')+(pct?' ('+pct+'% da meta)':''));
+  L.push('  Ticket médio       : '+(g('ticket')?fmtR(parseFloat(g('ticket'))):'—'));
+  L.push('  Itens por atend.   : '+(g('itens')||'—'));
+  L.push('  Conv. RX → Solar   : '+(g('conv1')||'—')+'%');
+  L.push('  Conv. RX → Lente OFT: '+(g('conv2')||'—')+'%');
+  L.push('  PM Óculos RX       : '+(g('pmrx')?fmtR(parseFloat(g('pmrx'))):'—'));
+  L.push('  PM Lente OFT       : '+(g('pmoft')?fmtR(parseFloat(g('pmoft'))):'—'));
+  L.push('  Tendência vs mês ant.: '+gST('fatvar'));
+
+  /* PLATAFORMAS */
+  L.push(bloco('3. PLATAFORMAS E OPERACIONAL',[]));
+  L.push('  Leonardo        : '+gST('leo'));
+  L.push('  Conecta         : '+gST('con'));
+  L.push('  Plataforma Meta : '+gST('metap'));
+  L.push('  Smart Shopper   : '+gST('ss'));
+  L.push('  Visioffice      : '+gST('vo'));
+  L.push('  Tripla oferta   : '+gST('tripla'));
+  L.push('  Livro óptico    : '+gST('livro'));
+  L.push('  Diploma óptico  : '+gST('diploma'));
+  L.push('  Pós-venda ativo : '+gST('posv'));
+  L.push('  PEX             : '+gST('pex'));
+  if(g('fc-rb')||g('fc-pr')||g('fc-ot')||g('fc-obs')){
+    L.push('');
+    L.push('  Facing / Planograma ('+gST('plan')+'):');
+    if(g('fc-rb'))L.push('    Ray-Ban     : '+g('fc-rb'));
+    if(g('fc-pr'))L.push('    Prada/Luxot.: '+g('fc-pr'));
+    if(g('fc-ot'))L.push('    Outras marcas: '+g('fc-ot'));
+    if(g('fc-obs'))L.push('    Obs. gerais : '+g('fc-obs'));
+  }
+
+  /* EQUIPE */
+  L.push(bloco('4. EQUIPE',[]));
+  L.push('  Colaboradores presentes: '+(g('ncolab')||'—')+' / '+(g('ntotal')||'—')+' no total');
+  L.push('  Perfil predominante    : '+gST('peq'));
+  L.push('  Energia e motivação    : '+stars);
+  if(dest.length)L.push('  Destaques positivos    : '+dest.join(' · '));
+  if(vicios.length)L.push('  Vícios observados      : '+vicios.join(' · '));
+  if(g('talento')){L.push('');L.push('  Talento em destaque:');L.push('    '+g('talento'));}
+
+  /* COMERCIAL */
+  if(mkts.length||labs.length||g('reclam')){
+    L.push(bloco('5. COMERCIAL',[]));
+    if(mkts.length){
+      L.push('  Ações de marketing:');
+      mkts.forEach(function(m,i){
+        L.push('  '+(i+1)+'. ['+( m.tipo||'—')+'] ['+m.status+']'+(m.desc?' — '+m.desc:''));
+      });
+    }
+    if(labs.length){
+      if(mkts.length)L.push('');
+      L.push('  Problemas com laboratório óptico:');
+      labs.forEach(function(l,i){
+        L.push('  '+(i+1)+'. '+( l.lab||'—')+' | '+(l.tipo||'—')+(l.desc?' — '+l.desc:''));
+      });
+    }
+    if(g('reclam')){
+      L.push('');
+      L.push('  Reclamações:');
+      L.push('    '+g('reclam'));
+      if(g('rec-enc'))L.push('  Encaminhamento: '+g('rec-enc'));
+    }
+  }
+
+  /* OBSERVAÇÕES */
+  L.push(bloco('6. OBSERVAÇÕES DA VISITA',[]));
+  if(g('trein')){L.push('  Treinamento realizado:');L.push('    '+g('trein'));L.push('');}
+  if(g('estrutura')){L.push('  Estrutura física / ponto comercial:');L.push('    '+g('estrutura'));L.push('');}
+  if(g('concorr')){L.push('  Concorrência e mercado local:');L.push('    '+g('concorr'));L.push('');}
+  if(g('percepcao')){L.push('  Percepção do consultor:');L.push('    '+g('percepcao'));L.push('');}
+  if(g('obsgerais')){L.push('  Observações gerais:');L.push('    '+g('obsgerais'));}
+
+  /* PLANO DE AÇÃO */
+  var temAcao=g('a1')||g('a2')||g('a3');
+  if(temAcao){
+    L.push(bloco('7. PLANO DE AÇÃO',[]));
+    if(g('a1'))L.push('  1. '+g('a1')+(g('a1r')?' ['+g('a1r')+']':'')+(g('a1p')?' — '+g('a1p'):''));
+    if(g('a2'))L.push('  2. '+g('a2')+(g('a2r')?' ['+g('a2r')+']':'')+(g('a2p')?' — '+g('a2p'):''));
+    if(g('a3'))L.push('  3. '+g('a3')+(g('a3r')?' ['+g('a3r')+']':'')+(g('a3p')?' — '+g('a3p'):''));
+  }
+
+  /* MATERIAIS */
+  if(mPend.length||mEnv.length){
+    L.push(bloco('8. CONTROLE DE MATERIAIS',[]));
+    if(mPend.length){
+      L.push('  PENDENTES ('+mPend.length+'):');
+      mPend.forEach(function(x,i){L.push('  '+(i+1)+'. '+x.desc+(x.dest?' → '+x.dest:'')+(x.tipo?' ['+x.tipo+']':''));});
+    }
+    if(mEnv.length){
+      if(mPend.length)L.push('');
+      L.push('  ENVIADOS ('+mEnv.length+'):');
+      mEnv.forEach(function(x){L.push('  ✓ '+x.desc+(x.dest?' → '+x.dest:''));});
+    }
+  }
+
+  /* RODAPÉ */
+  L.push('');
+  L.push(linha('═',50));
+  L.push('Documento gerado em: '+new Date().toLocaleString('pt-BR'));
+  L.push(linha('═',50));
+  L.push('');
+  L.push('Assinatura do consultor : _____________________________');
+  L.push('Assinatura do gerente   : _____________________________');
+  L.push('Data: '+dataVisita);
+
+  return L.join('\n');
+}
+
+/* ── AÇÕES DO RELATÓRIO ───────────────────────────────────── */
+function getRelTxt(){return document.getElementById('rel-txt').textContent;}
+
+function downloadTxt(){
+  var txt=getRelTxt();
+  var loja=(g('loja')||'loja').replace(/[^a-zA-Z0-9]/g,'_');
+  var data=(g('data')||new Date().toISOString().split('T')[0]);
+  var nome='relatorio_'+loja+'_'+data+'.txt';
+  var blob=new Blob([txt],{type:'text/plain;charset=utf-8'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;a.download=nome;
+  document.body.appendChild(a);a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function shareRel(){
+  var txt=getRelTxt();
+  if(navigator.share){
+    navigator.share({title:'Relatório de Visita — '+(g('loja')||''),text:txt});
+  }else{
+    window.open('https://wa.me/?text='+encodeURIComponent(txt.substring(0,4000)),'_blank');
+  }
+}
+
+function copyRel(){
+  var txt=getRelTxt();
+  var btn=event.target;
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(function(){flash(btn,'Copiado!');});
+  }else{
+    var ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';
+    document.body.appendChild(ta);ta.focus();ta.select();document.execCommand('copy');document.body.removeChild(ta);
+    flash(btn,'Copiado!');
+  }
+}
+function flash(btn,msg){
+  var orig=btn.textContent;btn.textContent=msg;
+  setTimeout(function(){btn.textContent=orig;},2200);
+}
+
+/* ── HISTÓRICO ────────────────────────────────────────────── */
+function loadHist(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||[];}catch(e){return[];}}
+function saveHist(h){try{localStorage.setItem(STORE_KEY,JSON.stringify(h));}catch(e){alert('Espaço insuficiente. Baixe o relatório antes de continuar.');}}
+
+function buildSnap(){
+  var sumCY=fatCY.reduce(function(a,b){return a+b;},0);
+  var filled=fatVP.filter(function(v){return v!==null;});
+  var media=filled.length?(filled.reduce(function(a,b){return a+b;},0)/filled.length).toFixed(1):null;
+  var meta=parseFloat(g('meta'))||0,real=parseFloat(g('realizado'))||0;
+  return{
+    id:Date.now(),data:g('data'),loja:g('loja'),marca:g('marca'),gerente:g('gerente'),
+    objetivo:g('objetivo'),meta:meta,realizado:real,
+    pct:meta?Math.round(real/meta*100):null,
+    ticket:g('ticket'),sumCY:sumCY,mediaVar:media,
+    a1:g('a1'),resumo:buildRelatorio()
+  };
+}
+
+function saveAndNew(){
+  var hist=loadHist();
+  hist.unshift(buildSnap());
+  if(hist.length>80)hist=hist.slice(0,80);
+  saveHist(hist);
+  closeRel();
+  resetForm();
+  alert('Visita salva no histórico!');
+}
+
+function renderHist(){
+  var hist=loadHist();
+  var el=document.getElementById('hist-list');
+  var cnt=document.getElementById('hist-count');
+  cnt.textContent='('+hist.length+')';
+  if(!hist.length){el.innerHTML='<div class="empty-msg">Nenhuma visita salva ainda.<br>Após gerar, use "Salvar no histórico".</div>';return;}
+  el.innerHTML=hist.slice(0,15).map(function(v){
+    var p=v.pct;
+    var cls=p>=100?'ok':p>=70?'wn':'er';
+    var varStr=v.mediaVar!==null?(parseFloat(v.mediaVar)>0?'+':'')+v.mediaVar+'%':'—';
+    return '<div class="hist-item">'
+      +'<div class="hist-top">'
+      +'<span class="hist-loja">'+( v.loja||'—')+'</span>'
+      +'<span>'+(p!==null?'<span class="hist-cov '+cls+'">'+p+'%</span>':'')
+      +'<span class="hist-del" onclick="delHist('+v.id+',event)">🗑</span></span>'
+      +'</div>'
+      +'<div class="hist-meta">'+(v.data?fmtD(v.data):'—')+' · '+(v.gerente||'')+(v.mediaVar!==null?' · Fat: '+varStr:'')+'</div>'
+      +(v.a1?'<div style="font-size:11px;color:var(--g500);margin-top:3px">→ '+v.a1+'</div>':'')
+      +'<span class="hist-open" onclick="verHist('+v.id+')">Ver relatório →</span>'
+      +'</div>';
+  }).join('');
+}
+
+function verHist(id){
+  var hist=loadHist();
+  var v=hist.find(function(x){return x.id===id;});
+  if(!v)return;
+  document.getElementById('rel-txt').textContent=v.resumo;
+  document.getElementById('rel-titulo').textContent='Relatório — '+(v.loja||'Loja');
+  document.getElementById('relView').classList.add('open');
+}
+
+function delHist(id,ev){
+  ev.stopPropagation();
+  if(!confirm('Excluir este registro?'))return;
+  saveHist(loadHist().filter(function(v){return v.id!==id;}));
+  renderHist();
+}
+
+/* ── RESET ────────────────────────────────────────────────── */
+function resetForm(){
+  document.querySelectorAll('input[type=text],input[type=number],input[type=date],textarea').forEach(function(e){e.value='';});
+  document.querySelectorAll('select').forEach(function(e){e.selectedIndex=0;});
+  document.querySelectorAll('.tog,.stg,.tag').forEach(function(e){e.className=e.className.replace(/\bon\b|\bok\b|\bwn\b|\ber\b/g,'').trim();});
+  ST={};starVal=0;mats=[];matId=0;labs=[];labId=0;mkts=[];mktId=0;
+  fatCY=new Array(12).fill(0);fatVP=new Array(12).fill(null);
+  setStar(0);
+  document.getElementById('pct-val').textContent='—';
+  document.getElementById('pct-val').style.color='';
+  document.getElementById('data').valueAsDate=new Date();
+  document.getElementById('cred-blk').style.display='none';
+  buildFatTable();renderMats();renderLabs();renderMkts();
+  goTo(0);
+}
+
+/* ── INIT ─────────────────────────────────────────────────── */
+buildFatTable();
+renderMats();
+</script>
+</body>
+</html>
