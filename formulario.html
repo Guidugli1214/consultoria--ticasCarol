@@ -184,6 +184,58 @@ body{font-family:var(--f);background:var(--g50);color:var(--g900);min-height:100
 .dp-total-g{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
 .dp-total-g span{font-size:11px;font-weight:700;font-family:var(--m);color:var(--blue-dk);text-align:center}
 .dp-total-g small{display:block;font-size:8px;font-weight:600;color:var(--g400);text-transform:uppercase;text-align:center}
+/* STATUS SC / ANÁLISE BI */
+.sc-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;border-radius:20px;padding:4px 10px}
+.sc-badge.vip{background:#1a1a2e;color:#FFD700}
+.sc-badge.prem{background:#1240a8;color:white}
+.sc-badge.star{background:#7c3aed;color:white}
+.sc-badge.basic{background:var(--g200);color:var(--g700)}
+.cluster-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.cluster-card{border:2px solid var(--g200);border-radius:var(--r);padding:10px 8px;text-align:center;cursor:pointer;transition:all .15s}
+.cluster-card.verde{border-color:#059669;background:#d1fae5}.cluster-card.verde .cc-lbl{color:#065f46}
+.cluster-card.amarelo{border-color:#d97706;background:#fef3c7}.cluster-card.amarelo .cc-lbl{color:#92400e}
+.cluster-card.branco{border-color:#6b7280;background:#f9fafb}.cluster-card.branco .cc-lbl{color:#374151}
+.cluster-card.selected{box-shadow:0 0 0 3px rgba(26,86,219,.4)}
+.cc-ico{font-size:20px;display:block;margin-bottom:3px}
+.cc-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.brand-tri{background:white;border:1.5px solid var(--g200);border-radius:var(--r);padding:0;margin-bottom:8px;overflow:hidden}
+.tri-hdr{background:var(--g100);padding:7px 12px;font-size:10px;font-weight:700;color:var(--g600);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--g200)}
+.tri-row{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--g100)}
+.tri-row:last-child{border-bottom:none}
+.tri-nm{font-size:12px;font-weight:500;color:var(--g800);flex:1}
+.tri-mandatory{font-size:9px;font-weight:700;background:#fee2e2;color:#991b1b;border-radius:4px;padding:1px 5px;margin-left:5px}
+.tri-opts{display:flex;gap:4px}
+.tri-opt{padding:4px 9px;border:1.5px solid var(--g200);border-radius:20px;font-size:10px;font-weight:600;cursor:pointer;transition:all .12s;color:var(--g500);background:white}
+.tri-opt.ok{background:var(--green-lt);border-color:var(--green);color:#065f46}
+.tri-opt.er{background:var(--red-lt);border-color:var(--red);color:#991b1b}
+.tri-opt.wn{background:var(--amber-lt);border-color:var(--amber);color:#92400e}
+.bi-card{background:white;border:1.5px solid var(--g200);border-radius:var(--r);padding:10px 12px;margin-bottom:8px;position:relative}
+.bi-card.alert-red{border-color:var(--red)}
+.bi-card.alert-amber{border-color:var(--amber)}
+.bi-card.alert-green{border-color:var(--green)}
+.bi-hdr{display:flex;align-items:center;gap:8px;margin-bottom:9px;padding-bottom:8px;border-bottom:1px solid var(--g100)}
+.bi-brand-nm{font-size:13px;font-weight:700;color:var(--g900);flex:1}
+.bi-class-tag{font-size:9px;font-weight:700;border-radius:4px;padding:2px 6px}
+.bi-class-tag.sol{background:#fef3c7;color:#92400e}
+.bi-class-tag.rx{background:#e8f0fe;color:#1240a8}
+.bi-del{font-size:14px;color:var(--g300);cursor:pointer;padding:2px}
+.bi-del:active{color:var(--red)}
+.bi-kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:8px}
+.bi-kpi{background:var(--g50);border-radius:var(--rsm);padding:5px 7px;text-align:center}
+.bi-kpi-l{font-size:8px;font-weight:600;color:var(--g400);letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px}
+.bi-kpi-v{font-size:14px;font-weight:700;font-family:var(--m);color:var(--g900)}
+.bi-kpi-v.pos{color:var(--green)}.bi-kpi-v.neg{color:var(--red)}.bi-kpi-v.warn{color:var(--amber)}
+.bi-rec{margin-top:7px;padding-top:7px;border-top:1px solid var(--g100)}
+.bi-rec-l{font-size:9px;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+.focal-card{border-radius:var(--r);padding:10px 13px;margin-bottom:8px;border-left:4px solid transparent}
+.focal-card.crit{background:#fff5f5;border-color:var(--red)}
+.focal-card.high{background:#fffbeb;border-color:var(--amber)}
+.focal-card.med{background:#eff6ff;border-color:var(--blue)}
+.focal-card.good{background:#f0fdf4;border-color:var(--green)}
+.focal-title{font-size:12px;font-weight:700;color:var(--g900);margin-bottom:3px}
+.focal-desc{font-size:11px;color:var(--g600);line-height:1.5}
+.sis-bar{height:6px;border-radius:3px;background:var(--g200);margin-top:4px;overflow:hidden}
+.sis-fill{height:100%;border-radius:3px;transition:width .3s}
 </style>
 </head>
 <body>
@@ -209,6 +261,8 @@ body{font-family:var(--f);background:var(--g50);color:var(--g900);min-height:100
     <div class="tab" onclick="goTo(8)">Observações</div>
     <div class="tab" onclick="goTo(9)">Materiais</div>
     <div class="tab" onclick="goTo(10)">📊 Desempenho</div>
+    <div class="tab" onclick="goTo(11)">🏷️ Status SC</div>
+    <div class="tab" onclick="goTo(12)">🔬 Análise BI</div>
   </div>
 </div>
 
@@ -676,6 +730,254 @@ body{font-family:var(--f);background:var(--g50);color:var(--g900);min-height:100
 
 </div>
 
+<!-- 11: STATUS SUPER CAROL / BUSINESS PLAN -->
+<div class="sec" id="sec11">
+
+  <div class="ibox">Status do programa Super Carol e compliance do Business Plan. Use como referência os dados do sistema antes da visita.</div>
+
+  <div class="slbl">Modalidade do Programa</div>
+  <div class="sc" style="margin-bottom:12px">
+    <div class="sr"><span class="sn">Modalidade atual</span>
+      <select id="sc-mod" style="border:1.5px solid var(--g200);border-radius:var(--rsm);font-size:12px;font-family:var(--f);color:var(--g700);padding:6px 9px;background:var(--g50);outline:none;appearance:none;-webkit-appearance:none" onchange="updScBadge()">
+        <option value="">Selecionar...</option>
+        <option value="vip-full">VIP Full</option>
+        <option value="vip-flex">VIP Flex</option>
+        <option value="prem-full">Premium Full</option>
+        <option value="prem-flex">Premium Flex</option>
+        <option value="stars">Stars</option>
+        <option value="basic+">Basic+</option>
+        <option value="basic">Basic</option>
+      </select>
+    </div>
+    <div class="sr"><span class="sn">Cluster / Segmento</span><div class="stgs">
+      <div class="stg" onclick="sg(this,'cluster','ok')">🟢 Verde</div>
+      <div class="stg" onclick="sg(this,'cluster','wn')">🟡 Amarelo</div>
+      <div class="stg" onclick="sg(this,'cluster','er')">⚪ Branco</div>
+    </div></div>
+    <div class="sr"><span class="sn">Tamanho da loja</span><div class="stgs">
+      <div class="stg" onclick="sg(this,'tamloja','ok')">PP</div>
+      <div class="stg" onclick="sg(this,'tamloja','ok')">P</div>
+      <div class="stg" onclick="sg(this,'tamloja','ok')">M</div>
+      <div class="stg" onclick="sg(this,'tamloja','ok')">G</div>
+      <div class="stg" onclick="sg(this,'tamloja','ok')">GG</div>
+    </div></div>
+  </div>
+
+  <div class="slbl">Métricas de Compliance</div>
+  <div class="kg">
+    <div class="kc"><div class="kl">Share Luxottica atual (%)</div><input type="number" id="sc-share-lux" placeholder="0" step="0.1" inputmode="decimal" oninput="checkScCompliance()"></div>
+    <div class="kc"><div class="kl">% compras fora portfólio</div><input type="number" id="sc-pct-fora" placeholder="0" step="0.1" inputmode="decimal" oninput="checkScCompliance()"></div>
+  </div>
+  <div class="kg">
+    <div class="kc"><div class="kl">Facing mapeado (peças)</div><input type="number" id="sc-facing-total" placeholder="0" inputmode="numeric"></div>
+    <div class="kc"><div class="kl">Colunas mapeadas</div><input type="number" id="sc-colunas" placeholder="0" inputmode="numeric"></div>
+  </div>
+  <div id="sc-compliance-status" style="margin-bottom:12px"></div>
+
+  <div class="sc" style="margin-bottom:12px">
+    <div class="sr"><span class="sn">Facing 100% centralizado?</span><div class="stgs">
+      <div class="stg" onclick="sg(this,'sc-facing100','ok')">Sim ✓</div>
+      <div class="stg" onclick="sg(this,'sc-facing100','er')">Não ✗</div>
+    </div></div>
+    <div class="sr"><span class="sn">Bônus fidelidade em vigência?</span><div class="stgs">
+      <div class="stg" onclick="sg(this,'sc-bonus','ok')">Sim</div>
+      <div class="stg" onclick="sg(this,'sc-bonus','er')">Não</div>
+      <div class="stg" onclick="sg(this,'sc-bonus','wn')">Pendente</div>
+    </div></div>
+    <div class="sr"><span class="sn">Rebate sell-in em vigência?</span><div class="stgs">
+      <div class="stg" onclick="sg(this,'sc-rebate','ok')">Sim</div>
+      <div class="stg" onclick="sg(this,'sc-rebate','er')">Não</div>
+    </div></div>
+    <div class="sr"><span class="sn">Faseamento de entrada concluído?</span><div class="stgs">
+      <div class="stg" onclick="sg(this,'sc-fasea','ok')">Sim</div>
+      <div class="stg" onclick="sg(this,'sc-fasea','er')">Pendente</div>
+      <div class="stg" onclick="sg(this,'sc-fasea','wn')">N/A</div>
+    </div></div>
+    <div class="sr"><span class="sn">Devoluções (Clean Up) ativas?</span><div class="stgs">
+      <div class="stg" onclick="sg(this,'sc-cleanup','ok')">Sim</div>
+      <div class="stg" onclick="sg(this,'sc-cleanup','er')">Não</div>
+    </div></div>
+    <div class="sr"><span class="sn">Compras duplicadas (Flex ∩ Central)?</span><div class="stgs">
+      <div class="stg" onclick="sg(this,'sc-dupli','er')">Sim ⚠</div>
+      <div class="stg" onclick="sg(this,'sc-dupli','ok')">Não</div>
+    </div></div>
+  </div>
+
+  <div class="dvd"></div>
+  <div class="slbl">Triângulo de Marcas — Conformidade por Cluster</div>
+  <div class="ibox warn" style="margin-bottom:10px">Marque a presença de cada marca conforme o cluster da loja. <strong>Indispensáveis</strong> não podem ser removidas do BP.</div>
+
+  <div class="brand-tri">
+    <div class="tri-hdr">🏆 LIFESTYLE & SPORT (todas as lojas)</div>
+    <div class="tri-row"><span class="tri-nm">Ray-Ban<span class="tri-mandatory">INDISPENSÁVEL</span></span><div class="tri-opts">
+      <div class="tri-opt" onclick="triOpt(this,'tri-rb')">✓ Sim</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-rb')">~ Parcial</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-rb')">✗ Não</div>
+    </div></div>
+    <div class="tri-row"><span class="tri-nm">OC Carol<span class="tri-mandatory">INDISPENSÁVEL</span></span><div class="tri-opts">
+      <div class="tri-opt" onclick="triOpt(this,'tri-occarol')">✓ Sim</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-occarol')">~ Parcial</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-occarol')">✗ Não</div>
+    </div></div>
+    <div class="tri-row"><span class="tri-nm">Oakley</span><div class="tri-opts">
+      <div class="tri-opt" onclick="triOpt(this,'tri-oakley')">✓ Sim</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-oakley')">~ Parcial</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-oakley')">✗ Não</div>
+    </div></div>
+  </div>
+
+  <div class="brand-tri">
+    <div class="tri-hdr">⚡ FAST FASHION (Verde + Amarelo: indispensáveis)</div>
+    <div class="tri-row"><span class="tri-nm">Vogue<span class="tri-mandatory">INDISPENSÁVEL</span></span><div class="tri-opts">
+      <div class="tri-opt" onclick="triOpt(this,'tri-vogue')">✓ Sim</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-vogue')">~ Parcial</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-vogue')">✗ Não</div>
+    </div></div>
+    <div class="tri-row"><span class="tri-nm">Ralph<span class="tri-mandatory">VERDE</span></span><div class="tri-opts">
+      <div class="tri-opt" onclick="triOpt(this,'tri-ralph')">✓ Sim</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-ralph')">~ Parcial</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-ralph')">✗ Não</div>
+    </div></div>
+    <div class="tri-row"><span class="tri-nm">Armani Exchange<span class="tri-mandatory">AMARELO</span></span><div class="tri-opts">
+      <div class="tri-opt" onclick="triOpt(this,'tri-ax')">✓ Sim</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-ax')">~ Parcial</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-ax')">✗ Não</div>
+    </div></div>
+    <div class="tri-row"><span class="tri-nm">Arnette<span class="tri-mandatory">BRANCO</span></span><div class="tri-opts">
+      <div class="tri-opt" onclick="triOpt(this,'tri-arnette')">✓ Sim</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-arnette')">~ Parcial</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-arnette')">✗ Não</div>
+    </div></div>
+    <div class="tri-row"><span class="tri-nm">Tecnol</span><div class="tri-opts">
+      <div class="tri-opt" onclick="triOpt(this,'tri-tecnol')">✓ Sim</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-tecnol')">~ Parcial</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-tecnol')">✗ Não</div>
+    </div></div>
+    <div class="tri-row"><span class="tri-nm">Platini</span><div class="tri-opts">
+      <div class="tri-opt" onclick="triOpt(this,'tri-platini')">✓ Sim</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-platini')">~ Parcial</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-platini')">✗ Não</div>
+    </div></div>
+    <div class="tri-row"><span class="tri-nm">Jean Monnier</span><div class="tri-opts">
+      <div class="tri-opt" onclick="triOpt(this,'tri-jm')">✓ Sim</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-jm')">~ Parcial</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-jm')">✗ Não</div>
+    </div></div>
+    <div class="tri-row"><span class="tri-nm">Grazi Massafera</span><div class="tri-opts">
+      <div class="tri-opt" onclick="triOpt(this,'tri-grazi')">✓ Sim</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-grazi')">~ Parcial</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-grazi')">✗ Não</div>
+    </div></div>
+  </div>
+
+  <div class="brand-tri">
+    <div class="tri-hdr">💎 PREMIUM (Verde: indispensáveis)</div>
+    <div class="tri-row"><span class="tri-nm">Emporio Armani<span class="tri-mandatory">INDISPENSÁVEL</span></span><div class="tri-opts">
+      <div class="tri-opt" onclick="triOpt(this,'tri-ea')">✓ Sim</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-ea')">~ Parcial</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-ea')">✗ Não</div>
+    </div></div>
+    <div class="tri-row"><span class="tri-nm">Michael Kors<span class="tri-mandatory">VERDE</span></span><div class="tri-opts">
+      <div class="tri-opt" onclick="triOpt(this,'tri-mk')">✓ Sim</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-mk')">~ Parcial</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-mk')">✗ Não</div>
+    </div></div>
+    <div class="tri-row"><span class="tri-nm">Versace</span><div class="tri-opts">
+      <div class="tri-opt" onclick="triOpt(this,'tri-versace')">✓ Sim</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-versace')">~ Parcial</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-versace')">✗ Não</div>
+    </div></div>
+    <div class="tri-row"><span class="tri-nm">Prada<span class="tri-mandatory">VERDE</span></span><div class="tri-opts">
+      <div class="tri-opt" onclick="triOpt(this,'tri-prada')">✓ Sim</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-prada')">~ Parcial</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-prada')">✗ Não</div>
+    </div></div>
+    <div class="tri-row"><span class="tri-nm">Dolce & Gabbana</span><div class="tri-opts">
+      <div class="tri-opt" onclick="triOpt(this,'tri-dg')">✓ Sim</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-dg')">~ Parcial</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-dg')">✗ Não</div>
+    </div></div>
+    <div class="tri-row"><span class="tri-nm">Burberry</span><div class="tri-opts">
+      <div class="tri-opt" onclick="triOpt(this,'tri-burberry')">✓ Sim</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-burberry')">~ Parcial</div>
+      <div class="tri-opt" onclick="triOpt(this,'tri-burberry')">✗ Não</div>
+    </div></div>
+  </div>
+
+  <div class="fld" style="margin-top:4px"><label>Observações sobre Business Plan e Compliance</label>
+    <textarea id="sc-obs" placeholder="Marcas ausentes, necessidade de revisão de BP, ações acordadas com franqueado..."></textarea>
+  </div>
+
+</div>
+
+<!-- 12: ANÁLISE DE MARCAS / FACING & GIRO (BI) -->
+<div class="sec" id="sec12">
+
+  <div class="ibox">Insira os dados do BI por marca. O sistema identifica automaticamente os <strong>focal points</strong> de baixo desempenho e gera recomendações de troca de coluna.</div>
+
+  <div id="bi-focal-wrap"></div>
+
+  <div class="slbl" style="margin-top:4px">Marcas — Dados do BI</div>
+  <div id="bi-brands-wrap"></div>
+
+  <div style="background:white;border:1.5px solid var(--g200);border-radius:var(--r);padding:10px 12px;margin-bottom:11px">
+    <div class="slbl" style="margin-bottom:8px">Adicionar marca</div>
+    <div class="fld" style="margin-bottom:8px">
+      <select id="bi-brand-sel" style="width:100%;border:1.5px solid var(--g200);border-radius:var(--rsm);font-size:13px;font-family:var(--f);color:var(--g700);padding:9px 10px;background:var(--g50);outline:none;appearance:none;-webkit-appearance:none">
+        <option value="">Selecionar marca...</option>
+        <optgroup label="── Lifestyle / Sport">
+          <option>Ray-Ban Sol</option><option>Ray-Ban Rx</option><option>Ray-Ban Ferrari Sol</option>
+          <option>Ray-Ban Wearable</option><option>Oakley Sol</option><option>Oakley Rx</option>
+        </optgroup>
+        <optgroup label="── Fast Fashion">
+          <option>Vogue Sol</option><option>Vogue Rx</option><option>Ralph Sol</option><option>Ralph Rx</option>
+          <option>Armani Exchange Sol</option><option>Armani Exchange Rx</option>
+          <option>Arnette Sol</option><option>Tommy Hilfiger Sol</option><option>Tommy Hilfiger Rx</option>
+          <option>Mormaii Sol</option><option>Colcci Sol</option>
+        </optgroup>
+        <optgroup label="── Premium">
+          <option>Emporio Armani Sol</option><option>Emporio Armani Rx</option>
+          <option>Michael Kors Sol</option><option>Michael Kors Rx</option>
+          <option>Versace Sol</option><option>Versace Rx</option>
+          <option>Polo Sol</option><option>Polo Rx</option><option>Swarovski Sol</option>
+        </optgroup>
+        <optgroup label="── Luxo">
+          <option>Prada Sol</option><option>Prada Rx</option>
+          <option>Dolce & Gabbana Sol</option><option>Dolce & Gabbana Rx</option>
+          <option>Burberry Sol</option><option>Burberry Rx</option>
+          <option>Giorgio Armani Sol</option><option>Giorgio Armani Rx</option>
+          <option>Gucci Sol</option><option>Gucci Rx</option>
+          <option>Persol Sol</option><option>Miu Miu Sol</option><option>Tiffany Sol</option>
+        </optgroup>
+        <optgroup label="── Frontline">
+          <option>OC Carol Sol</option><option>OC Carol Rx</option>
+          <option>Tecnol Sol</option><option>Tecnol Rx</option>
+          <option>Platini Rx</option><option>Jean Monnier Sol</option><option>Jean Monnier Rx</option>
+          <option>Grazi Massafera Sol</option><option>Kipling Sol</option><option>Kipling Rx</option>
+        </optgroup>
+        <optgroup label="── Exclusive Brands">
+          <option>SEEN Rx</option><option>SEEN Sol</option><option>DBYD Rx</option><option>DBYD Sol</option>
+        </optgroup>
+        <optgroup label="── Kids">
+          <option>Ray-Ban Jr</option><option>Oakley Jr</option><option>Vogue Jr</option><option>OC Carol Kids</option>
+        </optgroup>
+      </select>
+    </div>
+    <button onclick="addBiCard()" style="width:100%;padding:9px;background:var(--blue);color:white;border:none;border-radius:var(--rsm);font-size:13px;font-weight:600;font-family:var(--f);cursor:pointer">+ Adicionar marca ao análise</button>
+  </div>
+
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+    <button onclick="addBiQuick('Ray-Ban Sol')" style="padding:5px 10px;background:var(--blue-lt);color:var(--blue-dk);border:1.5px dashed var(--blue);border-radius:20px;font-size:11px;font-weight:600;font-family:var(--f);cursor:pointer">+ Ray-Ban Sol</button>
+    <button onclick="addBiQuick('Ray-Ban Rx')" style="padding:5px 10px;background:var(--blue-lt);color:var(--blue-dk);border:1.5px dashed var(--blue);border-radius:20px;font-size:11px;font-weight:600;font-family:var(--f);cursor:pointer">+ Ray-Ban Rx</button>
+    <button onclick="addBiQuick('Vogue Rx')" style="padding:5px 10px;background:var(--blue-lt);color:var(--blue-dk);border:1.5px dashed var(--blue);border-radius:20px;font-size:11px;font-weight:600;font-family:var(--f);cursor:pointer">+ Vogue</button>
+    <button onclick="addBiQuick('Emporio Armani Rx')" style="padding:5px 10px;background:var(--blue-lt);color:var(--blue-dk);border:1.5px dashed var(--blue);border-radius:20px;font-size:11px;font-weight:600;font-family:var(--f);cursor:pointer">+ EA</button>
+    <button onclick="addBiQuick('OC Carol Sol')" style="padding:5px 10px;background:var(--blue-lt);color:var(--blue-dk);border:1.5px dashed var(--blue);border-radius:20px;font-size:11px;font-weight:600;font-family:var(--f);cursor:pointer">+ OC Carol</button>
+    <button onclick="addBiQuick('Prada Rx')" style="padding:5px 10px;background:var(--blue-lt);color:var(--blue-dk);border:1.5px dashed var(--blue);border-radius:20px;font-size:11px;font-weight:600;font-family:var(--f);cursor:pointer">+ Prada</button>
+    <button onclick="addBiQuick('Oakley Rx')" style="padding:5px 10px;background:var(--blue-lt);color:var(--blue-dk);border:1.5px dashed var(--blue);border-radius:20px;font-size:11px;font-weight:600;font-family:var(--f);cursor:pointer">+ Oakley</button>
+  </div>
+
+</div>
+
 </div>
 
 <div class="navb">
@@ -734,7 +1036,7 @@ body{font-family:var(--f);background:var(--g50);color:var(--g900);min-height:100
 </div>
 
 <script>
-var cur=0,TOTAL=11,starVal=0,ST={},CL={};
+var cur=0,TOTAL=13,starVal=0,ST={},CL={};
 var mats=[],matId=0,labs=[],labId=0,mkts=[],mktId=0;
 var MESES=["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
 var fatCY=new Array(12).fill(0),fatVP=new Array(12).fill(null);
@@ -1045,6 +1347,12 @@ function buildRelatorio(){
   var dpTxt=buildDpRelatorio();
   if(dpTxt)L.push(dpTxt);
 
+  var scTxt=buildScRelatorio();
+  if(scTxt)L.push(scTxt);
+
+  var biTxt=buildBiRelatorio();
+  if(biTxt)L.push(biTxt);
+
   L.push('\n'+linha('═',50));
   L.push('Gerado em: '+new Date().toLocaleString('pt-BR'));
   L.push(linha('═',50));
@@ -1103,13 +1411,441 @@ function resetForm(){
   ST={};CL={};starVal=0;mats=[];matId=0;labs=[];labId=0;mkts=[];mktId=0;
   fatCY=new Array(12).fill(0);fatVP=new Array(12).fill(null);
   dpDyn={loftfab:[],lcntfab:[],rxbrand:[],solbrand:[],arm:[],loftsh:[]};dpDynId=0;
+  biCards=[];biCardId=0;
+  document.querySelectorAll('.tri-opt').forEach(function(e){e.classList.remove('ok','er','wn');});
+  var scInfo=document.getElementById('sc-compliance-status');if(scInfo){scInfo.className='ibox';scInfo.innerHTML='';}
   setStar(0);document.getElementById('pct-val').textContent='—';document.getElementById('pct-val').style.color='';
   document.getElementById('data').valueAsDate=new Date();
   document.getElementById('cred-blk').style.display='none';
-  buildFatTable();renderMats();renderLabs();renderMkts();buildDpUI();goTo(0);
+  buildFatTable();renderMats();renderLabs();renderMkts();buildDpUI();
+  renderBiCards();renderFocalPoints();goTo(0);
 }
 
-buildFatTable();renderMats();buildDpUI();
+buildFatTable();renderMats();buildDpUI();renderBiCards();
+
+// ============================================================
+// SEC 10 — DESEMPENHO
+// ============================================================
+var DP_CLASSES=[
+  {key:'lcnt',nm:'Lentes CNT'},{key:'loft',nm:'Lentes OFT'},
+  {key:'rxoc',nm:'Óculos RX'},{key:'soloc',nm:'Óculos Solar'},{key:'outros',nm:'Outros'}
+];
+var DP_LOFT_SUB=[
+  {key:'mono',nm:'Monofocal'},{key:'prog',nm:'Progressivo'},{key:'ocup',nm:'Ocupacional'},{key:'bif',nm:'Bifocal'}
+];
+var DP_LOFT_FAB=[
+  {key:'essilor',nm:'Essilor'},{key:'labcarol',nm:'Lab Carol'},{key:'zeiss',nm:'Zeiss'},{key:'hoya',nm:'Hoya'}
+];
+var dpDyn={loftfab:[],lcntfab:[],rxbrand:[],solbrand:[],arm:[],loftsh:[]};
+var dpDynId=0;
+
+function buildDpUI(){
+  // Classes
+  var cw=document.getElementById('dp-classes-wrap');if(!cw)return;
+  cw.innerHTML=DP_CLASSES.map(function(c){
+    return '<div class="dp-card"><div class="dp-nm">'+c.nm
+      +'<span id="dp-pct-'+c.key+'" style="font-size:12px;font-weight:600;font-family:var(--m)"></span></div>'
+      +'<div class="dp-grid">'
+      +'<div class="dp-inp"><div class="dp-il">Fat CY (R$)</div><input type="number" id="dp-cy-'+c.key+'" placeholder="0" inputmode="numeric" oninput="updDpTotals()"></div>'
+      +'<div class="dp-inp"><div class="dp-il">Fat PY (R$)</div><input type="number" id="dp-py-'+c.key+'" placeholder="0" inputmode="numeric" oninput="updDpTotals()"></div>'
+      +'<div class="dp-inp"><div class="dp-il">Qte CY</div><input type="number" id="dp-qcy-'+c.key+'" placeholder="0" inputmode="numeric" oninput="updDpTotals()"></div>'
+      +'<div class="dp-inp"><div class="dp-il">Qte PY</div><input type="number" id="dp-qpy-'+c.key+'" placeholder="0" inputmode="numeric" oninput="updDpTotals()"></div>'
+      +'<div class="dp-inp"><div class="dp-il">PM CY (R$)</div><input type="number" id="dp-pm-'+c.key+'" placeholder="0" inputmode="numeric"></div>'
+      +'<div class="dp-inp"><div class="dp-il">PM PY (R$)</div><input type="number" id="dp-pmpy-'+c.key+'" placeholder="0" inputmode="numeric"></div>'
+      +'</div></div>';
+  }).join('');
+  // LoftSub
+  var lsw=document.getElementById('dp-loft-sub-wrap');if(lsw){
+    lsw.innerHTML=DP_LOFT_SUB.map(function(s){
+      return '<div class="dp-card"><div class="dp-nm">'+s.nm+'</div>'
+        +'<div class="dp-grid">'
+        +'<div class="dp-inp"><div class="dp-il">Fat CY (R$)</div><input type="number" id="dplscy-'+s.key+'" placeholder="0" inputmode="numeric"></div>'
+        +'<div class="dp-inp"><div class="dp-il">Var % PY</div><input type="number" id="dplsvar-'+s.key+'" placeholder="0" step="0.1" inputmode="decimal"></div>'
+        +'</div></div>';
+    }).join('');
+  }
+  // LoftFab fixed
+  var lfw=document.getElementById('dp-loft-fab-wrap');if(lfw){
+    lfw.innerHTML=DP_LOFT_FAB.map(function(f){
+      return '<div class="dp-card"><div class="dp-nm">'+f.nm+'</div>'
+        +'<div class="dp-grid">'
+        +'<div class="dp-inp"><div class="dp-il">Share %</div><input type="number" id="dplf-sh-'+f.key+'" placeholder="0" step="0.1" inputmode="decimal"></div>'
+        +'<div class="dp-inp"><div class="dp-il">Var pp PY</div><input type="number" id="dplf-var-'+f.key+'" placeholder="0" step="0.1" inputmode="decimal"></div>'
+        +'</div></div>';
+    }).join('');
+  }
+  // Dynamic sections
+  renderDpDyn('dp-loft-fab-wrap',dpDyn.loftfab,'loftfab','Fabricante OFT');
+  renderDpDyn('dp-lcnt-fab-wrap',dpDyn.lcntfab,'lcntfab','Fabricante CNT');
+  renderDpBrand('dp-rx-wrap',dpDyn.rxbrand,'rxbrand','Marca RX');
+  renderDpBrand('dp-sol-wrap',dpDyn.solbrand,'solbrand','Marca Solar');
+  renderDpShare('dp-arm-wrap',dpDyn.arm,'arm');
+  renderDpShare('dp-loftsh-wrap',dpDyn.loftsh,'loftsh');
+  updDpTotals();
+}
+
+function updDpTotals(){
+  var sumCY=0,sumQCY=0;
+  DP_CLASSES.forEach(function(c){
+    var cy=parseFloat(document.getElementById('dp-cy-'+c.key)&&document.getElementById('dp-cy-'+c.key).value)||0;
+    var py=parseFloat(document.getElementById('dp-py-'+c.key)&&document.getElementById('dp-py-'+c.key).value)||0;
+    sumCY+=cy;sumQCY+=parseFloat(document.getElementById('dp-qcy-'+c.key)&&document.getElementById('dp-qcy-'+c.key).value)||0;
+    var el=document.getElementById('dp-pct-'+c.key);
+    if(el){if(cy&&py){var v=((cy-py)/py*100);el.textContent=(v>=0?'+':'')+v.toFixed(1)+'%';el.style.color=v>=0?'#059669':'#dc2626';}else{el.textContent='';}}
+  });
+}
+
+function addDpRow(grp,placeholder){
+  dpDyn[grp].push({id:dpDynId++,nm:'',cy:'',py:'',qcy:'',qpy:''});
+  refreshDpSection(grp,placeholder);
+}
+function delDpRow(grp,id){
+  dpDyn[grp]=dpDyn[grp].filter(function(r){return r.id!==id;});
+  refreshDpSection(grp,'');
+}
+function updDpRow(grp,id,fld,val){var r=dpDyn[grp].find(function(x){return x.id===id;});if(r)r[fld]=val;}
+function refreshDpSection(grp,ph){
+  var wrapId={'loftfab':'dp-loft-fab-wrap','lcntfab':'dp-lcnt-fab-wrap','rxbrand':'dp-rx-wrap','solbrand':'dp-sol-wrap','arm':'dp-arm-wrap','loftsh':'dp-loftsh-wrap'}[grp];
+  if(!wrapId)return;
+  if(grp==='arm'||grp==='loftsh')renderDpShare(wrapId,dpDyn[grp],grp);
+  else renderDpBrand(wrapId,dpDyn[grp],grp,ph);
+}
+function renderDpBrand(wrapId,arr,grp,ph){
+  var el=document.getElementById(wrapId);if(!el)return;
+  // Keep fixed rows if any; just append dynamic
+  if(!arr.length){el.innerHTML='';return;}
+  el.innerHTML=arr.map(function(r){
+    return '<div class="dp-brand"><span class="dp-bdel" onclick="delDpRow(\''+grp+'\','+r.id+')">✕</span>'
+      +'<input class="dp-bnm" type="text" placeholder="'+(ph||'Nome')+'..." value="'+r.nm+'" oninput="updDpRow(\''+grp+'\','+r.id+',\'nm\',this.value)">'
+      +'<div class="dp-grid">'
+      +'<div class="dp-inp"><div class="dp-il">Fat CY</div><input type="number" placeholder="0" value="'+r.cy+'" inputmode="numeric" oninput="updDpRow(\''+grp+'\','+r.id+',\'cy\',this.value)"></div>'
+      +'<div class="dp-inp"><div class="dp-il">Fat PY</div><input type="number" placeholder="0" value="'+r.py+'" inputmode="numeric" oninput="updDpRow(\''+grp+'\','+r.id+',\'py\',this.value)"></div>'
+      +'<div class="dp-inp"><div class="dp-il">Qte CY</div><input type="number" placeholder="0" value="'+r.qcy+'" inputmode="numeric" oninput="updDpRow(\''+grp+'\','+r.id+',\'qcy\',this.value)"></div>'
+      +'<div class="dp-inp"><div class="dp-il">Qte PY</div><input type="number" placeholder="0" value="'+r.qpy+'" inputmode="numeric" oninput="updDpRow(\''+grp+'\','+r.id+',\'qpy\',this.value)"></div>'
+      +'</div></div>';
+  }).join('');
+}
+function addShareRow(grp,ph){
+  dpDyn[grp].push({id:dpDynId++,nm:'',sh:'',var:''});
+  renderDpShare({'arm':'dp-arm-wrap','loftsh':'dp-loftsh-wrap'}[grp],dpDyn[grp],grp);
+}
+function renderDpShare(wrapId,arr,grp){
+  var el=document.getElementById(wrapId);if(!el)return;
+  if(!arr.length){el.innerHTML='';return;}
+  el.innerHTML=arr.map(function(r){
+    return '<div class="dp-brand"><span class="dp-bdel" onclick="delDpRow(\''+grp+'\','+r.id+')">✕</span>'
+      +'<input class="dp-bnm" type="text" placeholder="Fabricante..." value="'+r.nm+'" oninput="updDpRow(\''+grp+'\','+r.id+',\'nm\',this.value)">'
+      +'<div class="dp-grid">'
+      +'<div class="dp-inp"><div class="dp-il">Share %</div><input type="number" placeholder="0" step="0.1" value="'+r.sh+'" inputmode="decimal" oninput="updDpRow(\''+grp+'\','+r.id+',\'sh\',this.value)"></div>'
+      +'<div class="dp-inp"><div class="dp-il">Var pp PY</div><input type="number" placeholder="0" step="0.1" value="'+(r['var']||'')+'" inputmode="decimal" oninput="updDpRow(\''+grp+'\','+r.id+',\'var\',this.value)"></div>'
+      +'</div></div>';
+  }).join('');
+}
+
+function buildDpRelatorio(){
+  var lines=[];
+  var hasAny=false;
+  function gv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
+  function fv(id){return parseFloat(gv(id))||0;}
+
+  DP_CLASSES.forEach(function(c){
+    var cy=fv('dp-cy-'+c.key),py=fv('dp-py-'+c.key),qcy=fv('dp-qcy-'+c.key),qpy=fv('dp-qpy-'+c.key);
+    if(cy||py||qcy){
+      if(!hasAny){lines.push('\n'+('─').repeat(50)+'\n12. DESEMPENHO POR CLASSE\n'+('─').repeat(50));hasAny=true;}
+      var varFat=py?(cy-py)/py*100:null;
+      var varQte=qpy?(qcy-qpy)/qpy*100:null;
+      lines.push('  '+c.nm.padEnd(16)+': Fat CY '+fmtR(cy)+(varFat!==null?' (Var: '+(varFat>=0?'+':'')+varFat.toFixed(1)+'%)':'')+(qcy?'  |  Qte: '+qcy+(varQte!==null?' (Var: '+(varQte>=0?'+':'')+varQte.toFixed(1)+'%)':''):''));
+    }
+  });
+  // Brands
+  ['rxbrand','solbrand'].forEach(function(grp){
+    if(dpDyn[grp]&&dpDyn[grp].length){
+      if(!hasAny){lines.push('\n'+('─').repeat(50)+'\n12. DESEMPENHO POR CLASSE\n'+('─').repeat(50));hasAny=true;}
+      lines.push('\n  TOP Marcas — '+(grp==='rxbrand'?'Óculos RX':'Solar')+':');
+      dpDyn[grp].forEach(function(r){if(r.nm)lines.push('    '+r.nm+(r.cy?' CY: '+fmtR(r.cy):'')+(r.py?' PY: '+fmtR(r.py):''));});
+    }
+  });
+  return hasAny?lines.join('\n'):'';
+}
+
+// ============================================================
+// SEC 11 — STATUS SUPER CAROL
+// ============================================================
+var SC_MOD_THRESH={'vip-full':90,'vip-flex':90,'prem-full':60,'prem-flex':60,'stars':0,'basic+':0,'basic':0};
+var SC_MOD_LABELS={'vip-full':'VIP Full','vip-flex':'VIP Flex','prem-full':'Premium Full','prem-flex':'Premium Flex','stars':'Stars','basic+':'Basic+','basic':'Basic'};
+
+function updScBadge(){
+  var sel=document.getElementById('sc-mod');if(!sel)return;
+  var v=sel.value;
+  // Show badge in sc-compliance-status area with compliance info
+  checkScCompliance();
+}
+
+function checkScCompliance(){
+  var sel=document.getElementById('sc-mod');if(!sel)return;
+  var mod=sel.value;
+  var shareEl=document.getElementById('sc-share-lux');
+  var infoEl=document.getElementById('sc-compliance-status');
+  if(!infoEl)return;
+  var share=parseFloat(shareEl&&shareEl.value)||0;
+  var thresh=SC_MOD_THRESH[mod]||0;
+  if(!mod){infoEl.className='ibox';infoEl.textContent='Selecione a modalidade para verificar compliance.';return;}
+  var modLabel=SC_MOD_LABELS[mod]||mod;
+  var cls=mod.startsWith('vip')?'vip':mod.startsWith('prem')?'prem':mod==='stars'?'star':'basic';
+  var ico=mod.startsWith('vip')?'👑':mod.startsWith('prem')?'💎':mod==='stars'?'⭐':'🔵';
+  var badge='<span class="sc-badge '+cls+'">'+ico+' '+modLabel+'</span>';
+  if(!share){infoEl.className='ibox';infoEl.innerHTML=badge+'&nbsp; Informe o Share Luxottica para verificar compliance.';return;}
+  if(thresh>0&&share<thresh){
+    infoEl.className='ibox err';
+    infoEl.innerHTML=badge+'<br><strong>⚠️ Share Luxottica insuficiente!</strong><br>'+modLabel+' exige mín. '+thresh+'%. Atual: '+share+'%.<br>Faltam: '+(thresh-share).toFixed(1)+'pp para cumprir o critério.';
+  } else if(thresh>0){
+    infoEl.className='ibox ok';
+    infoEl.innerHTML=badge+'<br><strong>✅ Share Luxottica OK</strong><br>'+share+'% ≥ '+thresh+'% exigido. Superávit: '+(share-thresh).toFixed(1)+'pp.';
+  } else {
+    infoEl.className='ibox ok';
+    infoEl.innerHTML=badge+'<br><strong>✅ '+modLabel+'</strong> — Sem critério mínimo de share para esta modalidade.';
+  }
+}
+
+function triOpt(el,key){
+  var row=el.closest('.tri-row')||el.parentNode.parentNode;
+  row.querySelectorAll('.tri-opt').forEach(function(o){o.classList.remove('ok','er','wn');});
+  var txt=el.textContent.trim();
+  if(txt.indexOf('Sim')>=0)el.classList.add('ok');
+  else if(txt.indexOf('Não')>=0)el.classList.add('er');
+  else el.classList.add('wn');
+  ST[key]=txt;
+}
+
+
+function buildScRelatorio(){
+  var sel=document.getElementById('sc-mod');var mod=sel?sel.value:'';
+  if(!mod)return'';
+  var L=[];
+  L.push('\n'+('─').repeat(50)+'\n13. STATUS SUPER CAROL — BUSINESS PLAN\n'+('─').repeat(50));
+  L.push('  Modalidade      : '+(SC_MOD_LABELS[mod]||mod));
+  L.push('  Cluster         : '+(ST['cluster']||'—'));
+  L.push('  Tamanho da loja : '+(ST['tamloja']||'—'));
+  var shareEl=document.getElementById('sc-share-lux');var share=shareEl?shareEl.value:'';
+  var pforaEl=document.getElementById('sc-pct-fora');var pfora=pforaEl?pforaEl.value:'';
+  var facingEl=document.getElementById('sc-facing-total');var facing=facingEl?facingEl.value:'';
+  var colEl=document.getElementById('sc-colunas');var cols=colEl?colEl.value:'';
+  if(share)L.push('  Share Luxottica : '+share+'%'+(SC_MOD_THRESH[mod]>0?' (min '+SC_MOD_THRESH[mod]+'%)':''));
+  if(pfora)L.push('  Marcas fora SC  : '+pfora+'%');
+  if(facing)L.push('  Facing total    : '+facing+' peças');
+  if(cols)L.push('  Colunas SC      : '+cols);
+  L.push('');
+  L.push('  Compliance:');
+  L.push('    Facing 100%       : '+gST('sc-facing100'));
+  L.push('    Bônus acumulado   : '+gST('sc-bonus'));
+  L.push('    Rebate elegível   : '+gST('sc-rebate'));
+  L.push('    FASEA cumprida    : '+gST('sc-fasea'));
+  L.push('    Clean Up elegível : '+gST('sc-cleanup'));
+  L.push('    Sem duplicidade   : '+gST('sc-dupli'));
+  // Brand triangle
+  var triPairs=[
+    ['tri-rb-sol','Ray-Ban Sol'],['tri-rb-rx','Ray-Ban Rx'],['tri-vogue','Vogue'],
+    ['tri-ralph','Ralph'],['tri-axsol','AX Sol'],['tri-axrx','AX Rx'],
+    ['tri-arnette','Arnette'],['tri-oc','OC Carol'],['tri-ea-sol','EA Sol'],
+    ['tri-ea-rx','EA Rx'],['tri-mk','Michael Kors'],['tri-prada','Prada'],
+    ['tri-polo','Polo'],['tri-versace','Versace'],['tri-burberry','Burberry'],
+    ['tri-tecnol','Tecnol'],['tri-platini','Platini']
+  ];
+  var triLines=[];
+  triPairs.forEach(function(p){var v=ST[p[0]];if(v&&v!=='—')triLines.push('    '+p[1]+': '+v);});
+  if(triLines.length){L.push('');L.push('  Triângulo de marcas:');triLines.forEach(function(l){L.push(l);});}
+  var obs=document.getElementById('sc-obs');if(obs&&obs.value.trim())L.push('\n  Obs.: '+obs.value.trim());
+  return L.join('\n');
+}
+
+// ============================================================
+// SEC 12 — ANÁLISE BI / FOCAL POINTS
+// ============================================================
+var biCards=[], biCardId=0;
+
+// Brands that are MANDATORY per cluster (for focal point detection)
+var BI_MANDATORY={
+  all:['Ray-Ban Sol','Ray-Ban Rx','Vogue Sol','Vogue Rx','OC Carol Sol','OC Carol Rx'],
+  verde:['Ralph Sol','Ralph Rx','Emporio Armani Sol','Emporio Armani Rx','Michael Kors Sol','Prada Sol','Polo Sol'],
+  amarelo:['Armani Exchange Sol','Armani Exchange Rx','Emporio Armani Sol','Emporio Armani Rx'],
+  branco:['Arnette Sol']
+};
+
+function addBiCard(){
+  var sel=document.getElementById('bi-brand-sel');if(!sel||!sel.value)return;
+  addBiQuick(sel.value);sel.selectedIndex=0;
+}
+function addBiQuick(name){
+  if(biCards.find(function(c){return c.name===name;})){alert('Marca já adicionada!');return;}
+  var isSol=name.toLowerCase().indexOf('sol')>=0||name.toLowerCase().indexOf('jr')>=0;
+  biCards.push({id:biCardId++,name:name,cls:isSol?'sol':'rx',
+    socy:'',sopy:'',sis:'',facing:'',giro:'',giroest:'',crescimento:'',reposicao:'',obs:''});
+  renderBiCards();
+}
+function delBiCard(id){biCards=biCards.filter(function(c){return c.id!==id;});renderBiCards();}
+
+function renderBiCards(){
+  var wrap=document.getElementById('bi-brands-wrap');if(!wrap)return;
+  if(!biCards.length){wrap.innerHTML='<div class="empty-msg">Adicione marcas usando o seletor abaixo.</div>';renderFocalPoints();return;}
+  wrap.innerHTML=biCards.map(function(c){
+    var sis=parseFloat(c.sis)||0;
+    var giro=parseFloat(c.giro)||0;
+    var cresc=parseFloat(c.crescimento);
+    var alertCls='';
+    if(sis&&sis<80)alertCls='alert-red';
+    else if(giro&&giro<1)alertCls='alert-amber';
+    else if(!isNaN(cresc)&&cresc<-10)alertCls='alert-amber';
+    else if(sis>=100&&giro>=1)alertCls='alert-green';
+
+    var sisColor=sis>=100?'pos':sis>=80?'warn':'neg';
+    var giroColor=giro>=1.5?'pos':giro>=1?'warn':'neg';
+    var crescColor=!isNaN(cresc)?(cresc>=0?'pos':'neg'):'';
+
+    return '<div class="bi-card '+alertCls+'" id="bic-'+c.id+'">'
+      +'<div class="bi-hdr">'
+      +'<span class="bi-brand-nm">'+c.name+'</span>'
+      +'<span class="bi-class-tag '+(c.cls==='sol'?'sol':'rx')+'">'+(c.cls==='sol'?'SOL':'RX')+'</span>'
+      +'<span class="bi-del" onclick="delBiCard('+c.id+')">✕</span></div>'
+      +'<div class="bi-kpi-grid">'
+      +'<div class="bi-kpi"><div class="bi-kpi-l">SiS Facing%</div><div class="bi-kpi-v '+(sis?sisColor:'')+'">'+(sis?sis.toFixed(0)+'%':'—')+'</div>'+(sis?'<div class="sis-bar"><div class="sis-fill" style="width:'+Math.min(sis,100).toFixed(0)+'%;background:'+(sis>=100?'var(--green)':sis>=80?'var(--amber)':'var(--red)')+'"></div></div>':'')+'</div>'
+      +'<div class="bi-kpi"><div class="bi-kpi-l">Giro Facing</div><div class="bi-kpi-v '+(giro?giroColor:'')+'">'+(giro?giro.toFixed(2):'—')+'</div></div>'
+      +'<div class="bi-kpi"><div class="bi-kpi-l">Crescim. %</div><div class="bi-kpi-v '+crescColor+'">'+(isNaN(cresc)?'—':(cresc>=0?'+':'')+cresc.toFixed(1)+'%')+'</div></div>'
+      +'<div class="bi-kpi"><div class="bi-kpi-l">SO CY</div><div class="bi-kpi-v">'+(c.socy||'—')+'</div></div>'
+      +'<div class="bi-kpi"><div class="bi-kpi-l">SO PY</div><div class="bi-kpi-v">'+(c.sopy||'—')+'</div></div>'
+      +'<div class="bi-kpi"><div class="bi-kpi-l">Giro Est.</div><div class="bi-kpi-v">'+(c.giroest||'—')+'</div></div>'
+      +'</div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:8px">'
+      +'<div class="dp-inp"><div class="dp-il">SiS Facing %</div><input type="number" placeholder="0" step="0.1" value="'+c.sis+'" inputmode="decimal" oninput="updBi('+c.id+',\'sis\',this.value)"></div>'
+      +'<div class="dp-inp"><div class="dp-il">Facing BP</div><input type="number" placeholder="0" value="'+c.facing+'" inputmode="numeric" oninput="updBi('+c.id+',\'facing\',this.value)"></div>'
+      +'<div class="dp-inp"><div class="dp-il">Giro Facing</div><input type="number" placeholder="0" step="0.01" value="'+c.giro+'" inputmode="decimal" oninput="updBi('+c.id+',\'giro\',this.value)"></div>'
+      +'<div class="dp-inp"><div class="dp-il">SO CY (un)</div><input type="number" placeholder="0" value="'+c.socy+'" inputmode="numeric" oninput="updBi('+c.id+',\'socy\',this.value)"></div>'
+      +'<div class="dp-inp"><div class="dp-il">SO PY (un)</div><input type="number" placeholder="0" value="'+c.sopy+'" inputmode="numeric" oninput="updBi('+c.id+',\'sopy\',this.value)"></div>'
+      +'<div class="dp-inp"><div class="dp-il">Cresc. % SO</div><input type="number" placeholder="0" step="0.1" value="'+c.crescimento+'" inputmode="decimal" oninput="updBi('+c.id+',\'crescimento\',this.value)"></div>'
+      +'<div class="dp-inp"><div class="dp-il">Giro Estoque</div><input type="number" placeholder="0" step="0.01" value="'+c.giroest+'" inputmode="decimal" oninput="updBi('+c.id+',\'giroest\',this.value)"></div>'
+      +'<div class="dp-inp"><div class="dp-il">Repos. SC</div><input type="number" placeholder="0" value="'+c.reposicao+'" inputmode="numeric" oninput="updBi('+c.id+',\'reposicao\',this.value)"></div>'
+      +'</div>'
+      +'<div><textarea class="cl-cons" placeholder="Observações sobre esta marca..." oninput="updBi('+c.id+',\'obs\',this.value)">'+c.obs+'</textarea></div>'
+      +'</div>';
+  }).join('');
+  renderFocalPoints();
+}
+
+function updBi(id,fld,val){
+  var c=biCards.find(function(x){return x.id===id;});if(!c)return;
+  c[fld]=val;
+  renderBiCards();
+}
+
+function renderFocalPoints(){
+  var wrap=document.getElementById('bi-focal-wrap');if(!wrap)return;
+  if(!biCards.length){wrap.innerHTML='';return;}
+
+  var fps=[];
+  var clusterRaw=ST['cluster']||'';
+  var cluster=clusterRaw.toLowerCase().indexOf('verde')>=0?'verde':clusterRaw.toLowerCase().indexOf('amarelo')>=0?'amarelo':clusterRaw.toLowerCase().indexOf('branco')>=0?'branco':'';
+
+  biCards.forEach(function(c){
+    var sis=parseFloat(c.sis)||0;
+    var giro=parseFloat(c.giro)||0;
+    var cresc=parseFloat(c.crescimento);
+    var giroest=parseFloat(c.giroest)||0;
+
+    if(sis>0&&sis<80){
+      fps.push({level:'crit',brand:c.name,title:'SiS Crítico — '+c.name,
+        desc:'SiS Facing: '+sis.toFixed(0)+'% (abaixo de 80%). Estoque insuficiente para cobrir o Facing do BP. Ação: reposição imediata — verificar Shop9 e acionar pedido de compra/transferência.'});
+    } else if(sis>0&&sis<100){
+      fps.push({level:'high',brand:c.name,title:'SiS Abaixo do BP — '+c.name,
+        desc:'SiS Facing: '+sis.toFixed(0)+'% (entre 80-99%). Cobertura parcial. Ação: monitorar e repor antes de atingir nível crítico.'});
+    }
+    if(giro>0&&giro<1){
+      fps.push({level:'high',brand:c.name,title:'Giro Baixo — '+c.name,
+        desc:'Giro Facing: '+giro.toFixed(2)+' (< 1,0). A marca não está vendendo proporcionalmente ao espaço alocado. Ação: troca de coluna, treinamento de venda consultiva, revisar sortimento.'});
+    }
+    if(!isNaN(cresc)&&cresc<-10){
+      fps.push({level:'high',brand:c.name,title:'Queda Acentuada — '+c.name,
+        desc:'Crescimento Sell Out: '+cresc.toFixed(1)+'%. Queda superior a 10% vs PY. Ação: identificar causa (ruptura, concorrência, sortimento), plano de recuperação.'});
+    } else if(!isNaN(cresc)&&cresc<0){
+      fps.push({level:'med',brand:c.name,title:'Sell Out em Queda — '+c.name,
+        desc:'Crescimento: '+cresc.toFixed(1)+'% vs PY. Tendência negativa — monitorar e acionar ações de ativação da marca.'});
+    }
+    if(giroest>0&&giroest<0.5){
+      fps.push({level:'med',brand:c.name,title:'Giro de Estoque Baixo — '+c.name,
+        desc:'Giro de estoque: '+giroest.toFixed(2)+' (< 0,5). Estoque parado. Ação: revisar política de pedidos, verificar mix, ativar liquidação interna ou devolução.'});
+    }
+  });
+
+  // Check mandatory brands
+  var presentNames=biCards.map(function(c){return c.name;});
+  var mandatory=BI_MANDATORY.all.concat(cluster?BI_MANDATORY[cluster]||[]:[]);
+  mandatory.forEach(function(brand){
+    if(presentNames.indexOf(brand)<0){
+      fps.push({level:'crit',brand:brand,title:'Marca Obrigatória Ausente — '+brand,
+        desc:brand+' é marca INDISPENSÁVEL para o cluster '+(cluster||'da loja')+'. Ausência pode impactar compliance SC e gerar penalidade no BP. Ação: verificar se está no expositor, acionar compra se necessário.'});
+    }
+  });
+
+  // Deduplicate and sort: crit first, then high, med
+  var order={crit:0,high:1,med:2,good:3};
+  fps.sort(function(a,b){return order[a.level]-order[b.level];});
+
+  if(!fps.length){
+    wrap.innerHTML='<div class="focal-card good"><div class="focal-title">✅ Nenhum focal point crítico identificado</div><div class="focal-desc">Os indicadores inseridos estão dentro dos parâmetros. Continue monitorando.</div></div>';
+    return;
+  }
+  var icons={crit:'🔴',high:'🟠',med:'🔵',good:'🟢'};
+  wrap.innerHTML='<div class="slbl">Focal Points Identificados ('+fps.length+')</div>'
+    +fps.map(function(fp){
+      return '<div class="focal-card '+fp.level+'">'
+        +'<div class="focal-title">'+icons[fp.level]+' '+fp.title+'</div>'
+        +'<div class="focal-desc">'+fp.desc+'</div></div>';
+    }).join('');
+}
+
+function buildBiRelatorio(){
+  if(!biCards.length)return'';
+  var L=[];
+  L.push('\n'+('─').repeat(50)+'\n14. ANÁLISE BI — MARCAS / FACING & GIRO\n'+('─').repeat(50));
+
+  // Summary focal points
+  var fps_crit=0,fps_high=0;
+  biCards.forEach(function(c){
+    var sis=parseFloat(c.sis)||0;var giro=parseFloat(c.giro)||0;
+    if(sis>0&&sis<80)fps_crit++;
+    if(giro>0&&giro<1)fps_high++;
+  });
+  if(fps_crit||fps_high){
+    L.push('  ⚠️ Alertas: '+fps_crit+' SiS crítico(s), '+fps_high+' giro(s) baixo(s)');
+    L.push('');
+  }
+
+  biCards.forEach(function(c){
+    L.push('  ── '+c.name.toUpperCase()+' ['+c.cls.toUpperCase()+'] ──');
+    var sis=parseFloat(c.sis)||0;var giro=parseFloat(c.giro)||0;
+    var cresc=parseFloat(c.crescimento);
+    if(sis)L.push('    SiS Facing   : '+sis.toFixed(0)+'%'+(sis<80?' ⚠️ CRÍTICO':sis<100?' ⚠️ ABAIXO':' ✓'));
+    if(c.facing)L.push('    Facing BP    : '+c.facing+' peças');
+    if(giro)L.push('    Giro Facing  : '+giro.toFixed(2)+(giro<1?' ⚠️ BAIXO':' ✓'));
+    if(c.giroest)L.push('    Giro Estoque : '+c.giroest);
+    if(c.socy)L.push('    Sell Out CY  : '+c.socy+' un'+(c.sopy?' / PY: '+c.sopy+' un':''));
+    if(!isNaN(cresc))L.push('    Crescimento  : '+(cresc>=0?'+':'')+cresc.toFixed(1)+'%');
+    if(c.reposicao)L.push('    Repos. SC    : '+c.reposicao+' peças');
+    if(c.obs)L.push('    Obs.         : '+c.obs);
+    L.push('');
+  });
+
+  // Mandatory brand check
+  var clusterRaw2=ST['cluster']||'';
+  var cluster=clusterRaw2.toLowerCase().indexOf('verde')>=0?'verde':clusterRaw2.toLowerCase().indexOf('amarelo')>=0?'amarelo':clusterRaw2.toLowerCase().indexOf('branco')>=0?'branco':'';
+  var mandatory=BI_MANDATORY.all.concat(cluster?BI_MANDATORY[cluster]||[]:[]);
+  var presentNames=biCards.map(function(c){return c.name;});
+  var missing=mandatory.filter(function(b){return presentNames.indexOf(b)<0;});
+  if(missing.length){
+    L.push('  MARCAS OBRIGATÓRIAS AUSENTES NO ANÁLISE:');
+    missing.forEach(function(b){L.push('    ✗ '+b);});
+  }
+
+  return L.join('\n');
+}
 
 // ============================================================
 // GITHUB SYNC
