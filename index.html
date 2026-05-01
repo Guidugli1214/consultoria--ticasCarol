@@ -165,6 +165,25 @@ body{font-family:var(--f);background:var(--g50);color:var(--g900);min-height:100
 .bnx.finish:active{background:#047857}
 .empty-msg{text-align:center;color:var(--g400);font-size:12px;padding:16px 0;line-height:1.7}
 .new-badge{display:inline-block;font-size:9px;font-weight:700;background:#059669;color:white;border-radius:4px;padding:1px 5px;margin-left:5px;vertical-align:middle;letter-spacing:.04em}
+/* DESEMPENHO */
+.dp-card{background:white;border:1.5px solid var(--g200);border-radius:var(--r);padding:10px 12px;margin-bottom:8px}
+.dp-nm{font-size:11px;font-weight:700;color:var(--blue-dk);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;border-bottom:1px solid var(--g100);padding-bottom:5px;display:flex;align-items:center;justify-content:space-between}
+.dp-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.dp-grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.dp-inp{background:var(--g50);border-radius:var(--rsm);padding:6px 9px}
+.dp-il{font-size:9px;font-weight:600;color:var(--g400);letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px}
+.dp-inp input{width:100%;border:none;background:transparent;font-size:15px;font-weight:600;font-family:var(--m);color:var(--g900);outline:none;padding:0}
+.dp-inp input::placeholder{color:var(--g300)}
+.dp-brand{background:white;border:1.5px solid var(--g200);border-radius:var(--r);padding:9px 11px;margin-bottom:7px;position:relative}
+.dp-bdel{position:absolute;top:9px;right:11px;font-size:13px;color:var(--g300);cursor:pointer;padding:2px}
+.dp-bdel:active{color:var(--red)}
+.dp-bnm{width:calc(100% - 20px);border:none;border-bottom:1px solid var(--g100);font-size:13px;font-weight:600;font-family:var(--f);color:var(--g900);background:transparent;outline:none;padding:0 0 5px;margin-bottom:7px}
+.dp-bnm::placeholder{color:var(--g400)}
+.dp-total{background:var(--blue-lt);border-radius:var(--rsm);padding:7px 10px;margin-top:4px}
+.dp-total-l{font-size:9px;font-weight:700;color:var(--blue-dk);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+.dp-total-g{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.dp-total-g span{font-size:11px;font-weight:700;font-family:var(--m);color:var(--blue-dk);text-align:center}
+.dp-total-g small{display:block;font-size:8px;font-weight:600;color:var(--g400);text-transform:uppercase;text-align:center}
 </style>
 </head>
 <body>
@@ -189,6 +208,7 @@ body{font-family:var(--f);background:var(--g50);color:var(--g900);min-height:100
     <div class="tab" onclick="goTo(7)">Comercial</div>
     <div class="tab" onclick="goTo(8)">Observações</div>
     <div class="tab" onclick="goTo(9)">Materiais</div>
+    <div class="tab" onclick="goTo(10)">📊 Desempenho</div>
   </div>
 </div>
 
@@ -591,6 +611,71 @@ body{font-family:var(--f);background:var(--g50);color:var(--g900);min-height:100
   <div id="hist-list"></div>
 </div>
 
+<!-- 10: DESEMPENHO -->
+<div class="sec" id="sec10">
+
+  <div class="ibox">Informe os dados do período extraídos da planilha. Todos os campos são opcionais — preencha o que tiver disponível.</div>
+
+  <div class="slbl">Período da análise</div>
+  <div class="kg">
+    <div class="kc"><div class="kl">De</div><input type="date" id="dp-ini"></div>
+    <div class="kc"><div class="kl">Até</div><input type="date" id="dp-fim"></div>
+  </div>
+
+  <div class="dvd"></div>
+  <div class="slbl">Ticket Médio</div>
+  <div class="kg">
+    <div class="kc"><div class="kl">CY (R$)</div><input type="number" id="tm-cy" placeholder="0" inputmode="numeric"></div>
+    <div class="kc"><div class="kl">Var % vs PY</div><input type="number" id="tm-var" placeholder="0,0" step="0.1" inputmode="decimal"></div>
+  </div>
+
+  <div class="slbl">Conversões (%)</div>
+  <div class="dp-grid3" style="margin-bottom:12px">
+    <div class="dp-inp"><div class="dp-il">RX → Solar</div><input type="number" id="conv-rxsol" placeholder="0" inputmode="decimal" step="0.1"></div>
+    <div class="dp-inp"><div class="dp-il">RX → OFT</div><input type="number" id="conv-rxoft" placeholder="0" inputmode="decimal" step="0.1"></div>
+    <div class="dp-inp"><div class="dp-il">LC → OFT</div><input type="number" id="conv-lcoft" placeholder="0" inputmode="decimal" step="0.1"></div>
+  </div>
+
+  <div class="dvd"></div>
+  <div class="slbl">Desempenho por Classe</div>
+  <div id="dp-classes-wrap"></div>
+
+  <div class="dvd"></div>
+  <div class="slbl">Lente OFT — SubClasse</div>
+  <div id="dp-loft-sub-wrap"></div>
+
+  <div class="dvd"></div>
+  <div class="slbl">Lente OFT — Fabricante</div>
+  <div id="dp-loft-fab-wrap"></div>
+  <button class="add-btn" onclick="addDpRow('loftfab','Fabricante OFT')">+ Outro fabricante OFT</button>
+
+  <div class="dvd"></div>
+  <div class="slbl">Lente CNT — Fabricante</div>
+  <div id="dp-lcnt-fab-wrap"></div>
+  <button class="add-btn" onclick="addDpRow('lcntfab','Fabricante CNT')">+ Outro fabricante CNT</button>
+
+  <div class="dvd"></div>
+  <div class="slbl">Óculos RX — TOP Marcas</div>
+  <div id="dp-rx-wrap"></div>
+  <button class="add-btn" onclick="addDpRow('rxbrand','Marca RX')">+ Adicionar marca RX</button>
+
+  <div class="dvd"></div>
+  <div class="slbl">Óculos Solar — TOP Marcas</div>
+  <div id="dp-sol-wrap"></div>
+  <button class="add-btn" onclick="addDpRow('solbrand','Marca Solar')">+ Adicionar marca Solar</button>
+
+  <div class="dvd"></div>
+  <div class="slbl">Share Armações — Fabricante</div>
+  <div id="dp-arm-wrap"></div>
+  <button class="add-btn" onclick="addShareRow('arm','Fabricante')">+ Outro fabricante</button>
+
+  <div class="dvd"></div>
+  <div class="slbl">Share Lentes OFT — Fabricante</div>
+  <div id="dp-loftsh-wrap"></div>
+  <button class="add-btn" onclick="addShareRow('loftsh','Fabricante')">+ Outro fabricante</button>
+
+</div>
+
 </div>
 
 <div class="navb">
@@ -649,7 +734,7 @@ body{font-family:var(--f);background:var(--g50);color:var(--g900);min-height:100
 </div>
 
 <script>
-var cur=0,TOTAL=10,starVal=0,ST={},CL={};
+var cur=0,TOTAL=11,starVal=0,ST={},CL={};
 var mats=[],matId=0,labs=[],labId=0,mkts=[],mktId=0;
 var MESES=["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
 var fatCY=new Array(12).fill(0),fatVP=new Array(12).fill(null);
@@ -957,6 +1042,9 @@ function buildRelatorio(){
     if(mEnv.length){L.push('\n  ENVIADOS ('+mEnv.length+'):');mEnv.forEach(function(x){L.push('  ✓ '+x.desc+(x.dest?' → '+x.dest:''));});}
   }
 
+  var dpTxt=buildDpRelatorio();
+  if(dpTxt)L.push(dpTxt);
+
   L.push('\n'+linha('═',50));
   L.push('Gerado em: '+new Date().toLocaleString('pt-BR'));
   L.push(linha('═',50));
@@ -1014,13 +1102,14 @@ function resetForm(){
   document.querySelectorAll('.cl-op').forEach(function(e){e.classList.remove('sim','nao','parc','na');});
   ST={};CL={};starVal=0;mats=[];matId=0;labs=[];labId=0;mkts=[];mktId=0;
   fatCY=new Array(12).fill(0);fatVP=new Array(12).fill(null);
+  dpDyn={loftfab:[],lcntfab:[],rxbrand:[],solbrand:[],arm:[],loftsh:[]};dpDynId=0;
   setStar(0);document.getElementById('pct-val').textContent='—';document.getElementById('pct-val').style.color='';
   document.getElementById('data').valueAsDate=new Date();
   document.getElementById('cred-blk').style.display='none';
-  buildFatTable();renderMats();renderLabs();renderMkts();goTo(0);
+  buildFatTable();renderMats();renderLabs();renderMkts();buildDpUI();goTo(0);
 }
 
-buildFatTable();renderMats();
+buildFatTable();renderMats();buildDpUI();
 
 // ============================================================
 // GITHUB SYNC
