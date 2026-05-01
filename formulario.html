@@ -281,6 +281,23 @@ body{font-family:var(--f);background:var(--g50);color:var(--g900);min-height:100
   <div class="fld"><label>Objetivo da visita</label>
     <select id="objetivo"><option value="">Selecionar...</option><option>Visita rotina</option><option>Checklist Mundo Carol</option><option>Treinamento</option><option>Inventário de marcas</option><option>PEX</option><option>Lançamento de campanha</option><option>Acompanhamento de meta</option><option>Visita com liderança</option></select>
   </div>
+
+  <div class="slbl">Modo da visita</div>
+  <div class="trow">
+    <div class="tog" style="flex:1;text-align:center" onclick="setVisitMode(this,'rotina')">📋 Rotina Operacional</div>
+    <div class="tog" style="flex:1;text-align:center" onclick="setVisitMode(this,'bi')">🔬 Estratégica / BI</div>
+  </div>
+  <div class="ibox" id="mode-info" style="font-size:11px;margin-bottom:13px">Selecione o modo para adaptar o formulário. <strong>Rotina</strong>: VM, equipe e KPI do mês (seções 1–10). <strong>Estratégica/BI</strong>: inclui Desempenho, Status SC e Análise BI (todas as 13 seções).</div>
+
+  <div class="dvd"></div>
+  <div class="slbl">Pré-visita</div>
+  <div class="tlbl">Dados de BI extraídos antes de chegar à loja?</div>
+  <div class="trow"><div class="tog" onclick="ts(this,'pre-bi')">Sim</div><div class="tog" onclick="ts(this,'pre-bi')">Não</div></div>
+  <div class="tlbl">Ações da última visita verificadas no sistema?</div>
+  <div class="trow"><div class="tog" onclick="ts(this,'pre-acoes')">Sim ✓</div><div class="tog" onclick="ts(this,'pre-acoes')">Não</div><div class="tog" onclick="ts(this,'pre-acoes')">1ª visita</div></div>
+  <div class="fld"><label>Focal point principal desta visita</label><input type="text" id="pre-focal" placeholder="Ex: Giro baixo Ray-Ban Sol + ausência Vogue Rx no expositor..."></div>
+
+  <div class="dvd"></div>
   <div class="tlbl">Perfil da loja</div>
   <div class="trow"><div class="tog" onclick="ts(this,'ploja')">Shopping</div><div class="tog" onclick="ts(this,'ploja')">Rua</div><div class="tog" onclick="ts(this,'ploja')">Popular</div><div class="tog" onclick="ts(this,'ploja')">Premium</div></div>
   <div class="dvd"></div>
@@ -552,6 +569,14 @@ body{font-family:var(--f);background:var(--g50);color:var(--g900);min-height:100
 
 <!-- 6: EQUIPE -->
 <div class="sec" id="sec6">
+  <div class="slbl">Método de entrada na visita</div>
+  <div class="tlbl">Observação silenciosa realizada antes de se apresentar? <span class="new-badge">NOVO</span></div>
+  <div class="trow">
+    <div class="tog" onclick="ts(this,'obs-sil')">Sim — entrei como cliente</div>
+    <div class="tog" onclick="ts(this,'obs-sil')">Não — me apresentei direto</div>
+  </div>
+  <div class="fld"><label>O que observou nos primeiros minutos (antes de se identificar)</label><textarea id="obs-entrada" placeholder="Abordagem da equipe, postura, VM, atendimento em curso, temperatura da loja..."></textarea></div>
+  <div class="dvd"></div>
   <div class="slbl">Composição</div>
   <div class="kg">
     <div class="kc"><div class="kl">Presentes</div><input type="number" id="ncolab" placeholder="0"></div>
@@ -624,12 +649,52 @@ body{font-family:var(--f);background:var(--g50);color:var(--g900);min-height:100
   <div class="fld"><label>Concorrência e mercado local</label><textarea id="concorr" placeholder="Preços, mix, ações da concorrência..."></textarea></div>
   <div class="dvd"></div>
   <div class="fld"><label>Percepção do consultor</label><textarea id="percepcao" placeholder="Impressão genuína: liderança, potencial, comportamento, clima..."></textarea></div>
+  <div class="fld"><label>Auto-diagnóstico do gerente <span class="new-badge">NOVO</span></label><textarea id="gerente-diag" placeholder="O que o próprio gerente identificou como principal problema? (use as palavras dele — gera comprometimento real com o plano)"></textarea></div>
   <div class="fld"><label>Considerações finais / Follow-up interno</label><textarea id="obsgerais" placeholder="Pontos para acompanhamento interno, lembretes, follow-up..."></textarea></div>
   <div class="dvd"></div>
   <div class="slbl">Plano de ação — máx. 3</div>
-  <div class="ab"><div class="anum">Ação 1</div><input type="text" id="a1" placeholder="Descreva a ação..."><div class="am"><select id="a1r"><option value="">Responsável...</option><option>Gerente</option><option>Consultor</option><option>Equipe</option><option>Franqueador</option><option>TI</option></select><select id="a1p"><option value="">Prazo...</option><option>Hoje</option><option>Esta semana</option><option>Próxima visita</option><option>30 dias</option><option>Urgente</option></select></div></div>
-  <div class="ab"><div class="anum">Ação 2</div><input type="text" id="a2" placeholder="Descreva a ação..."><div class="am"><select id="a2r"><option value="">Responsável...</option><option>Gerente</option><option>Consultor</option><option>Equipe</option><option>Franqueador</option><option>TI</option></select><select id="a2p"><option value="">Prazo...</option><option>Hoje</option><option>Esta semana</option><option>Próxima visita</option><option>30 dias</option><option>Urgente</option></select></div></div>
-  <div class="ab"><div class="anum">Ação 3</div><input type="text" id="a3" placeholder="Descreva a ação..."><div class="am"><select id="a3r"><option value="">Responsável...</option><option>Gerente</option><option>Consultor</option><option>Equipe</option><option>Franqueador</option><option>TI</option></select><select id="a3p"><option value="">Prazo...</option><option>Hoje</option><option>Esta semana</option><option>Próxima visita</option><option>30 dias</option><option>Urgente</option></select></div></div>
+  <div class="ibox" style="font-size:11px;margin-bottom:10px">Regra dos 3 máximos: <strong>máx. 3 ações · 1 responsável por ação · data exata de prazo.</strong> Ações sem data e sem canal de follow-up não se concretizam.</div>
+  <div class="ab">
+    <div class="anum">Ação 1</div>
+    <input type="text" id="a1" placeholder="Descreva a ação acordada com o gerente...">
+    <div class="am" style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:4px">
+      <select id="a1r"><option value="">Responsável...</option><option>Gerente</option><option>Consultor</option><option>Equipe</option><option>Franqueador</option><option>TI</option></select>
+      <select id="a1c"><option value="">Canal follow-up...</option><option>WhatsApp</option><option>Chamada</option><option>Próxima visita</option><option>E-mail</option><option>Sistema</option></select>
+      <input type="date" id="a1d" title="Data exata do prazo">
+      <select id="a1p"><option value="">Prazo ref....</option><option>Hoje</option><option>Esta semana</option><option>Próxima visita</option><option>30 dias</option><option>Urgente</option></select>
+    </div>
+  </div>
+  <div class="ab">
+    <div class="anum">Ação 2</div>
+    <input type="text" id="a2" placeholder="Descreva a ação acordada com o gerente...">
+    <div class="am" style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:4px">
+      <select id="a2r"><option value="">Responsável...</option><option>Gerente</option><option>Consultor</option><option>Equipe</option><option>Franqueador</option><option>TI</option></select>
+      <select id="a2c"><option value="">Canal follow-up...</option><option>WhatsApp</option><option>Chamada</option><option>Próxima visita</option><option>E-mail</option><option>Sistema</option></select>
+      <input type="date" id="a2d" title="Data exata do prazo">
+      <select id="a2p"><option value="">Prazo ref....</option><option>Hoje</option><option>Esta semana</option><option>Próxima visita</option><option>30 dias</option><option>Urgente</option></select>
+    </div>
+  </div>
+  <div class="ab">
+    <div class="anum">Ação 3</div>
+    <input type="text" id="a3" placeholder="Descreva a ação acordada com o gerente...">
+    <div class="am" style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:4px">
+      <select id="a3r"><option value="">Responsável...</option><option>Gerente</option><option>Consultor</option><option>Equipe</option><option>Franqueador</option><option>TI</option></select>
+      <select id="a3c"><option value="">Canal follow-up...</option><option>WhatsApp</option><option>Chamada</option><option>Próxima visita</option><option>E-mail</option><option>Sistema</option></select>
+      <input type="date" id="a3d" title="Data exata do prazo">
+      <select id="a3p"><option value="">Prazo ref....</option><option>Hoje</option><option>Esta semana</option><option>Próxima visita</option><option>30 dias</option><option>Urgente</option></select>
+    </div>
+  </div>
+  <div class="dvd"></div>
+  <div class="slbl">Ciclo da visita</div>
+  <div class="kg">
+    <div class="kc"><div class="kl">Próxima visita prevista</div><input type="date" id="proxima-visita"></div>
+    <div class="kc"><div class="kl">Tipo da próxima visita</div>
+      <select id="proxima-tipo" style="width:100%;border:none;font-size:13px;font-weight:600;font-family:var(--m);color:var(--g900);background:transparent;outline:none;appearance:none;-webkit-appearance:none">
+        <option value="">...</option><option>Rotina</option><option>Estratégica/BI</option><option>Treinamento</option><option>Follow-up ação</option>
+      </select>
+    </div>
+  </div>
+  <div class="fld"><label>Focal point a verificar na próxima visita</label><input type="text" id="proxima-focal" placeholder="Ex: Verificar se Vogue Rx foi reposta + giro Ray-Ban Solar..."></div>
 </div>
 
 <!-- 9: MATERIAIS -->
@@ -668,7 +733,7 @@ body{font-family:var(--f);background:var(--g50);color:var(--g900);min-height:100
 <!-- 10: DESEMPENHO -->
 <div class="sec" id="sec10">
 
-  <div class="ibox">Informe os dados do período extraídos da planilha. Todos os campos são opcionais — preencha o que tiver disponível.</div>
+  <div class="ibox">Dados do <strong>período do BI</strong> — extraídos do sistema antes ou durante a visita. Podem diferir dos KPIs do mês atual (Seção 2), pois cobrem um intervalo de datas configurável.</div>
 
   <div class="slbl">Período da análise</div>
   <div class="kg">
@@ -677,13 +742,16 @@ body{font-family:var(--f);background:var(--g50);color:var(--g900);min-height:100
   </div>
 
   <div class="dvd"></div>
-  <div class="slbl">Ticket Médio</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+    <div class="slbl" style="margin-bottom:0">Ticket Médio <span style="font-size:9px;color:var(--g400);font-weight:400;text-transform:none;letter-spacing:0">(período BI)</span></div>
+    <button onclick="syncKpisToDP()" style="padding:5px 10px;background:var(--blue-lt);color:var(--blue-dk);border:1.5px solid var(--blue);border-radius:20px;font-size:10px;font-weight:600;font-family:var(--f);cursor:pointer">↙ Copiar KPIs do mês atual</button>
+  </div>
   <div class="kg">
     <div class="kc"><div class="kl">CY (R$)</div><input type="number" id="tm-cy" placeholder="0" inputmode="numeric"></div>
     <div class="kc"><div class="kl">Var % vs PY</div><input type="number" id="tm-var" placeholder="0,0" step="0.1" inputmode="decimal"></div>
   </div>
 
-  <div class="slbl">Conversões (%)</div>
+  <div class="slbl">Conversões % <span style="font-size:9px;color:var(--g400);font-weight:400;text-transform:none;letter-spacing:0">(período BI — use "Copiar KPIs" se for o mesmo mês)</span></div>
   <div class="dp-grid3" style="margin-bottom:12px">
     <div class="dp-inp"><div class="dp-il">RX → Solar</div><input type="number" id="conv-rxsol" placeholder="0" inputmode="decimal" step="0.1"></div>
     <div class="dp-inp"><div class="dp-il">RX → OFT</div><input type="number" id="conv-rxoft" placeholder="0" inputmode="decimal" step="0.1"></div>
@@ -1026,8 +1094,9 @@ body{font-family:var(--f);background:var(--g50);color:var(--g900);min-height:100
   <div class="rel-body">
     <div class="rel-txt" id="rel-txt"></div>
     <div class="rel-actions">
-      <button class="rbtn success" onclick="downloadTxt()">Baixar como arquivo .txt</button>
-      <button class="rbtn primary" onclick="shareRel()">Compartilhar via WhatsApp</button>
+      <button class="rbtn primary" onclick="shareResumo()" style="background:#25D366">📱 Resumo para WhatsApp (gerente)</button>
+      <button class="rbtn success" onclick="downloadTxt()">Baixar relatório completo (.txt)</button>
+      <button class="rbtn primary" onclick="shareRel()">Compartilhar relatório completo (WA)</button>
       <button class="rbtn secondary" onclick="copyRel()">Copiar texto</button>
       <button class="rbtn outline" onclick="saveAndNew()">Salvar no histórico e nova visita</button>
       <button class="rbtn secondary" onclick="closeRel()">Voltar ao formulário</button>
@@ -1042,6 +1111,26 @@ var MESES=["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","De
 var fatCY=new Array(12).fill(0),fatVP=new Array(12).fill(null);
 var STORE_KEY="visitas_v5";
 document.getElementById('data').valueAsDate=new Date();
+
+// ── MODO DE VISITA ────────────────────────────────────────────
+var visitMode='bi'; // 'rotina' | 'bi'
+function setVisitMode(el,mode){
+  visitMode=mode;
+  document.querySelectorAll('[onclick*="setVisitMode"]').forEach(function(e){e.classList.remove('on');});
+  el.classList.add('on');
+  ST['tipo-visita']=mode==='rotina'?'Rotina Operacional':'Estratégica / BI';
+  TOTAL=mode==='rotina'?10:13;
+  var tabs=document.getElementById('stabs').children;
+  for(var i=10;i<13;i++){
+    if(tabs[i]){tabs[i].style.opacity=mode==='rotina'?'0.3':'1';tabs[i].style.pointerEvents=mode==='rotina'?'none':'auto';}
+  }
+  var info=document.getElementById('mode-info');
+  if(info){
+    if(mode==='rotina'){info.className='ibox ok';info.innerHTML='<strong>📋 Rotina Operacional</strong> — Seções 1–10 ativas. Seções BI desabilitadas para agilizar a visita.';}
+    else{info.className='ibox';info.innerHTML='<strong>🔬 Estratégica / BI</strong> — Todas as 13 seções ativas. Inclui Desempenho, Status SC e Análise BI.';}
+  }
+  if(cur>=TOTAL)goTo(TOTAL-1);else goTo(cur);
+}
 
 function go(d){if(cur+d<0)return;if(cur===TOTAL-1){gerarRelatorio();return;}goTo(cur+d);}
 function goTo(n){
@@ -1192,6 +1281,67 @@ function renderMkts(){
 function updMkt(id,f,v){var m=mkts.find(function(x){return x.id===id;});if(m)m[f]=v;}
 function delMkt(id){mkts=mkts.filter(function(m){return m.id!==id;});renderMkts();}
 
+// ── SINCRONIZAÇÃO KPI → DESEMPENHO ────────────────────────────
+function syncKpisToDP(){
+  var ticket=g('ticket'),conv1=g('conv1'),conv2=g('conv2');
+  var tmcy=document.getElementById('tm-cy'),rxsol=document.getElementById('conv-rxsol'),rxoft=document.getElementById('conv-rxoft');
+  if(tmcy&&ticket){tmcy.value=ticket;}
+  if(rxsol&&conv1){rxsol.value=conv1;}
+  if(rxoft&&conv2){rxoft.value=conv2;}
+  var btn=event&&event.target;if(btn){var o=btn.textContent;btn.textContent='✓ Copiado!';setTimeout(function(){btn.textContent=o;},1800);}
+}
+
+// ── RESUMO EXECUTIVO (WhatsApp) ────────────────────────────────
+function buildResumoWA(){
+  var loja=g('loja')||'—';
+  var meta=parseFloat(g('meta'))||0,real=parseFloat(g('realizado'))||0;
+  var pct=meta?Math.round(real/meta*100):null;
+  var ticket=g('ticket');
+  var focal=g('pre-focal');
+  var a1=g('a1'),a2=g('a2'),a3=g('a3');
+  function sel(id){var e=document.getElementById(id);return e?e.value:'';}
+  function fmtAcao(txt,resp,canal,data,prazo){
+    var s=txt;
+    if(resp)s+=' ['+resp+']';
+    if(data)s+=' — até '+fmtD(data);
+    else if(prazo)s+=' — '+prazo;
+    if(canal)s+=' (via '+canal+')';
+    return s;
+  }
+  var proxima=g('proxima-visita');
+  var proximaTipo=sel('proxima-tipo');
+  var nextFocal=g('proxima-focal');
+  var L=[];
+  L.push('*Visita Consultoria — '+loja+'*');
+  L.push('📅 '+fmtD(g('data'))+(g('consultor')?' · '+g('consultor'):''));
+  if(focal){L.push('');L.push('🎯 *Foco da visita:* '+focal);}
+  L.push('');
+  L.push('*📊 KPI do mês*');
+  if(pct!==null)L.push((pct>=100?'✅':pct>=70?'⚠️':'🔴')+' Meta: '+pct+'% — '+fmtR(real)+(meta?' / '+fmtR(meta):''));
+  if(ticket)L.push('🎫 Ticket médio: '+fmtR(parseFloat(ticket)));
+  if(g('conv1'))L.push('🔄 Conv. RX→Solar: '+g('conv1')+'% | RX→OFT: '+(g('conv2')||'—')+'%');
+  if(a1||a2||a3){
+    L.push('');
+    L.push('*✅ Plano de ação acordado*');
+    if(a1)L.push('1️⃣ '+fmtAcao(a1,sel('a1r'),sel('a1c'),g('a1d'),sel('a1p')));
+    if(a2)L.push('2️⃣ '+fmtAcao(a2,sel('a2r'),sel('a2c'),g('a2d'),sel('a2p')));
+    if(a3)L.push('3️⃣ '+fmtAcao(a3,sel('a3r'),sel('a3c'),g('a3d'),sel('a3p')));
+  }
+  if(proxima){
+    L.push('');
+    L.push('📆 *Próxima visita:* '+fmtD(proxima)+(proximaTipo?' ('+proximaTipo+')':''));
+    if(nextFocal)L.push('🔍 Verificar: '+nextFocal);
+  }
+  L.push('');
+  L.push('_Relatório completo disponível mediante solicitação._');
+  return L.join('\n');
+}
+function shareResumo(){
+  var txt=buildResumoWA();
+  if(navigator.share)navigator.share({title:'Resumo — '+(g('loja')||''),text:txt});
+  else window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');
+}
+
 function gerarRelatorio(){var txt=buildRelatorio();document.getElementById('rel-txt').textContent=txt;document.getElementById('rel-titulo').textContent='Relatório — '+(g('loja')||'Loja');document.getElementById('relView').classList.add('open');}
 function closeRel(){document.getElementById('relView').classList.remove('open');}
 
@@ -1223,8 +1373,12 @@ function buildRelatorio(){
   L.push('Gerente       : '+(g('gerente')||'—'));
   L.push('Consultor     : '+(g('consultor')||'—'));
   L.push('Objetivo      : '+(g('objetivo')||'—'));
+  L.push('Tipo de visita: '+(gST('tipo-visita')||'—'));
   L.push('Perfil        : '+gST('ploja'));
   if(gST('cred')==='Sim')L.push('Crediário     : '+(g('cred-nome')||'Sim')+(g('cred-lim')?' | Limite R$ '+g('cred-lim'):'')+(g('cred-obs')?' | '+g('cred-obs'):''));
+  L.push('');
+  L.push('Pré-visita    : BI preparado: '+gST('pre-bi')+' | Ações ant. verificadas: '+gST('pre-acoes'));
+  if(g('pre-focal'))L.push('Focal point   : '+g('pre-focal'));
 
   L.push(sec('1. FATURAMENTO — CRESCIMENTO VS '+anoAnt));
   var temFat=false;
@@ -1297,6 +1451,8 @@ function buildRelatorio(){
   if(g('obs-op'))L.push('  Obs. operacional: '+g('obs-op'));
 
   L.push(sec('6. EQUIPE'));
+  L.push('  Obs. silenciosa    : '+gST('obs-sil'));
+  if(g('obs-entrada'))L.push('  Observação entrada : '+g('obs-entrada'));
   L.push('  Presentes          : '+(g('ncolab')||'—')+' / '+(g('ntotal')||'—'));
   L.push('  Perfil             : '+gST('peq'));
   L.push('  Quadro conforme MO : '+gST('quadro'));
@@ -1329,13 +1485,28 @@ function buildRelatorio(){
   if(g('estrutura')){L.push('  Estrutura/ponto comercial:\n    '+g('estrutura'));L.push('');}
   if(g('concorr')){L.push('  Concorrência/mercado:\n    '+g('concorr'));L.push('');}
   if(g('percepcao')){L.push('  Percepção do consultor:\n    '+g('percepcao'));L.push('');}
+  if(g('gerente-diag')){L.push('  Auto-diagnóstico do gerente:\n    '+g('gerente-diag'));L.push('');}
   if(g('obsgerais')){L.push('  Considerações finais / Follow-up:\n    '+g('obsgerais'));}
 
   if(g('a1')||g('a2')||g('a3')){
     L.push(sec('10. PLANO DE AÇÃO'));
-    if(g('a1'))L.push('  1. '+g('a1')+(g('a1r')?' ['+g('a1r')+']':'')+(g('a1p')?' — '+g('a1p'):''));
-    if(g('a2'))L.push('  2. '+g('a2')+(g('a2r')?' ['+g('a2r')+']':'')+(g('a2p')?' — '+g('a2p'):''));
-    if(g('a3'))L.push('  3. '+g('a3')+(g('a3r')?' ['+g('a3r')+']':'')+(g('a3p')?' — '+g('a3p'):''));
+    function fmtAcaoRel(num,txt,resp,canal,data,prazo){
+      var s='  '+num+'. '+txt;
+      if(resp)s+=' ['+resp+']';
+      if(data)s+=' — até '+fmtD(data);
+      else if(prazo)s+=' — '+prazo;
+      if(canal)s+=' (follow-up: '+canal+')';
+      return s;
+    }
+    function selV(id){var e=document.getElementById(id);return e?e.value:'';}
+    if(g('a1'))L.push(fmtAcaoRel(1,g('a1'),selV('a1r'),selV('a1c'),g('a1d'),selV('a1p')));
+    if(g('a2'))L.push(fmtAcaoRel(2,g('a2'),selV('a2r'),selV('a2c'),g('a2d'),selV('a2p')));
+    if(g('a3'))L.push(fmtAcaoRel(3,g('a3'),selV('a3r'),selV('a3c'),g('a3d'),selV('a3p')));
+    if(g('proxima-visita')){
+      L.push('');
+      L.push('  Próxima visita: '+fmtD(g('proxima-visita'))+(selV('proxima-tipo')?' ('+selV('proxima-tipo')+')':''));
+      if(g('proxima-focal'))L.push('  Verificar em seguida: '+g('proxima-focal'));
+    }
   }
 
   if(mPend.length||mEnv.length){
@@ -1412,6 +1583,12 @@ function resetForm(){
   fatCY=new Array(12).fill(0);fatVP=new Array(12).fill(null);
   dpDyn={loftfab:[],lcntfab:[],rxbrand:[],solbrand:[],arm:[],loftsh:[]};dpDynId=0;
   biCards=[];biCardId=0;
+  visitMode='bi';TOTAL=13;
+  document.querySelectorAll('[onclick*="setVisitMode"]').forEach(function(e){e.classList.remove('on');});
+  var tabs=document.getElementById('stabs').children;
+  for(var i=10;i<13;i++){if(tabs[i]){tabs[i].style.opacity='1';tabs[i].style.pointerEvents='auto';}}
+  var modeInfo=document.getElementById('mode-info');
+  if(modeInfo){modeInfo.className='ibox';modeInfo.innerHTML='Selecione o modo para adaptar o formulário. <strong>Rotina</strong>: VM, equipe e KPI do mês (seções 1–10). <strong>Estratégica/BI</strong>: inclui Desempenho, Status SC e Análise BI (todas as 13 seções).';}
   document.querySelectorAll('.tri-opt').forEach(function(e){e.classList.remove('ok','er','wn');});
   var scInfo=document.getElementById('sc-compliance-status');if(scInfo){scInfo.className='ibox';scInfo.innerHTML='';}
   setStar(0);document.getElementById('pct-val').textContent='—';document.getElementById('pct-val').style.color='';
