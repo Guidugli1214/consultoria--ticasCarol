@@ -244,6 +244,7 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #EDEEF0; color: v
     <button class="nav-tab" onclick="showTab('dashboard')" id="nav-dashboard">📊 Dashboard</button>
     <button class="nav-tab" onclick="showTab('history')" id="nav-history">📅 Histórico</button>
     <button class="nav-tab" onclick="showTab('recommendations')" id="nav-rec">💡 Recomendações</button>
+    <button class="nav-tab" onclick="showTab('settings')" id="nav-settings">⚙️ Configurações</button>
   </nav>
 
   <div class="main">
@@ -320,6 +321,32 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #EDEEF0; color: v
       <div id="rec-content"></div>
     </div>
 
+    <!-- ====== SETTINGS TAB ====== -->
+    <div id="tab-settings" class="tab-content">
+      <div class="final-block" style="max-width:560px;margin-top:10px">
+        <h3>⚙️ Sincronização com GitHub</h3>
+        <p style="font-size:12px;color:#555;margin-bottom:14px;line-height:1.6">
+          As visitas serão salvas no arquivo <strong>visits.json</strong> do repositório do GitHub, permitindo acesso de qualquer dispositivo.<br>
+          O token fica armazenado apenas neste navegador e nunca é enviado ao repositório.
+        </p>
+        <div class="field" style="margin-bottom:12px">
+          <label>Personal Access Token (PAT)</label>
+          <input type="password" id="gh-token" class="text-ans" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+            value="" oninput="saveToken(this.value)">
+        </div>
+        <p style="font-size:11px;color:#888;margin-bottom:14px;line-height:1.6">
+          Crie um token em <strong>GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens</strong>.
+          Permissão necessária: <strong>Contents → Read and write</strong> no repositório <em>consultoria--ticasCarol</em>.
+        </p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-navy" onclick="testConnection()">🔗 Testar Conexão</button>
+          <button class="btn btn-gold" onclick="pullFromGitHub()">⬇️ Baixar do GitHub</button>
+          <button class="btn btn-green" onclick="pushToGitHub()">⬆️ Enviar ao GitHub</button>
+        </div>
+        <div id="gh-status" style="margin-top:12px;font-size:12px;color:#555"></div>
+      </div>
+    </div>
+
   </div><!-- /main -->
 </div><!-- /app -->
 
@@ -328,6 +355,10 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #EDEEF0; color: v
 // CONSTANTS
 // ============================================================
 const STORE_KEY = 'cvf2026_visits';
+const GH_TOKEN_KEY = 'cvf2026_ghtoken';
+const GH_OWNER = 'Guidugli1214';
+const GH_REPO  = 'consultoria--ticasCarol';
+const GH_FILE  = 'visits.json';
 
 const SECTIONS = [
   { id:1, name:'Exposição',    icon:'🏪' },
@@ -679,6 +710,7 @@ function saveFn(clearAfter) {
   visits.push(visit);
   saveVisits(visits);
   toast('✅ Visita salva com sucesso!', 'ok');
+  syncAfterSave(visits);
 
   if (clearAfter) {
     state = {};
@@ -715,7 +747,7 @@ function clearForm() {
 // TABS
 // ============================================================
 function showTab(name) {
-  ['form','dashboard','history','rec'].forEach(t => {
+  ['form','dashboard','history','rec','settings'].forEach(t => {
     document.getElementById('tab-'+t).classList.remove('active');
     document.getElementById('nav-'+t).classList.remove('active');
   });
@@ -724,6 +756,7 @@ function showTab(name) {
   if (name==='dashboard') renderDashboard();
   if (name==='history')   renderHistory();
   if (name==='rec')       renderRec();
+  if (name==='settings')  { document.getElementById('gh-token').value = getToken(); }
 }
 
 // ============================================================
@@ -1013,6 +1046,87 @@ function toast(msg, type='info') {
   t.textContent = msg;
   document.body.appendChild(t);
   setTimeout(()=>t.remove(), 3200);
+}
+
+// ============================================================
+// GITHUB SYNC
+// ============================================================
+function getToken() { return localStorage.getItem(GH_TOKEN_KEY) || ''; }
+function saveToken(v) {
+  localStorage.setItem(GH_TOKEN_KEY, v.trim());
+  document.getElementById('gh-status').textContent = v.trim() ? '🔑 Token salvo no navegador.' : '';
+}
+
+function ghHeaders() {
+  return {
+    'Authorization': 'token ' + getToken(),
+    'Accept': 'application/vnd.github.v3+json',
+    'Content-Type': 'application/json'
+  };
+}
+
+async function ghGetFile() {
+  const r = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`, { headers: ghHeaders() });
+  if (r.status === 404) return { sha: null, data: [] };
+  if (!r.ok) throw new Error('Erro ao ler arquivo: ' + r.status);
+  const j = await r.json();
+  return { sha: j.sha, data: JSON.parse(decodeURIComponent(escape(atob(j.content.replace(/\n/g,''))))) };
+}
+
+async function ghPutFile(visits, sha) {
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(visits, null, 2))));
+  const body = { message: 'Atualiza visitas — ' + new Date().toLocaleString('pt-BR'), content };
+  if (sha) body.sha = sha;
+  const r = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`, {
+    method: 'PUT', headers: ghHeaders(), body: JSON.stringify(body)
+  });
+  if (!r.ok) throw new Error('Erro ao salvar: ' + r.status);
+}
+
+async function testConnection() {
+  const st = document.getElementById('gh-status');
+  if (!getToken()) { st.textContent = '⚠️ Insira o token primeiro.'; return; }
+  st.textContent = '⏳ Testando...';
+  try {
+    const r = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}`, { headers: ghHeaders() });
+    st.textContent = r.ok ? '✅ Conexão OK! Repositório acessível.' : '❌ Falha: ' + r.status + ' — verifique o token e as permissões.';
+  } catch(e) { st.textContent = '❌ Erro de rede: ' + e.message; }
+}
+
+async function pullFromGitHub() {
+  const st = document.getElementById('gh-status');
+  if (!getToken()) { st.textContent = '⚠️ Insira o token primeiro.'; return; }
+  st.textContent = '⏳ Baixando do GitHub...';
+  try {
+    const { data } = await ghGetFile();
+    saveVisits(data);
+    st.textContent = `✅ ${data.length} visita(s) importada(s) do GitHub.`;
+    toast('Dados sincronizados do GitHub!', 'ok');
+  } catch(e) { st.textContent = '❌ ' + e.message; }
+}
+
+async function pushToGitHub() {
+  const st = document.getElementById('gh-status');
+  if (!getToken()) { st.textContent = '⚠️ Insira o token primeiro.'; return; }
+  st.textContent = '⏳ Enviando ao GitHub...';
+  try {
+    const visits = loadVisits();
+    const { sha } = await ghGetFile();
+    await ghPutFile(visits, sha);
+    st.textContent = `✅ ${visits.length} visita(s) enviada(s) ao GitHub com sucesso.`;
+    toast('Dados salvos no GitHub!', 'ok');
+  } catch(e) { st.textContent = '❌ ' + e.message; }
+}
+
+async function syncAfterSave(visits) {
+  if (!getToken()) return;
+  try {
+    const { sha } = await ghGetFile();
+    await ghPutFile(visits, sha);
+    toast('☁️ Sincronizado com GitHub!', 'ok');
+  } catch(e) {
+    toast('⚠️ Salvo localmente. Falha no GitHub: ' + e.message, 'err');
+  }
 }
 
 // ============================================================
