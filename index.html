@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checklist de Visitas | Franquias 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root {
+  --gold: #C8A800;
+  --gold-light: #FFF0A0;
+  --gold-dark: #9A7E00;
+  --navy: #1A3557;
+  --white: #FFFFFF;
+  --gray-light: #F5F5F5;
+  --gray: #E0E0E0;
+  --gray-dark: #757575;
+  --red: #D32F2F;
+  --green: #2E7D32;
+  --orange: #E65100;
+  --blue: #1565C0;
+  --text: #212121;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #EDEEF0; color: var(--text); font-size: 14px; }
+
+/* HEADER */
+.app-header { background: var(--gold); color: var(--navy); padding: 14px 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+.app-header h1 { font-size: 18px; font-weight: 700; letter-spacing: 0.5px; }
+.app-header .sub { font-size: 12px; margin-top: 3px; opacity: 0.8; }
+
+/* NAVIGATION */
+.nav-tabs { background: var(--navy); display: flex; padding: 0 16px; overflow-x: auto; }
+.nav-tab {
+  background: none; border: none; color: rgba(255,255,255,0.65);
+  padding: 11px 18px; cursor: pointer; font-size: 13px; font-weight: 500;
+  white-space: nowrap; border-bottom: 3px solid transparent; transition: all 0.15s;
+}
+.nav-tab:hover { color: white; background: rgba(255,255,255,0.08); }
+.nav-tab.active { color: var(--gold); border-bottom-color: var(--gold); font-weight: 700; }
+
+/* CONTENT */
+.main { padding: 16px; max-width: 1280px; margin: 0 auto; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* STORE INFO CARD */
+.store-card {
+  background: white; border: 1px solid var(--gray); border-radius: 6px;
+  padding: 16px; margin-bottom: 14px;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px;
+}
+.field label { display: block; font-size: 11px; font-weight: 700; color: var(--navy); text-transform: uppercase; margin-bottom: 4px; }
+.field input, .field select {
+  width: 100%; padding: 7px 10px; border: 1px solid var(--gray);
+  border-radius: 4px; font-size: 13px; font-family: inherit;
+}
+.field input:focus, .field select:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 2px rgba(200,168,0,0.2); }
+
+/* SECTION HEADER */
+.sec-header {
+  background: var(--gold); color: var(--navy);
+  padding: 9px 16px; font-weight: 700; font-size: 13px;
+  border-radius: 5px 5px 0 0; margin-top: 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+.sec-score-badge {
+  margin-left: auto; background: var(--navy); color: white;
+  font-size: 11px; padding: 2px 8px; border-radius: 10px;
+  font-weight: 600;
+}
+
+/* QUESTION CARD */
+.q-card {
+  background: white; border: 1px solid var(--gray); border-top: none;
+  padding: 14px 16px;
+}
+.q-card:last-of-type { border-radius: 0 0 5px 5px; margin-bottom: 6px; }
+.q-text { font-weight: 600; color: var(--navy); margin-bottom: 10px; font-size: 13px; line-height: 1.4; }
+.q-text .req { color: var(--red); }
+.opts { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 10px; }
+.opt {
+  padding: 5px 14px; border: 2px solid var(--gold);
+  background: white; border-radius: 4px; cursor: pointer;
+  font-size: 12px; font-weight: 600; color: var(--navy);
+  transition: all 0.12s; user-select: none;
+}
+.opt:hover { background: var(--gold-light); }
+.opt.sel-yes { background: var(--gold); color: var(--navy); }
+.opt.sel-no { background: var(--red); color: white; border-color: var(--red); }
+.opt.sel-partial { background: var(--orange); color: white; border-color: var(--orange); }
+.opt.sel-na { background: #607D8B; color: white; border-color: #607D8B; }
+
+.q-bottom { display: grid; grid-template-columns: 1fr 220px; gap: 10px; margin-top: 6px; }
+.cons-label, .att-label { font-size: 11px; color: var(--gray-dark); font-weight: 600; margin-bottom: 3px; text-transform: uppercase; }
+.cons-input {
+  width: 100%; min-height: 44px; border: 1px solid var(--gray);
+  border-radius: 4px; padding: 6px 8px; font-size: 12px;
+  resize: vertical; font-family: inherit;
+}
+.cons-input:focus { outline: none; border-color: var(--gold); }
+.att-input {
+  width: 100%; border: 1px solid var(--gray); border-radius: 4px;
+  padding: 6px 8px; font-size: 12px; font-family: inherit;
+}
+.att-input:focus { outline: none; border-color: var(--gold); }
+
+/* TEXT FIELD Q */
+.text-ans {
+  width: 100%; border: 1px solid var(--gray); border-radius: 4px;
+  padding: 7px 10px; font-size: 13px; font-family: inherit;
+}
+.text-ans:focus { outline: none; border-color: var(--gold); }
+
+/* FINAL SECTIONS */
+.final-block { background: white; border: 1px solid var(--gray); border-radius: 5px; padding: 14px 16px; margin-top: 10px; }
+.final-block h3 {
+  background: var(--gold); color: var(--navy);
+  padding: 7px 12px; border-radius: 4px;
+  font-size: 12px; font-weight: 700; margin-bottom: 10px; text-transform: uppercase;
+}
+.final-ta {
+  width: 100%; min-height: 72px; border: 1px solid var(--gray);
+  border-radius: 4px; padding: 8px; font-size: 13px;
+  resize: vertical; font-family: inherit;
+}
+.final-ta:focus { outline: none; border-color: var(--gold); }
+
+/* ACTION BAR */
+.action-bar {
+  display: flex; gap: 8px; padding: 14px 0; justify-content: flex-end;
+  flex-wrap: wrap; align-items: center;
+}
+.progress-info { flex: 1; font-size: 12px; color: var(--gray-dark); }
+.progress-info strong { color: var(--navy); }
+
+/* BUTTONS */
+.btn { padding: 8px 18px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 700; transition: all 0.15s; letter-spacing: 0.3px; }
+.btn-gold { background: var(--gold); color: var(--navy); }
+.btn-gold:hover { background: var(--gold-dark); color: white; }
+.btn-navy { background: var(--navy); color: white; }
+.btn-navy:hover { background: #0F2039; }
+.btn-red { background: var(--red); color: white; }
+.btn-red:hover { background: #B71C1C; }
+.btn-green { background: var(--green); color: white; }
+.btn-green:hover { background: #1B5E20; }
+.btn-sm { padding: 4px 10px; font-size: 11px; }
+
+/* SCORE CARDS */
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-bottom: 14px; }
+.score-card { background: white; border: 1px solid var(--gray); border-radius: 5px; padding: 14px; text-align: center; }
+.score-card.total-card { background: var(--navy); color: white; }
+.score-num { font-size: 30px; font-weight: 800; line-height: 1; }
+.score-lbl { font-size: 11px; margin-top: 4px; color: var(--gray-dark); font-weight: 600; text-transform: uppercase; }
+.total-card .score-lbl { color: rgba(255,255,255,0.7); }
+.score-delta { font-size: 11px; margin-top: 5px; }
+.c-green { color: var(--green); }
+.c-red { color: var(--red); }
+.c-orange { color: var(--orange); }
+.c-gray { color: var(--gray-dark); }
+
+/* CHART CONTAINERS */
+.chart-wrap { background: white; border: 1px solid var(--gray); border-radius: 5px; padding: 16px; margin-bottom: 14px; }
+.chart-title { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 12px; border-bottom: 2px solid var(--gold); padding-bottom: 6px; }
+.charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+/* HISTORY TABLE */
+.hist-wrap { overflow-x: auto; }
+.hist-table { width: 100%; border-collapse: collapse; background: white; border-radius: 5px; overflow: hidden; font-size: 12px; }
+.hist-table th { background: var(--navy); color: white; padding: 9px 10px; text-align: left; white-space: nowrap; }
+.hist-table td { padding: 7px 10px; border-bottom: 1px solid var(--gray); white-space: nowrap; }
+.hist-table tr:last-child td { border-bottom: none; }
+.hist-table tr:hover td { background: #FAFAFA; }
+.d-pos { color: var(--green); font-weight: 700; }
+.d-neg { color: var(--red); font-weight: 700; }
+.d-eq { color: var(--gray-dark); }
+
+/* RECOMMENDATIONS */
+.rec-summary { background: var(--navy); color: white; border-radius: 5px; padding: 14px 18px; margin-bottom: 14px; display: flex; gap: 28px; flex-wrap: wrap; align-items: center; }
+.rec-stat { text-align: center; }
+.rec-stat .n { font-size: 26px; font-weight: 800; }
+.rec-stat .l { font-size: 11px; opacity: 0.8; text-transform: uppercase; }
+.rec-group { margin-bottom: 14px; border-radius: 5px; overflow: hidden; border: 1px solid var(--gray); }
+.rec-gh { padding: 8px 14px; font-size: 12px; font-weight: 700; }
+.rec-gh.rh { background: #FFEBEE; color: #B71C1C; border-bottom: 1px solid #FFCDD2; }
+.rec-gh.rm { background: #FFF3E0; color: #BF360C; border-bottom: 1px solid #FFE0B2; }
+.rec-gh.rl { background: #E3F2FD; color: #0D47A1; border-bottom: 1px solid #BBDEFB; }
+.rec-gh.rs { background: #E8F5E9; color: #1B5E20; border-bottom: 1px solid #C8E6C9; }
+.rec-item { background: white; padding: 12px 14px; border-bottom: 1px solid #F0F0F0; }
+.rec-item:last-child { border-bottom: none; }
+.rec-q { font-weight: 700; color: var(--navy); margin-bottom: 4px; font-size: 12px; }
+.rec-a { font-size: 12px; color: #444; line-height: 1.5; }
+.rec-recur { font-size: 11px; color: var(--red); font-weight: 700; margin-top: 5px; }
+.rec-obs { font-size: 11px; background: #F9F9F9; padding: 5px 8px; border-radius: 3px; margin-top: 5px; color: #555; }
+
+/* EMPTY STATE */
+.empty { text-align: center; padding: 56px 24px; color: var(--gray-dark); }
+.empty .ico { font-size: 52px; margin-bottom: 12px; }
+
+/* TOAST */
+.toast {
+  position: fixed; bottom: 20px; right: 20px; padding: 11px 18px;
+  border-radius: 5px; font-size: 13px; font-weight: 600; z-index: 9999;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25); animation: fadeUp 0.25s ease;
+  color: white; max-width: 320px;
+}
+.toast-ok { background: var(--green); }
+.toast-err { background: var(--red); }
+.toast-info { background: var(--navy); }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+/* PRINT */
+@media print {
+  .nav-tabs, .action-bar, #tab-dashboard, #tab-history, #tab-recommendations { display: none !important; }
+  #tab-form { display: block !important; }
+  .main { padding: 0; }
+  body { background: white; }
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .store-card { grid-template-columns: 1fr 1fr; }
+  .q-bottom { grid-template-columns: 1fr; }
+  .charts-row { grid-template-columns: 1fr; }
+  .cards-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .store-card { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- HEADER -->
+  <div class="app-header">
+    <h1>📋 CHECKLIST DE VISITAS | FRANQUIAS 2026</h1>
+    <div class="sub" id="hdr-sub">Sistema de Acompanhamento de Franquias — EssilorLuxottica</div>
+  </div>
+
+  <!-- NAVIGATION -->
+  <nav class="nav-tabs">
+    <button class="nav-tab active" onclick="showTab('form')" id="nav-form">📝 Formulário</button>
+    <button class="nav-tab" onclick="showTab('dashboard')" id="nav-dashboard">📊 Dashboard</button>
+    <button class="nav-tab" onclick="showTab('history')" id="nav-history">📅 Histórico</button>
+    <button class="nav-tab" onclick="showTab('recommendations')" id="nav-rec">💡 Recomendações</button>
+  </nav>
+
+  <div class="main">
+
+    <!-- ====== FORM TAB ====== -->
+    <div id="tab-form" class="tab-content active">
+      <div class="store-card">
+        <div class="field">
+          <label>Unidade / Loja *</label>
+          <input type="text" id="f-store" placeholder="Ex: CAROL - MARCELO DE OLIVEIRA" oninput="updateHdr()">
+        </div>
+        <div class="field">
+          <label>Tipo de Loja</label>
+          <select id="f-type">
+            <option value="carol">Carol</option>
+            <option value="grandvision">Grand Vision</option>
+            <option value="sunglasshut">Sunglass Hut</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Data da Visita</label>
+          <input type="date" id="f-date" oninput="updateHdr()">
+        </div>
+        <div class="field">
+          <label>Hora</label>
+          <input type="time" id="f-time">
+        </div>
+        <div class="field">
+          <label>Consultor</label>
+          <input type="text" id="f-cons" value="Leandro Guidugli">
+        </div>
+        <div class="field">
+          <label>Nº Visita</label>
+          <input type="text" id="f-num" readonly style="background:#F5F5F5; color:#777">
+        </div>
+      </div>
+
+      <div id="qcontainer"></div>
+
+      <div class="final-block">
+        <h3>📎 Anexos Extras</h3>
+        <input type="text" class="text-ans" id="f-attach" placeholder="Liste os nomes dos arquivos anexados (separados por vírgula)...">
+      </div>
+      <div class="final-block">
+        <h3>📝 Considerações Finais</h3>
+        <textarea class="final-ta" id="f-final" placeholder="Registre suas considerações gerais sobre a visita..."></textarea>
+      </div>
+      <div class="final-block">
+        <h3>🔒 Follow-up (Informações Internas)</h3>
+        <textarea class="final-ta" id="f-followup" placeholder="Informações internas de acompanhamento (uso do consultor)..."></textarea>
+      </div>
+
+      <div class="action-bar">
+        <div class="progress-info" id="prog-info"></div>
+        <button class="btn btn-navy" onclick="clearForm()">🗑 Limpar</button>
+        <button class="btn btn-navy" onclick="window.print()">🖨 Imprimir</button>
+        <button class="btn btn-navy" onclick="saveFn(false)">💾 Salvar e Corrigir</button>
+        <button class="btn btn-gold" onclick="saveFn(true)">✅ Finalizar e Continuar</button>
+      </div>
+    </div>
+
+    <!-- ====== DASHBOARD TAB ====== -->
+    <div id="tab-dashboard" class="tab-content">
+      <div id="db-content"></div>
+    </div>
+
+    <!-- ====== HISTORY TAB ====== -->
+    <div id="tab-history" class="tab-content">
+      <div id="hist-content"></div>
+    </div>
+
+    <!-- ====== RECOMMENDATIONS TAB ====== -->
+    <div id="tab-rec" class="tab-content">
+      <div id="rec-content"></div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<script>
+// ============================================================
+// CONSTANTS
+// ============================================================
+const STORE_KEY = 'cvf2026_visits';
+
+const SECTIONS = [
+  { id:1, name:'Exposição',    icon:'🏪' },
+  { id:2, name:'Time de Loja', icon:'👥' },
+  { id:3, name:'Portfólio',    icon:'👓' },
+  { id:4, name:'Gestão',       icon:'📈' },
+  { id:5, name:'Ferramentas',  icon:'🛠' },
+  { id:6, name:'Operações',    icon:'📦' },
+];
+
+// opt: {v:value, l:label, s:score(0|0.5|1|null=NA)}
+// priority: high | medium | low
+// rec: recommendation text
+const QUESTIONS = [
+  // ---- 1 EXPOSIÇÃO ----
+  { id:'1.1', sec:1, req:true, text:"Marcas expostas de acordo com o planograma?",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0},{v:'na',l:'N/A (não Super Carol)',s:null}],
+    pri:'high', rec:'Realizar reunião com gerente para revisão do planograma. Reorganizar exposição de marcas conforme guia VM atualizado.' },
+
+  { id:'1.2', sec:1, req:true, text:"Sortimento exposto com mínimo de 80% de SKU's ativos?",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0},{v:'na',l:'N/A (não Super Carol)',s:null}],
+    pri:'high', rec:"Levantar SKUs ativos vs. expostos. Elaborar plano de reposição para atingir mínimo de 80% de SKUs na exposição." },
+
+  { id:'1.3', sec:1, req:true, text:"Qual o layout atual da loja?",
+    opts:[{v:'atual',l:'Atual',s:1},{v:'outros',l:'Outros',s:0.5}],
+    pri:'medium', rec:'Alinhar prazo com franqueado para adequação do layout ao padrão atual da Franqueadora.' },
+
+  { id:'1.4', sec:1, req:true, text:"Loja positivada com a campanha nacional?",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0}],
+    pri:'medium', rec:'Enviar material da campanha nacional ao gerente. Definir prazo de positivação e agendar verificação.' },
+
+  { id:'1.5', sec:1, req:true, text:"Loja positivada com a campanha regional (local)?",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0}],
+    pri:'medium', rec:'Compartilhar peças da campanha regional. Orientar gerente sobre obrigatoriedade de positivação local.' },
+
+  { id:'1.6', sec:1, req:true, text:"Imagens e expositores aplicados conforme Guia de VM?",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0},{v:'parcialmente',l:'Parcialmente',s:0.5}],
+    pri:'medium', rec:'Disponibilizar Guia de VM atualizado. Agendar visita de acompanhamento para validar aplicação correta.' },
+
+  { id:'1.7', sec:1, req:true, text:"Imagens relacionadas às marcas (gigantografia/testeira/porta/parede/fachada) atualizadas conforme banco de imagem vigente?",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0},{v:'parcialmente',l:'Parcialmente',s:0.5}],
+    pri:'medium', rec:'Verificar banco de imagens vigente com equipe de marketing. Substituir imagens desatualizadas conforme cronograma.' },
+
+  { id:'1.8', sec:1, req:true, text:"Fachada da loja está atualizada e de acordo com o guia da Franqueadora?",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0}],
+    pri:'medium', rec:'Acionar equipe responsável por obras/reforma para adequação de fachada. Comunicar prazo ao franqueado.' },
+
+  // ---- 2 TIME DE LOJA ----
+  { id:'2.1', sec:2, req:true, text:"Loja conta com Supervisor na estrutura de gestão? (recomendado para grupos com mais de 5 lojas)",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0},{v:'na',l:'N/A (<5 lojas)',s:null}],
+    pri:'low', rec:'Avaliar necessidade de Supervisor para o grupo. Discutir estrutura de gestão ampliada com franqueado.' },
+
+  { id:'2.2', sec:2, req:true, text:"Quadro de gestores composto por Gerente e Vendedor Responsável (VR)?",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0},{v:'apenas_gerente',l:'Apenas Gerente',s:0.5}],
+    pri:'low', rec:'Orientar franqueado sobre a importância do VR. Apoiar processo de seleção do Vendedor Responsável.' },
+
+  { id:'2.3', sec:2, req:true, text:"Quadro de vendedores como recomendado no Manual de Operações? (mínimo 2 vendedores e 1 assistente por turno)",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0},{v:'parcialmente',l:'Parcialmente',s:0.5}],
+    pri:'high', rec:'Mapear gap de quadro vs. recomendado pelo Manual de Operações. Apoiar recrutamento e seleção.' },
+
+  { id:'2.4', sec:2, req:true, text:"Equipe devidamente uniformizada?",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0}],
+    pri:'medium', rec:'Verificar estoque de uniformes. Alinhar prazo para adequação com gerente.' },
+
+  { id:'2.5', sec:2, req:true, text:"Equipe de loja ciente das campanhas vigentes?",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0}],
+    pri:'medium', rec:'Realizar briefing de campanhas com toda a equipe. Disponibilizar material de comunicação na loja.' },
+
+  { id:'2.6', sec:2, req:true, text:"Equipe focada na conversão de rx/solar?",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0}],
+    pri:'medium', rec:'Treinar equipe em técnicas de conversão rx/solar. Incluir meta de conversão no plano da loja.' },
+
+  { id:'2.7', sec:2, req:true, text:"Equipe focada na conversão de lentes oftálmicas/rx?",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0}],
+    pri:'medium', rec:'Desenvolver treinamento focado em lentes oftálmicas. Acompanhar indicadores de conversão rx.' },
+
+  { id:'2.8', sec:2, req:true, text:"Equipe explora a pirâmide de preços dos produtos EssilorLuxottica?",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0}],
+    pri:'medium', rec:'Aplicar treinamento sobre pirâmide de preços EssilorLuxottica. Realizar roleplay de vendas com equipe.' },
+
+  { id:'2.9', sec:2, req:true, text:'Equipe treinada e alinhada ao protocolo de vendas "Jeito Carol"?',
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0}],
+    pri:'high', rec:'Implementar/reforçar protocolo "Jeito Carol". Incluir alinhamento no próximo treinamento da equipe.' },
+
+  // ---- 3 PORTFÓLIO ----
+  { id:'3.1', sec:3, req:true, text:"Loja trabalha EXCLUSIVAMENTE com marcas de armações e solares homologadas?",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0}],
+    pri:'high', rec:'CRÍTICO: Identificar marcas não homologadas e orientar retirada imediata. Registrar ocorrência formalmente.' },
+
+  { id:'3.2', sec:3, req:true, text:"Loja tem todas as marcas must have do cluster em que está ativada?",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0}],
+    pri:'medium', rec:'Verificar marcas must have do cluster. Criar plano de ativação com franqueado para as marcas ausentes.' },
+
+  { id:'3.3', sec:3, req:true, text:"Loja trabalha EXCLUSIVAMENTE com marcas de lentes oftálmicas homologadas?",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0}],
+    pri:'high', rec:'CRÍTICO: Identificar lentes não homologadas e orientar retirada imediata. Registrar ocorrência formalmente.' },
+
+  { id:'3.4', sec:3, req:false, isText:true, text:"Qual o principal laboratório utilizado pela loja?",
+    pri:'low', rec:'' },
+
+  { id:'3.5', sec:3, req:true, text:"Loja trabalha com laboratório secundário para serviços rápidos?",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0}],
+    pri:'low', rec:'Avaliar necessidade de laboratório secundário. Apresentar opções de parceiro para serviços rápidos.' },
+
+  { id:'3.6', sec:3, req:true, text:"Loja possui laboratório de montagem?",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0}],
+    pri:'low', rec:'Avaliar viabilidade de instalação de laboratório de montagem. Calcular ROI com franqueado.' },
+
+  { id:'3.7', sec:3, req:true, text:"Loja possui estoque de lentes prontas?",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0}],
+    pri:'low', rec:'Orientar franqueado sobre os benefícios do estoque de lentes prontas para conversão imediata.' },
+
+  { id:'3.8', sec:3, req:true, text:"Oferta/exposição de lentes de contato está adequada conforme sortimento mínimo sugerido?",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0}],
+    pri:'low', rec:'Revisar sortimento de lentes de contato. Adequar exposição conforme planograma sugerido.' },
+
+  // ---- 4 GESTÃO ----
+  { id:'4.1', sec:4, req:true, text:"Franqueado tem plano de expansão?",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0}],
+    pri:'low', rec:'Apresentar oportunidades de expansão da rede. Apoiar na elaboração de plano de negócio.' },
+
+  { id:'4.2', sec:4, req:true, text:"Franqueado aplica planos de incentivos para treinamentos?",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0}],
+    pri:'low', rec:'Apresentar modelos de plano de incentivo para treinamentos. Orientar sobre importância para retenção e desempenho.' },
+
+  { id:'4.3', sec:4, req:true, text:"A loja possui algum método de gestão à vista?",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0}],
+    pri:'low', rec:'Implementar ferramenta de gestão à vista (quadro de metas, dashboard, etc.). Capacitar gerente no uso.' },
+
+  // ---- 5 FERRAMENTAS ----
+  { id:'5.1', sec:5, req:true, text:"Smartshopper (iPad + Totem) exposto conforme orientado, ativo e em utilização pela equipe?",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0},{v:'nao_possui',l:'Loja não possui SS',s:null}],
+    pri:'medium', rec:'Verificar posicionamento e ativação do Smartshopper. Treinar equipe para uso ativo da ferramenta.' },
+
+  { id:'5.2', sec:5, req:true, text:"Loja com acesso ativo nas ferramentas oficiais? [Mundo Carol / MYEL / Canal Único / Lens Simulator]",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0},{v:'parcialmente',l:'Parcialmente',s:0.5}],
+    pri:'medium', rec:'Verificar acessos a: Mundo Carol, MYEL, Canal Único, Lens Simulator. Resolver pendências de cadastro/acesso.' },
+
+  { id:'5.3', sec:5, req:true, text:"Equipe cadastrada na plataforma de treinamentos Leonardo?",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0}],
+    pri:'medium', rec:'Realizar cadastro de toda equipe na plataforma Leonardo. Acompanhar completude de treinamentos obrigatórios.' },
+
+  { id:'5.4', sec:5, req:true, text:"Equipe cadastrada na ferramenta de suporte ao time de loja [Acelera]?",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0}],
+    pri:'medium', rec:'Cadastrar equipe na ferramenta Acelera. Orientar gerente sobre utilização para suporte operacional.' },
+
+  // ---- 6 OPERAÇÕES ----
+  { id:'6.1', sec:6, req:true, text:"No inventário realizado por amostragem foram encontradas inconsistências?",
+    opts:[{v:'sim',l:'Sim',s:0},{v:'nao',l:'Não',s:1}],
+    pri:'high', rec:'ATENÇÃO: Inconsistências de inventário identificadas. Realizar inventário completo. Investigar causas e implementar controles de estoque.' },
+
+  { id:'6.2', sec:6, req:true, text:"Todas as NF's de Entrada e Saída estavam processadas e não tinham pendências?",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0}],
+    pri:'high', rec:"Regularizar processamento de NFs pendentes. Implementar rotina de controle diário de NFs de entrada e saída." },
+
+  { id:'6.3', sec:6, req:true, text:"Loja regular sem a presença de optometrista / oftalmologista em suas dependências?",
+    opts:[{v:'sim',l:'Sim',s:1},{v:'nao',l:'Não',s:0}],
+    pri:'high', rec:'ATENÇÃO: Presença irregular de profissional de saúde. Comunicar imediatamente ao jurídico/compliance. Orientar franqueado sobre regulamentação vigente.' },
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let state = {};   // current form answers
+let charts = {};
+
+// ============================================================
+// STORAGE
+// ============================================================
+function loadVisits() {
+  try { return JSON.parse(localStorage.getItem(STORE_KEY) || '[]'); }
+  catch(e) { return []; }
+}
+function saveVisits(v) { localStorage.setItem(STORE_KEY, JSON.stringify(v)); }
+
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+  const now = new Date();
+  document.getElementById('f-date').value = now.toISOString().split('T')[0];
+  document.getElementById('f-time').value = now.toTimeString().slice(0,5);
+  const n = loadVisits().length + 1;
+  document.getElementById('f-num').value = 'Visita #' + n;
+  renderForm();
+  updateProgress();
+}
+
+function updateHdr() {
+  const store = document.getElementById('f-store').value;
+  const date = document.getElementById('f-date').value;
+  document.getElementById('hdr-sub').textContent =
+    (store || 'Nome da loja') + (date ? '  |  ' + fmtDate(date) : '') +
+    '  —  EssilorLuxottica';
+}
+
+// ============================================================
+// RENDER FORM
+// ============================================================
+function renderForm() {
+  const container = document.getElementById('qcontainer');
+  let html = '';
+  let curSec = null;
+
+  QUESTIONS.forEach(q => {
+    if (q.sec !== curSec) {
+      curSec = q.sec;
+      const s = SECTIONS.find(x => x.id === q.sec);
+      html += `<div class="sec-header">${s.icon} ${q.sec}) ${s.name}
+        <span class="sec-score-badge" id="sbadge-${q.sec}">—</span></div>`;
+    }
+    html += renderQ(q);
+  });
+
+  container.innerHTML = html;
+  updateSectionBadges();
+}
+
+function renderQ(q) {
+  const ans = state[q.id] || {};
+  const key = q.id.replace('.','_');
+
+  if (q.isText) {
+    return `<div class="q-card" id="qc-${key}">
+      <div class="q-text">${q.id}) ${q.text}</div>
+      <input type="text" class="text-ans" id="ta-${key}"
+        value="${esc(ans.text||'')}"
+        placeholder="Informe o laboratório principal..."
+        oninput="stText('${q.id}',this.value)">
+    </div>`;
+  }
+
+  const optsHtml = q.opts.map(o => {
+    let cls = 'opt';
+    if (ans.value === o.v) {
+      cls += o.s === 0 ? ' sel-no' : o.s === 0.5 ? ' sel-partial' : o.s === null ? ' sel-na' : ' sel-yes';
+    }
+    return `<button class="${cls}" onclick="pick('${q.id}','${o.v}')">${o.l}</button>`;
+  }).join('');
+
+  return `<div class="q-card" id="qc-${key}">
+    <div class="q-text">${q.id}) ${q.text}${q.req?'<span class="req"> *</span>':''}</div>
+    <div class="opts" id="opts-${key}">${optsHtml}</div>
+    <div class="q-bottom">
+      <div>
+        <div class="cons-label">Considerações:</div>
+        <textarea class="cons-input" id="cn-${key}"
+          placeholder="Adicione observações sobre este item..."
+          oninput="stCons('${q.id}',this.value)">${esc(ans.consideration||'')}</textarea>
+      </div>
+      <div>
+        <div class="att-label">Anexos:</div>
+        <input type="text" class="att-input" id="at-${key}"
+          value="${esc(ans.attachments||'')}"
+          placeholder="Ex: foto_01.jpg"
+          oninput="stAtt('${q.id}',this.value)">
+      </div>
+    </div>
+  </div>`;
+}
+
+// ============================================================
+// INTERACTIONS
+// ============================================================
+function pick(qId, val) {
+  if (!state[qId]) state[qId] = {};
+  state[qId].value = val;
+  const q = QUESTIONS.find(x => x.id === qId);
+  const key = qId.replace('.','_');
+  const container = document.getElementById('opts-' + key);
+  if (!container) return;
+  container.innerHTML = q.opts.map(o => {
+    let cls = 'opt';
+    if (val === o.v) {
+      cls += o.s === 0 ? ' sel-no' : o.s === 0.5 ? ' sel-partial' : o.s === null ? ' sel-na' : ' sel-yes';
+    }
+    return `<button class="${cls}" onclick="pick('${q.id}','${o.v}')">${o.l}</button>`;
+  }).join('');
+  updateSectionBadges();
+  updateProgress();
+}
+function stCons(qId, v) { if(!state[qId])state[qId]={}; state[qId].consideration=v; }
+function stAtt(qId, v)  { if(!state[qId])state[qId]={}; state[qId].attachments=v; }
+function stText(qId, v) { if(!state[qId])state[qId]={}; state[qId].text=v; }
+
+// ============================================================
+// SCORING
+// ============================================================
+function calcScore(answers) {
+  const secs = {};
+  let tp=0, tm=0;
+  SECTIONS.forEach(sec => {
+    const qs = QUESTIONS.filter(q => q.sec===sec.id && !q.isText);
+    let pts=0, max=0;
+    qs.forEach(q => {
+      const a = answers[q.id];
+      if(!a||!a.value) return;
+      const o = q.opts.find(x=>x.v===a.value);
+      if(!o||o.s===null) return;
+      pts += o.s; max += 1;
+    });
+    secs[sec.id] = max>0 ? Math.round(pts/max*100) : null;
+    tp += pts; tm += max;
+  });
+  return { total: tm>0 ? Math.round(tp/tm*100) : null, sections: secs };
+}
+
+function updateSectionBadges() {
+  SECTIONS.forEach(sec => {
+    const badge = document.getElementById('sbadge-' + sec.id);
+    if (!badge) return;
+    const s = calcScore(state).sections[sec.id];
+    badge.textContent = s !== null ? s + '%' : '—';
+    badge.style.background = s===null?'#607D8B':s>=80?'#2E7D32':s>=60?'#E65100':'#D32F2F';
+  });
+}
+
+function updateProgress() {
+  const total = QUESTIONS.filter(q=>!q.isText).length;
+  const answered = QUESTIONS.filter(q=>!q.isText && state[q.id] && state[q.id].value).length;
+  const pct = Math.round(answered/total*100);
+  document.getElementById('prog-info').innerHTML =
+    `<strong>${answered}/${total}</strong> perguntas respondidas (${pct}%)`;
+}
+
+// ============================================================
+// SAVE
+// ============================================================
+function saveFn(clearAfter) {
+  const store = document.getElementById('f-store').value.trim();
+  if (!store) { toast('Informe o nome da loja antes de salvar.','err'); document.getElementById('f-store').focus(); return; }
+
+  const visit = {
+    id: Date.now().toString(),
+    date: document.getElementById('f-date').value,
+    time: document.getElementById('f-time').value,
+    store,
+    storeType: document.getElementById('f-type').value,
+    consultant: document.getElementById('f-cons').value,
+    visitNum: loadVisits().length + 1,
+    answers: JSON.parse(JSON.stringify(state)),
+    extraAttach: document.getElementById('f-attach').value,
+    finalNotes: document.getElementById('f-final').value,
+    followUp:   document.getElementById('f-followup').value,
+    scores: calcScore(state)
+  };
+
+  const visits = loadVisits();
+  visits.push(visit);
+  saveVisits(visits);
+  toast('✅ Visita salva com sucesso!', 'ok');
+
+  if (clearAfter) {
+    state = {};
+    document.getElementById('f-num').value = 'Visita #' + (visits.length+1);
+    document.getElementById('f-store').value = '';
+    document.getElementById('f-attach').value = '';
+    document.getElementById('f-final').value = '';
+    document.getElementById('f-followup').value = '';
+    const now = new Date();
+    document.getElementById('f-date').value = now.toISOString().split('T')[0];
+    document.getElementById('f-time').value = now.toTimeString().slice(0,5);
+    renderForm();
+    updateProgress();
+    updateHdr();
+    toast('✅ Visita salva! Formulário pronto para nova visita.','ok');
+  }
+}
+
+function clearForm() {
+  if (!confirm('Limpar todos os dados do formulário? Os dados não salvos serão perdidos.')) return;
+  state = {};
+  document.getElementById('f-store').value = '';
+  document.getElementById('f-attach').value = '';
+  document.getElementById('f-final').value = '';
+  document.getElementById('f-followup').value = '';
+  const now = new Date();
+  document.getElementById('f-date').value = now.toISOString().split('T')[0];
+  document.getElementById('f-time').value = now.toTimeString().slice(0,5);
+  renderForm(); updateProgress(); updateHdr();
+  toast('Formulário limpo.','info');
+}
+
+// ============================================================
+// TABS
+// ============================================================
+function showTab(name) {
+  ['form','dashboard','history','rec'].forEach(t => {
+    document.getElementById('tab-'+t).classList.remove('active');
+    document.getElementById('nav-'+t).classList.remove('active');
+  });
+  document.getElementById('tab-'+name).classList.add('active');
+  document.getElementById('nav-'+name).classList.add('active');
+  if (name==='dashboard') renderDashboard();
+  if (name==='history')   renderHistory();
+  if (name==='rec')       renderRec();
+}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+function renderDashboard() {
+  const visits = loadVisits();
+  const c = document.getElementById('db-content');
+  if (!visits.length) {
+    c.innerHTML = `<div class="empty"><div class="ico">📊</div><p>Nenhuma visita registrada ainda.</p><p style="font-size:12px;margin-top:8px;color:#aaa">Preencha e salve o formulário para ver o dashboard.</p></div>`;
+    return;
+  }
+  const last = visits[visits.length-1];
+  const prev = visits.length>1 ? visits[visits.length-2] : null;
+
+  // Score cards
+  const t = last.scores.total;
+  const tc = t>=80?'c-green':t>=60?'c-orange':'c-red';
+  let cards = `<div class="cards-grid">
+    <div class="score-card total-card">
+      <div class="score-num">${t!==null?t+'%':'—'}</div>
+      <div class="score-lbl">Score Total</div>
+      <div class="score-delta">${prev?deltaHtml(t,prev.scores.total,true):''}</div>
+    </div>`;
+  SECTIONS.forEach(s => {
+    const sc = last.scores.sections[s.id];
+    const cc = sc>=80?'c-green':sc>=60?'c-orange':'c-red';
+    const psc = prev?prev.scores.sections[s.id]:null;
+    cards += `<div class="score-card">
+      <div class="score-num ${cc}">${sc!==null?sc+'%':'—'}</div>
+      <div class="score-lbl">${s.icon} ${s.name}</div>
+      <div class="score-delta">${prev&&sc!==null?deltaHtml(sc,psc,false):''}</div>
+    </div>`;
+  });
+  cards += '</div>';
+
+  const barId = 'ch-bar', lineId = 'ch-line', radId = 'ch-radar';
+  const showLine = visits.length>=2;
+
+  c.innerHTML = cards +
+    `<div class="chart-wrap"><div class="chart-title">📊 Scores por Seção — ${last.store} (${fmtDate(last.date)})</div><canvas id="${barId}" height="180"></canvas></div>` +
+    (showLine ? `<div class="charts-row">
+      <div class="chart-wrap"><div class="chart-title">📈 Evolução do Score Total</div><canvas id="${lineId}" height="200"></canvas></div>
+      <div class="chart-wrap"><div class="chart-title">🕸 Comparação Última vs. Anterior</div><canvas id="${radId}" height="200"></canvas></div>
+    </div>` : '');
+
+  setTimeout(() => {
+    mkBar(last, barId);
+    if (showLine) { mkLine(visits, lineId); mkRadar(visits, radId); }
+  }, 80);
+}
+
+function deltaHtml(curr, prev, white) {
+  if (prev===null||prev===undefined||curr===null) return '';
+  const d = curr - prev;
+  if (d>0) return `<span style="color:${white?'#69F0AE':'#2E7D32'}">▲ +${d}%</span>`;
+  if (d<0) return `<span style="color:${white?'#FF5252':'#D32F2F'}">▼ ${d}%</span>`;
+  return `<span style="color:${white?'rgba(255,255,255,0.5)':'#999'}">— igual</span>`;
+}
+
+function mkBar(visit, id) {
+  const el = document.getElementById(id); if(!el) return;
+  if(charts[id]) charts[id].destroy();
+  const data = SECTIONS.map(s => visit.scores.sections[s.id]||0);
+  const colors = data.map(v => v>=80?'#2E7D32':v>=60?'#E65100':'#D32F2F');
+  charts[id] = new Chart(el, { type:'bar',
+    data:{ labels: SECTIONS.map(s=>s.name), datasets:[{label:'Score',data,backgroundColor:colors,borderRadius:4}]},
+    options:{ responsive:true, plugins:{legend:{display:false}},
+      scales:{y:{beginAtZero:true,max:100,ticks:{callback:v=>v+'%'}}}}});
+}
+function mkLine(visits, id) {
+  const el = document.getElementById(id); if(!el) return;
+  if(charts[id]) charts[id].destroy();
+  charts[id] = new Chart(el, { type:'line',
+    data:{ labels: visits.map(v=>fmtDate(v.date)),
+      datasets:[{label:'Score Total',data:visits.map(v=>v.scores.total||0),
+        borderColor:'#C8A800',backgroundColor:'rgba(200,168,0,0.12)',
+        borderWidth:2,fill:true,tension:0.35,pointBackgroundColor:'#C8A800',pointRadius:5}]},
+    options:{responsive:true,scales:{y:{min:0,max:100,ticks:{callback:v=>v+'%'}}}}});
+}
+function mkRadar(visits, id) {
+  const el = document.getElementById(id); if(!el) return;
+  if(charts[id]) charts[id].destroy();
+  const last=visits[visits.length-1], prev=visits[visits.length-2];
+  charts[id] = new Chart(el, { type:'radar',
+    data:{ labels: SECTIONS.map(s=>s.name),
+      datasets:[
+        {label:`Atual (${fmtDate(last.date)})`,data:SECTIONS.map(s=>last.scores.sections[s.id]||0),
+          borderColor:'#C8A800',backgroundColor:'rgba(200,168,0,0.2)',borderWidth:2,pointBackgroundColor:'#C8A800'},
+        {label:`Anterior (${fmtDate(prev.date)})`,data:SECTIONS.map(s=>prev.scores.sections[s.id]||0),
+          borderColor:'#1A3557',backgroundColor:'rgba(26,53,87,0.1)',borderWidth:2,pointBackgroundColor:'#1A3557'}
+      ]},
+    options:{responsive:true,scales:{r:{min:0,max:100,ticks:{callback:v=>v+'%'}}}}});
+}
+
+// ============================================================
+// HISTORY
+// ============================================================
+function renderHistory() {
+  const visits = loadVisits();
+  const c = document.getElementById('hist-content');
+  if (!visits.length) {
+    c.innerHTML = `<div class="empty"><div class="ico">📅</div><p>Nenhuma visita registrada ainda.</p></div>`;
+    return;
+  }
+  let html = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+    <span style="font-size:14px;font-weight:700;color:var(--navy)">${visits.length} visita(s) registrada(s)</span>
+    <button class="btn btn-red btn-sm" onclick="clearAll()">🗑 Apagar Todas</button>
+  </div>
+  <div class="hist-wrap"><table class="hist-table">
+    <thead><tr>
+      <th>#</th><th>Data</th><th>Hora</th><th>Loja</th><th>Tipo</th><th>Consultor</th>
+      <th>Total</th>`;
+  SECTIONS.forEach(s => html += `<th>${s.name}</th>`);
+  html += `<th>Δ Anterior</th><th>Ações</th></tr></thead><tbody>`;
+
+  visits.forEach((v,i) => {
+    const pv = i>0?visits[i-1]:null;
+    const d = (pv && v.scores.total!==null && pv.scores.total!==null) ? v.scores.total-pv.scores.total : null;
+    const dHtml = d===null?'<span class="d-eq">—</span>':
+      d>0?`<span class="d-pos">▲ +${d}%</span>`:
+      d<0?`<span class="d-neg">▼ ${d}%</span>`:
+      `<span class="d-eq">—</span>`;
+    const tc = v.scores.total>=80?'#2E7D32':v.scores.total>=60?'#E65100':'#D32F2F';
+    html += `<tr>
+      <td>${v.visitNum||i+1}</td>
+      <td>${fmtDate(v.date)}</td>
+      <td>${v.time||'—'}</td>
+      <td>${v.store}</td>
+      <td>${typeLbl(v.storeType)}</td>
+      <td>${v.consultant||'—'}</td>
+      <td><strong style="color:${tc}">${v.scores.total!==null?v.scores.total+'%':'—'}</strong></td>`;
+    SECTIONS.forEach(s => {
+      const sc = v.scores.sections[s.id];
+      const cc = sc>=80?'#2E7D32':sc>=60?'#E65100':sc!==null?'#D32F2F':'#999';
+      html += `<td style="color:${cc}">${sc!==null?sc+'%':'—'}</td>`;
+    });
+    html += `<td>${dHtml}</td>
+      <td style="display:flex;gap:4px;padding:6px 10px">
+        <button class="btn btn-navy btn-sm" onclick="loadV('${v.id}')">📋 Ver</button>
+        <button class="btn btn-red btn-sm" onclick="delV('${v.id}')">🗑</button>
+      </td></tr>`;
+  });
+  html += '</tbody></table></div>';
+  c.innerHTML = html;
+}
+
+function typeLbl(t) { return t==='grandvision'?'Grand Vision':t==='sunglasshut'?'Sunglass Hut':'Carol'; }
+
+function loadV(id) {
+  const v = loadVisits().find(x=>x.id===id);
+  if(!v) return;
+  state = JSON.parse(JSON.stringify(v.answers));
+  document.getElementById('f-store').value   = v.store;
+  document.getElementById('f-type').value    = v.storeType||'carol';
+  document.getElementById('f-date').value    = v.date;
+  document.getElementById('f-time').value    = v.time||'';
+  document.getElementById('f-cons').value    = v.consultant||'';
+  document.getElementById('f-num').value     = 'Visita #' + (v.visitNum||'—');
+  document.getElementById('f-attach').value  = v.extraAttach||'';
+  document.getElementById('f-final').value   = v.finalNotes||'';
+  document.getElementById('f-followup').value= v.followUp||'';
+  renderForm(); updateProgress(); updateHdr();
+  showTab('form');
+  toast('Visita carregada.','info');
+}
+
+function delV(id) {
+  if(!confirm('Excluir esta visita?')) return;
+  saveVisits(loadVisits().filter(x=>x.id!==id));
+  renderHistory();
+  toast('Visita excluída.','info');
+}
+
+function clearAll() {
+  if(!confirm('Apagar TODAS as visitas? Esta ação não pode ser desfeita.')) return;
+  saveVisits([]);
+  renderHistory();
+  toast('Todas as visitas apagadas.','info');
+}
+
+// ============================================================
+// RECOMMENDATIONS
+// ============================================================
+function renderRec() {
+  const visits = loadVisits();
+  const c = document.getElementById('rec-content');
+  if (!visits.length) {
+    c.innerHTML = `<div class="empty"><div class="ico">💡</div><p>Nenhuma visita registrada ainda.</p><p style="font-size:12px;margin-top:8px;color:#aaa">Salve pelo menos uma visita para ver as recomendações.</p></div>`;
+    return;
+  }
+
+  const last = visits[visits.length-1];
+  const prev = visits.length>1 ? visits[visits.length-2] : null;
+
+  const high=[], med=[], low=[], resolved=[];
+
+  QUESTIONS.forEach(q => {
+    if (q.isText || !q.rec) return;
+    const a = last.answers[q.id];
+    if (!a||!a.value) return;
+    const o = q.opts.find(x=>x.v===a.value);
+    if (!o||o.s===null) return;
+    const ok = o.s===1;
+    const wasOk = prev ? (() => {
+      const pa = prev.answers[q.id];
+      if(!pa||!pa.value) return null;
+      const po = q.opts.find(x=>x.v===pa.value);
+      return po ? po.s===1 : null;
+    })() : null;
+
+    if (!ok) {
+      const recur = wasOk===false;
+      const item = {q, recur, a};
+      if(q.pri==='high') high.push(item);
+      else if(q.pri==='medium') med.push(item);
+      else low.push(item);
+    } else if (ok && wasOk===false) {
+      resolved.push({q,a});
+    }
+  });
+
+  const total = high.length+med.length+low.length;
+  let html = `
+    <div style="margin-bottom:14px;">
+      <h2 style="font-size:15px;color:var(--navy);margin-bottom:10px">
+        💡 Plano de Ação — ${last.store} &nbsp;<span style="font-size:12px;font-weight:400;color:var(--gray-dark)">${fmtDate(last.date)}</span>
+      </h2>
+      <div class="rec-summary">
+        <div class="rec-stat"><div class="n" style="color:#FF5252">${high.length}</div><div class="l">Alta Prioridade</div></div>
+        <div class="rec-stat"><div class="n" style="color:#FFA726">${med.length}</div><div class="l">Média Prioridade</div></div>
+        <div class="rec-stat"><div class="n" style="color:#64B5F6">${low.length}</div><div class="l">Baixa Prioridade</div></div>
+        <div class="rec-stat"><div class="n" style="color:#69F0AE">${resolved.length}</div><div class="l">Resolvidos</div></div>
+        <div style="flex:1;text-align:right;font-size:13px">
+          Score Total: <strong style="font-size:20px">${last.scores.total!==null?last.scores.total+'%':'—'}</strong>
+        </div>
+      </div>
+    </div>`;
+
+  if (!total && !resolved.length)
+    html += `<div class="empty"><div class="ico">🎉</div><p>Nenhuma não-conformidade identificada!</p></div>`;
+
+  if (high.length) html += recGroup('rh','🔴 Alta Prioridade',high.length,high);
+  if (med.length)  html += recGroup('rm','🟡 Média Prioridade',med.length,med);
+  if (low.length)  html += recGroup('rl','🔵 Baixa Prioridade',low.length,low);
+
+  if (resolved.length) {
+    html += `<div class="rec-group"><div class="rec-gh rs">✅ Itens Resolvidos na Última Visita (${resolved.length})</div>`;
+    resolved.forEach(({q}) => {
+      html += `<div class="rec-item"><div class="rec-q">✅ ${q.id}) ${q.text}</div>
+        <div class="rec-a" style="color:var(--green)">Conformidade atingida em ${fmtDate(last.date)}. Manter acompanhamento.</div></div>`;
+    });
+    html += '</div>';
+  }
+
+  c.innerHTML = html;
+}
+
+function recGroup(cls, label, n, items) {
+  let h = `<div class="rec-group"><div class="rec-gh ${cls}">${label} (${n} ${n===1?'item':'itens'})</div>`;
+  items.forEach(({q,recur,a}) => {
+    h += `<div class="rec-item">
+      <div class="rec-q">${q.id}) ${q.text}</div>
+      <div class="rec-a">📌 ${q.rec}</div>
+      ${recur?'<div class="rec-recur">⚠ Item recorrente — não resolvido desde a visita anterior. Exige atenção imediata.</div>':''}
+      ${a.consideration?`<div class="rec-obs">📝 Obs: ${a.consideration}</div>`:''}
+    </div>`;
+  });
+  return h + '</div>';
+}
+
+// ============================================================
+// UTILITIES
+// ============================================================
+function fmtDate(d) {
+  if(!d) return '';
+  const [y,m,dd] = d.split('-');
+  return `${dd}/${m}/${y}`;
+}
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function toast(msg, type='info') {
+  const old = document.querySelector('.toast'); if(old) old.remove();
+  const t = document.createElement('div');
+  t.className = `toast toast-${type}`;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(), 3200);
+}
+
+// ============================================================
+// BOOT
+// ============================================================
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
