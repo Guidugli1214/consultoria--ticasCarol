@@ -236,16 +236,45 @@ body{font-family:var(--f);background:var(--g50);color:var(--g900);min-height:100
 .focal-desc{font-size:11px;color:var(--g600);line-height:1.5}
 .sis-bar{height:6px;border-radius:3px;background:var(--g200);margin-top:4px;overflow:hidden}
 .sis-fill{height:100%;border-radius:3px;transition:width .3s}
+.auth-view{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:18px;background:var(--g50)}
+.auth-card{width:100%;max-width:380px;background:white;border:1.5px solid var(--g200);border-radius:var(--r);padding:18px;box-shadow:0 8px 28px rgba(17,24,39,.08)}
+.auth-logo{display:block;width:min(190px,68vw);height:auto;margin:0 auto 14px}
+.auth-title{font-size:18px;font-weight:700;color:var(--g900);margin-bottom:4px}
+.auth-sub{font-size:12px;color:var(--g500);line-height:1.5;margin-bottom:16px}
+.auth-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.auth-status{font-size:12px;color:var(--g600);line-height:1.5;min-height:18px;margin-top:10px;text-align:center}
+.auth-status.err{color:var(--red)}.auth-status.ok{color:var(--green)}
+.hdr-user{font-size:10px;color:rgba(255,255,255,.72);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hdr-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.26);color:white;border-radius:var(--rsm);font-size:11px;font-weight:600;font-family:var(--f);padding:5px 8px;cursor:pointer}
+.hdr-btn:active{background:rgba(255,255,255,.2)}
 </style>
 </head>
 <body>
+
+<div class="auth-view" id="authView">
+  <div class="auth-card">
+    <img class="auth-logo" src="image.png" alt="LG Consulting">
+    <div class="auth-title">Visita Consultoria</div>
+    <div class="auth-sub">Entre para salvar visitas, relatórios e histórico no Supabase.</div>
+    <div class="fld"><label>Email</label><input type="email" id="auth-email" autocomplete="email" placeholder="consultor@email.com"></div>
+    <div class="fld"><label>Senha</label><input type="password" id="auth-password" autocomplete="current-password" placeholder="Sua senha"></div>
+    <div class="auth-actions">
+      <button class="rbtn primary" onclick="signIn()">Entrar</button>
+      <button class="rbtn secondary" onclick="signUp()">Criar conta</button>
+    </div>
+    <div class="auth-status" id="auth-status"></div>
+  </div>
+</div>
+
+<div id="appShell" style="display:none">
 
 <div class="hdr">
   <div class="hdr-top">
     <span class="hdr-title">Visita Consultoria v5</span>
     <div style="display:flex;align-items:center;gap:10px">
+      <span class="hdr-user" id="user-email"></span>
       <span class="hdr-step" id="hstep">1 / 10</span>
-      <button onclick="openGH()" title="Configurações GitHub" style="background:none;border:none;color:rgba(255,255,255,0.8);font-size:18px;cursor:pointer;padding:2px;line-height:1">⚙️</button>
+      <button class="hdr-btn" onclick="signOut()">Sair</button>
     </div>
   </div>
   <div class="prog-track"><div class="prog-fill" id="prog" style="width:10%"></div></div>
@@ -1053,38 +1082,6 @@ body{font-family:var(--f);background:var(--g50);color:var(--g900);min-height:100
   <button class="bnx" id="btnNext" onclick="go(1)">Próximo</button>
 </div>
 
-<!-- CONFIGURAÇÕES GITHUB -->
-<div class="rel-view" id="ghView">
-  <div class="rel-hdr">
-    <span class="rel-hdr-title">⚙️ Configurações</span>
-    <span class="rel-close" onclick="closeGH()">✕</span>
-  </div>
-  <div class="rel-body">
-    <div style="margin-bottom:6px">
-      <div style="font-size:13px;font-weight:600;color:var(--g700);margin-bottom:8px">Sincronização com GitHub</div>
-      <div style="font-size:12px;color:var(--g500);margin-bottom:14px;line-height:1.6">
-        As visitas serão salvas no arquivo <strong>visitas.json</strong> do repositório GitHub, permitindo acesso de qualquer dispositivo.<br>
-        O token fica armazenado apenas neste navegador.
-      </div>
-      <div class="fld">
-        <label>Personal Access Token (PAT)</label>
-        <input type="password" id="gh-token" placeholder="github_pat_..." style="font-size:13px" oninput="onTokenInput(this.value)">
-      </div>
-      <div style="font-size:11px;color:var(--g400);margin-bottom:16px;line-height:1.7">
-        Crie em: <strong>GitHub → Settings → Developer settings → Fine-grained tokens</strong><br>
-        Permissão necessária: <strong>Contents → Read and write</strong> no repositório <em>consultoria--ticasCarol</em>.
-      </div>
-    </div>
-    <div class="rel-actions">
-      <button class="rbtn outline" onclick="testGH()">🔗 Testar Conexão</button>
-      <button class="rbtn success" onclick="pushGH()">⬆️ Enviar ao GitHub</button>
-      <button class="rbtn primary" onclick="pullGH()">⬇️ Baixar do GitHub</button>
-      <button class="rbtn secondary" onclick="closeGH()">Fechar</button>
-    </div>
-    <div id="gh-status" style="font-size:12px;color:var(--g600);padding:12px 0;text-align:center;line-height:1.5"></div>
-  </div>
-</div>
-
 <!-- RELATÓRIO -->
 <div class="rel-view" id="relView">
   <div class="rel-hdr">
@@ -1098,19 +1095,56 @@ body{font-family:var(--f);background:var(--g50);color:var(--g900);min-height:100
       <button class="rbtn success" onclick="downloadTxt()">Baixar relatório completo (.txt)</button>
       <button class="rbtn primary" onclick="shareRel()">Compartilhar relatório completo (WA)</button>
       <button class="rbtn secondary" onclick="copyRel()">Copiar texto</button>
-      <button class="rbtn outline" onclick="saveAndNew()">Salvar no histórico e nova visita</button>
+      <button class="rbtn outline" onclick="saveAndNew()">Salvar no Supabase e nova visita</button>
       <button class="rbtn secondary" onclick="closeRel()">Voltar ao formulário</button>
     </div>
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 var cur=0,TOTAL=13,starVal=0,ST={},CL={};
 var mats=[],matId=0,labs=[],labId=0,mkts=[],mktId=0;
 var MESES=["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
 var fatCY=new Array(12).fill(0),fatVP=new Array(12).fill(null);
 var STORE_KEY="visitas_v5";
+var SUPABASE_URL='https://ehkqetbwzixbmemasalw.supabase.co';
+var SUPABASE_KEY='sb_publishable_Q641nvk9xRJLiYKIjMpTVQ_r_ecYnX2';
+var sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+var currentUser=null,visitCache=[];
 document.getElementById('data').valueAsDate=new Date();
+
+async function initAuth(){
+  var res=await sb.auth.getSession();
+  currentUser=res.data.session?res.data.session.user:null;
+  applyAuthState();
+  sb.auth.onAuthStateChange(function(_event,session){currentUser=session?session.user:null;applyAuthState();});
+}
+function setAuthStatus(msg,cls){var el=document.getElementById('auth-status');if(!el)return;el.textContent=msg||'';el.className='auth-status '+(cls||'');}
+function applyAuthState(){
+  var authed=!!currentUser;
+  document.getElementById('authView').style.display=authed?'none':'flex';
+  document.getElementById('appShell').style.display=authed?'block':'none';
+  var email=document.getElementById('user-email');if(email)email.textContent=authed?currentUser.email:'';
+  if(authed)renderHist();
+}
+async function signIn(){
+  var email=g('auth-email'),password=g('auth-password');
+  if(!email||!password){setAuthStatus('Informe email e senha.','err');return;}
+  setAuthStatus('Entrando...');
+  var res=await sb.auth.signInWithPassword({email:email,password:password});
+  if(res.error){setAuthStatus(res.error.message,'err');return;}
+  setAuthStatus('Login realizado.','ok');
+}
+async function signUp(){
+  var email=g('auth-email'),password=g('auth-password');
+  if(!email||!password){setAuthStatus('Informe email e senha para criar a conta.','err');return;}
+  setAuthStatus('Criando conta...');
+  var res=await sb.auth.signUp({email:email,password:password});
+  if(res.error){setAuthStatus(res.error.message,'err');return;}
+  setAuthStatus('Conta criada. Verifique o email se a confirmação estiver ativa.','ok');
+}
+async function signOut(){await sb.auth.signOut();}
 
 // ── MODO DE VISITA ────────────────────────────────────────────
 var visitMode='bi'; // 'rotina' | 'bi'
@@ -1546,8 +1580,14 @@ function shareRel(){var txt=getRelTxt();if(navigator.share)navigator.share({titl
 function copyRel(){var txt=getRelTxt();var btn=event.target;if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(function(){flash(btn);});else{var ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.focus();ta.select();document.execCommand('copy');document.body.removeChild(ta);flash(btn);}}
 function flash(btn){var o=btn.textContent;btn.textContent='Copiado!';setTimeout(function(){btn.textContent=o;},2200);}
 
-function loadHist(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||[];}catch(e){return[];}}
-function saveHist(h){try{localStorage.setItem(STORE_KEY,JSON.stringify(h));}catch(e){alert('Espaço insuficiente.');}}
+async function loadHist(){
+  if(!currentUser)return[];
+  var res=await sb.from('visits').select('*').order('created_at',{ascending:false}).limit(80);
+  if(res.error)throw res.error;
+  visitCache=res.data||[];
+  return visitCache;
+}
+function saveHist(_h){}
 function buildSnap(){
   var sumCY=fatCY.reduce(function(a,b){return a+b;},0);
   var filled=fatVP.filter(function(v){return v!==null;});
@@ -1555,24 +1595,90 @@ function buildSnap(){
   var meta=parseFloat(g('meta'))||0,real=parseFloat(g('realizado'))||0;
   return{id:Date.now(),data:g('data'),loja:g('loja'),marca:g('marca'),gerente:g('gerente'),objetivo:g('objetivo'),meta:meta,realizado:real,pct:meta?Math.round(real/meta*100):null,ticket:g('ticket'),sumCY:sumCY,mediaVar:media,a1:g('a1'),resumo:buildRelatorio()};
 }
-function saveAndNew(){var hist=loadHist();hist.unshift(buildSnap());if(hist.length>80)hist=hist.slice(0,80);saveHist(hist);syncToGH(hist);closeRel();resetForm();alert('Visita salva no histórico! '+(getToken()?'Sincronizando com GitHub...':'Configure o token em ⚙️ para salvar no GitHub.'));}
-function renderHist(){
-  var hist=loadHist();var el=document.getElementById('hist-list');var cnt=document.getElementById('hist-count');
+function buildVisitPayload(reportText){
+  var sumCY=fatCY.reduce(function(a,b){return a+b;},0);
+  var filled=fatVP.filter(function(v){return v!==null;});
+  var media=filled.length?Number((filled.reduce(function(a,b){return a+b;},0)/filled.length).toFixed(1)):null;
+  var meta=parseFloat(g('meta'))||0,real=parseFloat(g('realizado'))||0;
+  var pct=meta?Math.round(real/meta*100):null;
+  return{
+    user_id:currentUser.id,
+    visit_date:g('data')||null,
+    store_name:g('loja')||null,
+    store_brand:g('marca')||null,
+    store_manager:g('gerente')||null,
+    consultant_name:g('consultor')||null,
+    visit_objective:g('objetivo')||null,
+    store_profile:ST.ploja||null,
+    has_financing:ST.cred?ST.cred==='Sim':null,
+    financing_name:g('cred-nome')||null,
+    financing_limit:g('cred-lim')?Number(g('cred-lim')):null,
+    financing_notes:g('cred-obs')||null,
+    coverage_pct:pct,
+    total_revenue:sumCY||null,
+    average_variation:media,
+    revenue_data:{months:MESES,cy:fatCY,variation_vs_py:fatVP},
+    kpi_data:{meta:meta,realizado:real,ticket:g('ticket'),itens:g('itens'),conv_rx_solar:g('conv1'),conv_rx_oft:g('conv2'),pm_rx:g('pmrx'),pm_oft:g('pmoft'),gestao_a_vista:ST.gavist||null,tendencia:ST.fatvar||null},
+    platforms_data:{statuses:ST,checklist:CL,visit_mode:visitMode},
+    facing_data:{ray_ban:g('fc-rb'),prada:g('fc-pr'),others:g('fc-ot'),general_obs:g('fc-obs'),planogram:ST.plan||null},
+    team_data:{presentes:g('ncolab'),total:g('ntotal'),perfil:ST.peq||null,motivacao:starVal,vicios:getTags('wn'),destaques:getTags('ok'),talento:g('talento')},
+    commercial_data:{marketing:mkts,laboratorio:labs,reclamacoes:g('reclam'),encaminhamento:g('rec-enc')},
+    observations_data:{treinamento:g('trein'),estrutura:g('estrutura'),concorrencia:g('concorr'),percepcao:g('percepcao'),observacoes_gerais:g('obsgerais'),desempenho:typeof dpDyn!=='undefined'?dpDyn:null,bi:typeof biCards!=='undefined'?biCards:null},
+    action_plan:[
+      {text:g('a1'),responsavel:g('a1r'),prazo:g('a1p')},
+      {text:g('a2'),responsavel:g('a2r'),prazo:g('a2p')},
+      {text:g('a3'),responsavel:g('a3r'),prazo:g('a3p')}
+    ].filter(function(a){return a.text;}),
+    materials:mats,
+    report_text:reportText
+  };
+}
+async function saveAndNew(){
+  if(!currentUser){alert('Entre novamente para salvar.');return;}
+  var ev=typeof event!=='undefined'?event:null;
+  var btn=ev&&ev.target?ev.target:null,orig=btn?btn.textContent:'';
+  if(btn)btn.textContent='Salvando...';
+  var report=getRelTxt()||buildRelatorio();
+  var res=await sb.from('visits').insert(buildVisitPayload(report)).select('id').single();
+  if(btn)btn.textContent=orig;
+  if(res.error){alert('Erro ao salvar no Supabase: '+res.error.message);return;}
+  closeRel();resetForm();await renderHist();alert('Visita salva no Supabase.');
+}
+async function renderHist(){
+  var el=document.getElementById('hist-list');var cnt=document.getElementById('hist-count');
+  if(!el||!cnt)return;
+  if(!currentUser){cnt.textContent='';el.innerHTML='<div class="empty-msg">Entre para carregar o histórico.</div>';return;}
+  el.innerHTML='<div class="empty-msg">Carregando histórico...</div>';
+  try{var hist=await loadHist();}
+  catch(e){el.innerHTML='<div class="empty-msg">Erro ao carregar histórico.<br>'+e.message+'</div>';return;}
   cnt.textContent='('+hist.length+')';
-  if(!hist.length){el.innerHTML='<div class="empty-msg">Nenhuma visita salva ainda.<br>Após gerar, use "Salvar no histórico".</div>';return;}
+  if(!hist.length){el.innerHTML='<div class="empty-msg">Nenhuma visita salva ainda.<br>Após gerar, use "Salvar no Supabase".</div>';return;}
   el.innerHTML=hist.slice(0,15).map(function(v){
-    var p=v.pct;var cls=p>=100?'ok':p>=70?'wn':'er';
-    var varStr=v.mediaVar!==null?(parseFloat(v.mediaVar)>0?'+':'')+v.mediaVar+'%':'—';
-    return '<div class="hist-item"><div class="hist-top"><span class="hist-loja">'+( v.loja||'—')+'</span>'
-      +'<span>'+(p!==null?'<span class="hist-cov '+cls+'">'+p+'%</span>':'')
-      +'<span class="hist-del" onclick="delHist('+v.id+',event)">🗑</span></span></div>'
-      +'<div class="hist-meta">'+(v.data?fmtD(v.data):'—')+' · '+(v.gerente||'')+(v.mediaVar!==null?' · Fat: '+varStr:'')+'</div>'
-      +(v.a1?'<div style="font-size:11px;color:var(--g500);margin-top:3px">→ '+v.a1+'</div>':'')
-      +'<span class="hist-open" onclick="verHist('+v.id+')">Ver relatório →</span></div>';
+    var p=v.coverage_pct;var cls=p>=100?'ok':p>=70?'wn':'er';
+    var varStr=v.average_variation!==null&&v.average_variation!==undefined?(parseFloat(v.average_variation)>0?'+':'')+v.average_variation+'%':'—';
+    var firstAction=(v.action_plan&&v.action_plan[0]&&v.action_plan[0].text)||'';
+    return '<div class="hist-item"><div class="hist-top"><span class="hist-loja">'+(v.store_name||'—')+'</span>'
+      +'<span>'+(p!==null&&p!==undefined?'<span class="hist-cov '+cls+'">'+p+'%</span>':'')
+      +'<span class="hist-del" onclick="delHist(\''+v.id+'\',event)">Excluir</span></span></div>'
+      +'<div class="hist-meta">'+(v.visit_date?fmtD(v.visit_date):'—')+' · '+(v.store_manager||'')+(v.average_variation!==null&&v.average_variation!==undefined?' · Fat: '+varStr:'')+'</div>'
+      +(firstAction?'<div style="font-size:11px;color:var(--g500);margin-top:3px">'+firstAction+'</div>':'')
+      +'<span class="hist-open" onclick="verHist(\''+v.id+'\')">Ver relatório</span></div>';
   }).join('');
 }
-function verHist(id){var v=loadHist().find(function(x){return x.id===id;});if(!v)return;document.getElementById('rel-txt').textContent=v.resumo;document.getElementById('rel-titulo').textContent='Relatório — '+(v.loja||'Loja');document.getElementById('relView').classList.add('open');}
-function delHist(id,ev){ev.stopPropagation();if(!confirm('Excluir?'))return;saveHist(loadHist().filter(function(v){return v.id!==id;}));renderHist();}
+async function verHist(id){
+  var v=visitCache.find(function(x){return x.id===id;});
+  if(!v){var res=await sb.from('visits').select('*').eq('id',id).single();if(res.error){alert(res.error.message);return;}v=res.data;}
+  document.getElementById('rel-txt').textContent=v.report_text||'';
+  document.getElementById('rel-titulo').textContent='Relatório — '+(v.store_name||'Loja');
+  document.getElementById('relView').classList.add('open');
+}
+async function delHist(id,ev){
+  ev.stopPropagation();
+  if(!confirm('Excluir este registro do Supabase?'))return;
+  var res=await sb.from('visits').delete().eq('id',id);
+  if(res.error){alert('Erro ao excluir: '+res.error.message);return;}
+  renderHist();
+}
 
 function resetForm(){
   document.querySelectorAll('input[type=text],input[type=number],input[type=date],textarea').forEach(function(e){e.value='';});
@@ -1597,8 +1703,6 @@ function resetForm(){
   buildFatTable();renderMats();renderLabs();renderMkts();buildDpUI();
   renderBiCards();renderFocalPoints();goTo(0);
 }
-
-buildFatTable();renderMats();buildDpUI();renderBiCards();
 
 // ============================================================
 // SEC 10 — DESEMPENHO
@@ -1659,6 +1763,20 @@ function buildDpUI(){
   renderDpShare('dp-arm-wrap',dpDyn.arm,'arm');
   renderDpShare('dp-loftsh-wrap',dpDyn.loftsh,'loftsh');
   updDpTotals();
+}
+
+function renderDpDyn(wrapId,arr,grp,ph){
+  var el=document.getElementById(wrapId);if(!el||!arr.length)return;
+  el.innerHTML+=arr.map(function(r){
+    return '<div class="dp-brand"><span class="dp-bdel" onclick="delDpRow(\''+grp+'\','+r.id+')">✕</span>'
+      +'<input class="dp-bnm" type="text" placeholder="'+(ph||'Nome')+'..." value="'+r.nm+'" oninput="updDpRow(\''+grp+'\','+r.id+',\'nm\',this.value)">'
+      +'<div class="dp-grid">'
+      +'<div class="dp-inp"><div class="dp-il">Fat CY</div><input type="number" placeholder="0" value="'+r.cy+'" inputmode="numeric" oninput="updDpRow(\''+grp+'\','+r.id+',\'cy\',this.value)"></div>'
+      +'<div class="dp-inp"><div class="dp-il">Fat PY</div><input type="number" placeholder="0" value="'+r.py+'" inputmode="numeric" oninput="updDpRow(\''+grp+'\','+r.id+',\'py\',this.value)"></div>'
+      +'<div class="dp-inp"><div class="dp-il">Qte CY</div><input type="number" placeholder="0" value="'+r.qcy+'" inputmode="numeric" oninput="updDpRow(\''+grp+'\','+r.id+',\'qcy\',this.value)"></div>'
+      +'<div class="dp-inp"><div class="dp-il">Qte PY</div><input type="number" placeholder="0" value="'+r.qpy+'" inputmode="numeric" oninput="updDpRow(\''+grp+'\','+r.id+',\'qpy\',this.value)"></div>'
+      +'</div></div>';
+  }).join('');
 }
 
 function updDpTotals(){
@@ -2024,57 +2142,9 @@ function buildBiRelatorio(){
   return L.join('\n');
 }
 
-// ============================================================
-// GITHUB SYNC
-// ============================================================
-var GH_TOK_KEY='vv5_ghtoken',GH_OWNER='Guidugli1214',GH_REPO='consultoria--ticasCarol',GH_FILE='visitas.json';
-function getToken(){return localStorage.getItem(GH_TOK_KEY)||'';}
-function onTokenInput(v){localStorage.setItem(GH_TOK_KEY,v.trim());}
-function ghHdr(){return{'Authorization':'token '+getToken(),'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'};}
-function openGH(){document.getElementById('gh-token').value=getToken();document.getElementById('gh-status').textContent='';document.getElementById('ghView').classList.add('open');}
-function closeGH(){document.getElementById('ghView').classList.remove('open');}
-
-async function ghGet(){
-  var r=await fetch('https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_FILE,{headers:ghHdr()});
-  if(r.status===404)return{sha:null,data:[]};
-  if(!r.ok)throw new Error('Erro '+r.status+' ao ler arquivo.');
-  var j=await r.json();
-  return{sha:j.sha,data:JSON.parse(decodeURIComponent(escape(atob(j.content.replace(/\n/g,'')))))};
-}
-async function ghPut(hist,sha){
-  var content=btoa(unescape(encodeURIComponent(JSON.stringify(hist,null,2))));
-  var body={message:'Atualiza visitas — '+new Date().toLocaleString('pt-BR'),content:content};
-  if(sha)body.sha=sha;
-  var r=await fetch('https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_FILE,{method:'PUT',headers:ghHdr(),body:JSON.stringify(body)});
-  if(!r.ok)throw new Error('Erro '+r.status+' ao salvar.');
-}
-
-async function testGH(){
-  var st=document.getElementById('gh-status');
-  if(!getToken()){st.textContent='⚠️ Insira o token primeiro.';return;}
-  st.textContent='⏳ Testando conexão...';
-  try{var r=await fetch('https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO,{headers:ghHdr()});st.textContent=r.ok?'✅ Conexão OK! Repositório acessível.':'❌ Erro '+r.status+' — verifique o token e permissões.';}
-  catch(e){st.textContent='❌ Erro de rede: '+e.message;}
-}
-async function pushGH(){
-  var st=document.getElementById('gh-status');
-  if(!getToken()){st.textContent='⚠️ Insira o token primeiro.';return;}
-  st.textContent='⏳ Enviando ao GitHub...';
-  try{var hist=loadHist();var res=await ghGet();await ghPut(hist,res.sha);st.textContent='✅ '+hist.length+' visita(s) enviada(s) ao GitHub.';}
-  catch(e){st.textContent='❌ '+e.message;}
-}
-async function pullGH(){
-  var st=document.getElementById('gh-status');
-  if(!getToken()){st.textContent='⚠️ Insira o token primeiro.';return;}
-  st.textContent='⏳ Baixando do GitHub...';
-  try{var res=await ghGet();saveHist(res.data);renderHist();st.textContent='✅ '+res.data.length+' visita(s) importada(s) do GitHub.';}
-  catch(e){st.textContent='❌ '+e.message;}
-}
-async function syncToGH(hist){
-  if(!getToken())return;
-  try{var res=await ghGet();await ghPut(hist,res.sha);}
-  catch(e){console.warn('GitHub sync falhou:',e.message);}
-}
+buildFatTable();renderMats();buildDpUI();renderBiCards();
+initAuth();
 </script>
+</div><!-- /appShell -->
 </body>
 </html>
